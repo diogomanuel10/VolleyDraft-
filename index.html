@@ -201,10 +201,15 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .court-wrap{position:relative}
 .court-title{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:center}
 .court{position:relative;width:100%;aspect-ratio:.66;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
-/* playing floor inside the free zone */
+/* playing floor inside the free zone (9×18m) */
 .court-floor{position:absolute;inset:6.5% 9%;background:var(--court-floor);border:2px solid var(--court-line);border-radius:4px;box-shadow:inset 0 0 50px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.15)}
-/* attack (3m) lines + faint front-zone shading */
-.court-floor::before{content:"";position:absolute;left:0;right:0;top:calc(50% - 18.5%);height:37%;background:var(--court-zone);opacity:.22;border-top:2px solid var(--court-line);border-bottom:2px solid var(--court-line)}
+/* front zones: brighter band between the two 3m attack lines (lines are its borders) */
+.court-floor::before{content:"";position:absolute;left:0;right:0;top:33.33%;bottom:33.33%;background:var(--court-zone);opacity:.30;border-top:2px solid var(--court-line);border-bottom:2px solid var(--court-line)}
+/* centre line under the net */
+.court-floor::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:var(--court-line);opacity:.85}
+/* faint rotation-zone numbers for that FIVB-diagram feel */
+.zone-nums{position:absolute;inset:6.5% 9%;pointer-events:none;color:rgba(255,255,255,.16);font-size:9px;font-weight:800}
+.zone-nums span{position:absolute;transform:translate(-50%,-50%)}
 .court-lines{position:absolute;inset:0;pointer-events:none}
 /* net across the middle, with tape + posts + antennas */
 .court-net{position:absolute;left:6%;right:6%;top:50%;height:13px;transform:translateY(-50%);
@@ -289,8 +294,8 @@ table.lb td.med{font-size:18px;text-align:center;width:30px}
 .lb-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}
 .lb-players{font-size:9px;color:var(--text2);margin-top:1px}
 .lb-empty{text-align:center;padding:32px;color:var(--muted)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:11px;font-size:12px;font-weight:600;z-index:60;transition:transform .28s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:11px;font-size:12px;font-weight:600;z-index:60;transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .2s,visibility .2s;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap;opacity:0;visibility:hidden;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
 footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text-align:center}
 .footer-brand{display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:900;margin-bottom:6px}
 .footer-brand em{color:var(--gold);font-style:normal}
@@ -546,6 +551,10 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         <div class="court-title" id="courtTitle">Your Dream Team</div>
         <div class="court" id="court">
           <div class="court-floor"></div>
+          <div class="zone-nums">
+            <span style="left:22%;top:16%">5</span><span style="left:50%;top:16%">6</span><span style="left:78%;top:16%">1</span>
+            <span style="left:22%;top:38%">4</span><span style="left:50%;top:38%">3</span><span style="left:78%;top:38%">2</span>
+          </div>
           <div class="opp-zone">Opponent</div>
           <div class="court-net"></div>
           <div class="your-zone">Your Side</div>
