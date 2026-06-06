@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VolleyDraft — VNL Dream Team Draft</title>
+<style>
+  :root{
+    --bg:#0a0e1a;
+    --bg2:#121a30;
+    --panel:#16203a;
+    --panel2:#1d2a48;
+    --line:#28365c;
+    --accent:#ffce32;
+    --accent2:#ff7a32;
+    --blue:#3a7bff;
+    --green:#27d07a;
+    --red:#ff4d5e;
+    --text:#eef2ff;
+    --muted:#8e9bc4;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 700px at 70% -10%,#1b2b4f 0%,transparent 60%),linear-gradient(160deg,var(--bg),var(--bg2));
+    background-attachment:fixed;
+    color:var(--text);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:18px 16px 80px}
+  header.app{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;margin-bottom:18px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .ball{
+    width:46px;height:46px;border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 30%,#fff 0 38%,transparent 39%),
+      conic-gradient(from 20deg,var(--accent),var(--accent2),var(--accent));
+    box-shadow:0 6px 20px rgba(255,122,50,.35),inset 0 -6px 14px rgba(0,0,0,.25);
+    position:relative;flex:0 0 auto;
+  }
+  .ball::before,.ball::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:2px solid rgba(0,0,0,.35);
+  }
+  .ball::before{transform:rotate(25deg) scaleX(.45)}
+  .ball::after{transform:rotate(-35deg) scaleX(.45)}
+  h1{font-size:22px;margin:0;letter-spacing:.5px}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+
+  .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .panel{
+    background:linear-gradient(180deg,var(--panel),rgba(22,32,58,.6));
+    border:1px solid var(--line);border-radius:16px;padding:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  .panel h2{margin:0 0 12px;font-size:15px;letter-spacing:.4px;color:#cdd7ff;text-transform:uppercase}
+  .panel h2 .pill{font-size:11px;color:var(--muted);text-transform:none;margin-left:6px}
+
+  /* SPIN */
+  .spin-area{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0 4px}
+  .reel{
+    width:100%;max-width:420px;height:120px;overflow:hidden;position:relative;
+    border:1px solid var(--line);border-radius:14px;background:#0c1326;
+    box-shadow:inset 0 0 40px rgba(0,0,0,.5);
+  }
+  .reel::before,.reel::after{content:"";position:absolute;left:0;right:0;height:34px;z-index:3;pointer-events:none}
+  .reel::before{top:0;background:linear-gradient(#0c1326,transparent)}
+  .reel::after{bottom:0;background:linear-gradient(transparent,#0c1326)}
+  .reel-marker{position:absolute;left:0;right:0;top:50%;height:48px;transform:translateY(-50%);
+    border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);z-index:2}
+  .reel-track{position:absolute;left:0;right:0;top:0;will-change:transform}
+  .reel-item{height:48px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:17px}
+  .reel-item .flag{font-size:22px}
+  .reel-item .era{color:var(--muted);font-weight:600;font-size:13px}
+
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:12px;font-weight:700}
+  .btn-spin{
+    background:linear-gradient(180deg,var(--accent),var(--accent2));
+    color:#241500;padding:13px 30px;font-size:16px;letter-spacing:.5px;
+    box-shadow:0 8px 22px rgba(255,122,50,.4);transition:transform .08s,filter .2s;
+  }
+  .btn-spin:hover{filter:brightness(1.06)}
+  .btn-spin:active{transform:translateY(2px)}
+  .btn-spin:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.4)}
+  .btn-ghost{background:#22305a;color:var(--text);padding:10px 16px;font-size:13px;border:1px solid var(--line)}
+  .btn-ghost:hover{background:#2a3a6a}
+
+  /* SQUAD PICK */
+  .squad-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .squad-head .flag{font-size:30px}
+  .squad-title{font-weight:800;font-size:18px}
+  .squad-meta{color:var(--muted);font-size:12.5px}
+  .players{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.players{grid-template-columns:1fr}}
+  .pcard{
+    background:#0e1730;border:1px solid var(--line);border-radius:12px;padding:9px 11px;
+    display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s;
+  }
+  .pcard:hover{border-color:var(--accent);background:#13203f;transform:translateY(-1px)}
+  .pcard.disabled{opacity:.32;cursor:not-allowed;filter:grayscale(.5)}
+  .pcard.disabled:hover{transform:none;border-color:var(--line);background:#0e1730}
+  .pos-badge{
+    flex:0 0 auto;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:12px;color:#0a0e1a;
+  }
+  .pos-S{background:#7ad0ff}.pos-OPP{background:#ff8f6b}.pos-OH{background:#ffd24a}.pos-MB{background:#9be38c}
+  .pinfo{flex:1;min-width:0}
+  .pname{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pmeta{color:var(--muted);font-size:11px}
+  .ovr{font-weight:800;font-size:16px;color:var(--accent);margin-left:auto}
+
+  /* ROSTER */
+  .court{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+  .slot{
+    background:#0e1730;border:1.5px dashed var(--line);border-radius:12px;min-height:88px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;position:relative;
+  }
+  .slot.filled{border-style:solid;border-color:var(--green);background:linear-gradient(180deg,#13243f,#0e1730)}
+  .slot.next{border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,206,50,.25)}
+  .slot .slabel{font-size:10px;color:var(--muted);letter-spacing:1px;font-weight:700}
+  .slot .sname{font-weight:700;font-size:13px;margin-top:3px;line-height:1.15}
+  .slot .smeta{font-size:10px;color:var(--muted);margin-top:2px}
+  .slot .sovr{position:absolute;top:6px;right:8px;font-size:12px;font-weight:800;color:var(--accent)}
+  .slot .splus{font-size:26px;color:var(--line)}
+
+  .team-strength{display:flex;align-items:center;gap:10px;margin:10px 0 4px}
+  .bar{flex:1;height:10px;background:#0c1326;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--accent));width:0;transition:width .6s}
+  .strength-num{font-weight:800;font-size:18px;color:var(--accent)}
+
+  .roster-actions{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+  .btn-go{background:linear-gradient(180deg,var(--green),#16a85e);color:#03130a;padding:12px 18px;font-size:14px;flex:1}
+  .btn-go:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5)}
+
+  .hint{color:var(--muted);font-size:12px;text-align:center;padding:18px 8px}
+
+  /* SEASON / MODAL */
+  .overlay{position:fixed;inset:0;background:rgba(4,7,16,.78);backdrop-filter:blur(4px);z-index:50;
+    display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 14px}
+  .overlay.show{display:flex}
+  .modal{width:100%;max-width:760px;background:linear-gradient(180deg,#16203a,#0e1730);
+    border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .modal h2{margin:0 0 4px;font-size:20px}
+  .modal .close{float:right;background:#22305a;color:#fff;width:32px;height:32px;border-radius:9px;font-size:16px}
+  .stage{margin:14px 0}
+  .stage h3{font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  .match{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;margin-bottom:5px;background:#0e1730;border:1px solid var(--line);font-size:13px}
+  .match .t{display:flex;align-items:center;gap:7px}
+  .match .t.right{justify-content:flex-end;text-align:right}
+  .match .you{color:var(--accent);font-weight:800}
+  .match .sets{font-weight:800;font-size:15px;letter-spacing:1px;min-width:54px;text-align:center}
+  .match .win{color:var(--green)}
+  .match .lose{color:var(--muted)}
+  .match .fl{font-size:16px}
+
+  table.standings{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  table.standings th,table.standings td{padding:7px 8px;text-align:center;border-bottom:1px solid var(--line)}
+  table.standings th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+  table.standings td.tn{text-align:left;font-weight:700}
+  table.standings tr.me td{background:rgba(255,206,50,.10)}
+  .q{color:var(--green);font-size:10px;font-weight:800;margin-left:6px}
+
+  .medal-banner{text-align:center;padding:18px;border-radius:14px;margin-bottom:6px;font-weight:800}
+  .medal-gold{background:linear-gradient(180deg,#fff0b8,#ffce32);color:#3a2700}
+  .medal-silver{background:linear-gradient(180deg,#eef2ff,#b9c4e0);color:#1a2240}
+  .medal-bronze{background:linear-gradient(180deg,#ffd9a8,#cd7f32);color:#3a1e00}
+  .medal-none{background:#22305a;color:#cdd7ff}
+  .medal-banner .big{font-size:30px;display:block}
+  .medal-banner .lil{font-size:13px;font-weight:600;opacity:.85}
+
+  footer{color:var(--muted);font-size:11.5px;text-align:center;margin-top:26px;line-height:1.6}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(120%);
+    background:#22305a;border:1px solid var(--line);color:#fff;padding:11px 18px;border-radius:12px;
+    font-size:13px;z-index:60;transition:transform .3s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app">
+    <div class="brand">
+      <div class="ball"></div>
+      <div>
+        <h1>Volley<span>Draft</span></h1>
+        <div class="sub">Spin a nation &amp; era · draft a legend · win the VNL</div>
+      </div>
+    </div>
+    <button class="btn-ghost" id="resetBtn">↺ New Game</button>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: spin + squad -->
+    <div>
+      <div class="panel" style="margin-bottom:16px">
+        <h2>1 · Spin for a squad <span class="pill">FIVB 1990s → today</span></h2>
+        <div class="spin-area">
+          <div class="reel">
+            <div class="reel-marker"></div>
+            <div class="reel-track" id="reelTrack"></div>
+          </div>
+          <button class="btn-spin" id="spinBtn">🎰 SPIN</button>
+        </div>
+      </div>
+
+      <div class="panel" id="squadPanel" style="display:none">
+        <h2>2 · Draft one player</h2>
+        <div class="squad-head">
+          <div class="flag" id="sqFlag">🏐</div>
+          <div>
+            <div class="squad-title" id="sqTitle">—</div>
+            <div class="squad-meta" id="sqMeta">—</div>
+          </div>
+        </div>
+        <div class="players" id="playerList"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: roster -->
+    <div>
+      <div class="panel">
+        <h2>Your Dream Team</h2>
+        <div class="court" id="court"></div>
+        <div class="team-strength">
+          <span style="font-size:12px;color:var(--muted);font-weight:700">RATING</span>
+          <div class="bar"><i id="strBar"></i></div>
+          <span class="strength-num" id="strNum">—</span>
+        </div>
+        <div class="roster-actions">
+          <button class="btn-go" id="seasonBtn" disabled>🏆 Simulate VNL Season</button>
+        </div>
+        <div class="hint" id="rosterHint">Spin, then pick a player for each open slot.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    A fan-made tribute to volleyball history · squads are illustrative roster snapshots from real FIVB campaigns.<br>
+    Inspired by the spin-and-draft format of 82-0.com.
+  </footer>
+</div>
+
+<!-- SEASON MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   DATA — nation + era squads from major FIVB competitions
+   Positions: S (Setter), OPP (Opposite), OH (Outside Hitter), MB (Middle Blocker)
+   ovr = overall rating (illustrative)
+============================================================ */
+const SQUADS = [
+  {
+    nation:"Italy", flag:"🇮🇹", era:"1990s", comp:"World Championship & World League",
+    blurb:"La Generazione dei Fenomeni — the most dominant men's team of the decade.",
+    players:[
+      {name:"Lorenzo Bernardi", pos:"OH", ovr:97},
+      {name:"Andrea Giani", pos:"OH", ovr:95},
+      {name:"Andrea Zorzi", pos:"OPP", ovr:93},
+      {name:"Marco Bracci", pos:"OPP", ovr:88},
+      {name:"Samuele Papi", pos:"OH", ovr:90},
+      {name:"Andrea Gardini", pos:"MB", ovr:91},
+      {name:"Pasquale Gravina", pos:"MB", ovr:87},
+      {name:"Andrea Sartoretti", pos:"MB", ovr:84},
+      {name:"Paolo Tofoli", pos:"S", ovr:89},
+    ]
+  },
+  {
+    nation:"Netherlands", flag:"🇳🇱", era:"1996", comp:"Olympic Cycle & World League",
+    blurb:"The golden generation that struck Olympic gold in Atlanta.",
+    players:[
+      {name:"Bas van de Goor", pos:"MB", ovr:91},
+      {name:"Olof van der Meulen", pos:"MB", ovr:86},
+      {name:"Peter Blangé", pos:"S", ovr:90},
+      {name:"Mike van de Goor", pos:"S", ovr:84},
+      {name:"Richard Schuil", pos:"OPP", ovr:88},
+      {name:"Guido Görtzen", pos:"OH", ovr:89},
+      {name:"Misha Latuhihin", pos:"OH", ovr:85},
+      {name:"Henk-Jan Held", pos:"OH", ovr:87},
+    ]
+  },
+  {
+    nation:"Yugoslavia / Serbia", flag:"🇷🇸", era:"2000", comp:"Olympic Cycle & World League",
+    blurb:"Sydney 2000 gold — power, blocking and the Grbić brothers.",
+    players:[
+      {name:"Ivan Miljković", pos:"OPP", ovr:95},
+      {name:"Vladimir Grbić", pos:"OH", ovr:93},
+      {name:"Nikola Grbić", pos:"S", ovr:92},
+      {name:"Slobodan Boškan", pos:"OH", ovr:88},
+      {name:"Andrija Gerić", pos:"MB", ovr:88},
+      {name:"Goran Vujević", pos:"MB", ovr:85},
+      {name:"Đula Mešter", pos:"MB", ovr:83},
+      {name:"Vasa Mijić", pos:"OH", ovr:82},
+    ]
+  },
+  {
+    nation:"Brazil", flag:"🇧🇷", era:"2004–2007", comp:"World League & Olympic Cycle",
+    blurb:"Bernardinho's juggernaut — relentless World League dynasty.",
+    players:[
+      {name:"Giba", pos:"OH", ovr:96},
+      {name:"Dante Amaral", pos:"OH", ovr:90},
+      {name:"André Nascimento", pos:"OH", ovr:88},
+      {name:"Anderson Rodrigues", pos:"OPP", ovr:89},
+      {name:"Gustavo Endres", pos:"MB", ovr:90},
+      {name:"André Heller", pos:"MB", ovr:87},
+      {name:"Rodrigão", pos:"MB", ovr:86},
+      {name:"Ricardinho", pos:"S", ovr:91},
+      {name:"Maurício Lima", pos:"S", ovr:85},
+    ]
+  },
+  {
+    nation:"USA", flag:"🇺🇸", era:"2008", comp:"World League & Olympic Cycle",
+    blurb:"The Beijing gold-medal team built around a lethal serve.",
+    players:[
+      {name:"Clayton Stanley", pos:"OPP", ovr:94},
+      {name:"Reid Priddy", pos:"OH", ovr:91},
+      {name:"Riley Salmon", pos:"OH", ovr:85},
+      {name:"Sean Rooney", pos:"OH", ovr:84},
+      {name:"Lloy Ball", pos:"S", ovr:92},
+      {name:"Ryan Millar", pos:"MB", ovr:87},
+      {name:"David Lee", pos:"MB", ovr:86},
+      {name:"Gabriel Gardner", pos:"OH", ovr:83},
+    ]
+  },
+  {
+    nation:"Russia", flag:"🇷🇺", era:"2011–2013", comp:"World League & Olympic Cycle",
+    blurb:"London 2012 champions — towering blockers and Mikhaylov's cannon.",
+    players:[
+      {name:"Maxim Mikhaylov", pos:"OPP", ovr:95},
+      {name:"Dmitriy Muserskiy", pos:"MB", ovr:93},
+      {name:"Alexander Volkov", pos:"MB", ovr:88},
+      {name:"Nikolay Apalikov", pos:"MB", ovr:84},
+      {name:"Sergey Tetyukhin", pos:"OH", ovr:91},
+      {name:"Dmitriy Ilinykh", pos:"OH", ovr:87},
+      {name:"Yury Berezhko", pos:"OH", ovr:84},
+      {name:"Sergey Grankin", pos:"S", ovr:88},
+    ]
+  },
+  {
+    nation:"Bulgaria", flag:"🇧🇬", era:"2006–2009", comp:"World League & World Championship",
+    blurb:"The Kaziyski era — bronze in 2006 and a fearless attacking line.",
+    players:[
+      {name:"Matey Kaziyski", pos:"OH", ovr:93},
+      {name:"Vladimir Nikolov", pos:"OH", ovr:90},
+      {name:"Boyan Yordanov", pos:"OPP", ovr:86},
+      {name:"Andrey Zhekov", pos:"MB", ovr:85},
+      {name:"Vladimir Garkov", pos:"MB", ovr:83},
+      {name:"Hristo Tsvetanov", pos:"S", ovr:84},
+      {name:"Teodor Todorov", pos:"OH", ovr:81},
+    ]
+  },
+  {
+    nation:"Poland", flag:"🇵🇱", era:"2014–2018", comp:"World Championship & World League",
+    blurb:"Back-to-back World Champions (2014 & 2018).",
+    players:[
+      {name:"Bartosz Kurek", pos:"OPP", ovr:94},
+      {name:"Mariusz Wlazły", pos:"OPP", ovr:89},
+      {name:"Michał Kubiak", pos:"OH", ovr:91},
+      {name:"Bartosz Bednorz", pos:"OH", ovr:88},
+      {name:"Aleksander Śliwka", pos:"OH", ovr:88},
+      {name:"Piotr Nowakowski", pos:"MB", ovr:87},
+      {name:"Mateusz Bieniek", pos:"MB", ovr:86},
+      {name:"Fabian Drzyzga", pos:"S", ovr:90},
+    ]
+  },
+  {
+    nation:"France", flag:"🇫🇷", era:"2015–2021", comp:"World League / VNL & Olympic Cycle",
+    blurb:"World League 2015/2017 winners → Tokyo 2020 Olympic champions.",
+    players:[
+      {name:"Earvin Ngapeth", pos:"OH", ovr:94},
+      {name:"Trévor Clévenot", pos:"OH", ovr:88},
+      {name:"Kévin Tillie", pos:"OH", ovr:85},
+      {name:"Jean Patry", pos:"OPP", ovr:88},
+      {name:"Benjamin Toniutti", pos:"S", ovr:90},
+      {name:"Antoine Brizard", pos:"S", ovr:86},
+      {name:"Barthélémy Chinenyeze", pos:"MB", ovr:88},
+      {name:"Nicolas Le Goff", pos:"MB", ovr:86},
+    ]
+  },
+  {
+    nation:"Brazil", flag:"🇧🇷", era:"2019–2021", comp:"VNL & Olympic Cycle",
+    blurb:"VNL silver medallists led by maestro Bruninho.",
+    players:[
+      {name:"Wallace de Souza", pos:"OPP", ovr:90},
+      {name:"Alan Souza", pos:"OPP", ovr:86},
+      {name:"Yoandy Leal", pos:"OH", ovr:91},
+      {name:"Douglas Souza", pos:"OH", ovr:87},
+      {name:"Lucarelli", pos:"OH", ovr:88},
+      {name:"Bruno Rezende", pos:"S", ovr:92},
+      {name:"Lucão", pos:"MB", ovr:86},
+      {name:"Maurício Souza", pos:"MB", ovr:85},
+    ]
+  },
+  {
+    nation:"Poland", flag:"🇵🇱", era:"2023–2024", comp:"VNL Champions",
+    blurb:"VNL 2023 winners with Wilfredo Leon firing.",
+    players:[
+      {name:"Wilfredo Leon", pos:"OH", ovr:95},
+      {name:"Aleksander Śliwka", pos:"OH", ovr:89},
+      {name:"Kamil Semeniuk", pos:"OH", ovr:88},
+      {name:"Bartosz Kurek", pos:"OPP", ovr:90},
+      {name:"Łukasz Kaczmarek", pos:"OPP", ovr:88},
+      {name:"Marcin Komenda", pos:"S", ovr:88},
+      {name:"Jakub Kochanowski", pos:"MB", ovr:87},
+      {name:"Mateusz Bieniek", pos:"MB", ovr:86},
+    ]
+  },
+  {
+    nation:"Italy", flag:"🇮🇹", era:"2021–2023", comp:"World Championship & VNL",
+    blurb:"New-generation World Champions (2022), VNL gold (2022).",
+    players:[
+      {name:"Alessandro Michieletto", pos:"OH", ovr:93},
+      {name:"Daniele Lavia", pos:"OH", ovr:89},
+      {name:"Yuri Romanò", pos:"OPP", ovr:89},
+      {name:"Simone Giannelli", pos:"S", ovr:93},
+      {name:"Gianluca Galassi", pos:"MB", ovr:86},
+      {name:"Roberto Russo", pos:"MB", ovr:85},
+      {name:"Simone Anzani", pos:"MB", ovr:85},
+      {name:"Mattia Bottolo", pos:"OH", ovr:84},
+    ]
+  },
+  {
+    nation:"USA", flag:"🇺🇸", era:"2018–2021", comp:"VNL & Olympic Cycle",
+    blurb:"Two-time VNL champions (2018, 2019).",
+    players:[
+      {name:"Matt Anderson", pos:"OPP", ovr:91},
+      {name:"Aaron Russell", pos:"OH", ovr:88},
+      {name:"T.J. DeFalco", pos:"OH", ovr:86},
+      {name:"Taylor Sander", pos:"OH", ovr:85},
+      {name:"Micah Christenson", pos:"S", ovr:89},
+      {name:"Max Holt", pos:"MB", ovr:87},
+      {name:"David Smith", pos:"MB", ovr:84},
+      {name:"Jeff Jendryk", pos:"MB", ovr:83},
+    ]
+  },
+  {
+    nation:"Argentina", flag:"🇦🇷", era:"2019–2021", comp:"VNL & Olympic Cycle",
+    blurb:"Tokyo 2020 bronze medallists, marshalled by De Cecco.",
+    players:[
+      {name:"Luciano De Cecco", pos:"S", ovr:91},
+      {name:"Facundo Conte", pos:"OH", ovr:88},
+      {name:"Cristian Poglajen", pos:"OH", ovr:84},
+      {name:"Ezequiel Palacios", pos:"OH", ovr:83},
+      {name:"Bruno Lima", pos:"OPP", ovr:87},
+      {name:"Sebastián Solé", pos:"MB", ovr:86},
+      {name:"Agustín Loser", pos:"MB", ovr:85},
+    ]
+  },
+  {
+    nation:"Cuba", flag:"🇨🇺", era:"2009–2012", comp:"World League & World Championship",
+    blurb:"Explosive young Cuban side — raw athleticism and a teenage Leon.",
+    players:[
+      {name:"Wilfredo Leon", pos:"OH", ovr:90},
+      {name:"Yoandy Leal", pos:"OH", ovr:87},
+      {name:"Henry Bell", pos:"OH", ovr:83},
+      {name:"Oreol Camejo", pos:"OPP", ovr:86},
+      {name:"Robertlandy Simón", pos:"MB", ovr:90},
+      {name:"Fernando Hernández", pos:"MB", ovr:83},
+      {name:"Raydel Hierrezuelo", pos:"S", ovr:84},
+    ]
+  },
+  {
+    nation:"Slovenia", flag:"🇸🇮", era:"2019–2022", comp:"VNL & World Championship",
+    blurb:"Surprise World Championship silver (2022) on a soaring run.",
+    players:[
+      {name:"Tine Urnaut", pos:"OH", ovr:88},
+      {name:"Klemen Čebulj", pos:"OH", ovr:86},
+      {name:"Rok Možič", pos:"OH", ovr:87},
+      {name:"Tonček Štern", pos:"OPP", ovr:87},
+      {name:"Dejan Vinčić", pos:"S", ovr:84},
+      {name:"Alen Pajenk", pos:"MB", ovr:83},
+      {name:"Jan Kozamernik", pos:"MB", ovr:84},
+    ]
+  },
+];
+
+/* AI opponent nations for the season (name + base strength band) */
+const AI_TEAMS = [
+  {nation:"Brazil", flag:"🇧🇷", base:90},
+  {nation:"Italy", flag:"🇮🇹", base:90},
+  {nation:"Poland", flag:"🇵🇱", base:91},
+  {nation:"France", flag:"🇫🇷", base:89},
+  {nation:"USA", flag:"🇺🇸", base:88},
+  {nation:"Japan", flag:"🇯🇵", base:88},
+  {nation:"Slovenia", flag:"🇸🇮", base:86},
+  {nation:"Argentina", flag:"🇦🇷", base:86},
+  {nation:"Serbia", flag:"🇷🇸", base:85},
+  {nation:"Germany", flag:"🇩🇪", base:84},
+  {nation:"Netherlands", flag:"🇳🇱", base:83},
+  {nation:"Canada", flag:"🇨🇦", base:83},
+];
+
+/* Roster: 6 court positions */
+const SLOTS = [
+  {pos:"S",  label:"SETTER"},
+  {pos:"OPP",label:"OPPOSITE"},
+  {pos:"OH", label:"OUTSIDE"},
+  {pos:"OH", label:"OUTSIDE"},
+  {pos:"MB", label:"MIDDLE"},
+  {pos:"MB", label:"MIDDLE"},
+];
+const POS_NAME = {S:"Setter", OPP:"Opposite", OH:"Outside Hitter", MB:"Middle Blocker"};
+
+/* ============================================================ STATE */
+let roster = SLOTS.map(s=>({...s, player:null}));
+let currentSquad = null;
+let spinning = false;
+let pickedKeys = new Set(); // avoid drafting exact same player twice
+
+/* ============================================================ HELPERS */
+const $ = id => document.getElementById(id);
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200);
+}
+function nextOpenIndex(){ return roster.findIndex(s=>!s.player); }
+function rosterFull(){ return roster.every(s=>s.player); }
+function playerKey(p){ return p.name+"|"+p.pos; }
+
+/* ============================================================ REEL / SPIN */
+function buildReelStatic(){
+  const track=$("reelTrack"); track.innerHTML="";
+  for(let i=0;i<3;i++){
+    const sq=SQUADS[i%SQUADS.length];
+    track.appendChild(reelItem(sq));
+  }
+  track.style.transform="translateY(-48px)";
+}
+function reelItem(sq){
+  const d=document.createElement("div");
+  d.className="reel-item";
+  d.innerHTML=`<span class="flag">${sq.flag}</span>${sq.nation} <span class="era">· ${sq.era}</span>`;
+  return d;
+}
+function spin(){
+  if(spinning) return;
+  const open=nextOpenIndex();
+  if(open===-1){ toast("Roster is full — simulate your season!"); return; }
+  spinning=true;
+  $("spinBtn").disabled=true;
+  $("squadPanel").style.display="none";
+
+  const target=SQUADS[Math.floor(Math.random()*SQUADS.length)];
+  const track=$("reelTrack");
+  const spins=20+Math.floor(Math.random()*8);
+  const seq=[];
+  for(let i=0;i<spins;i++) seq.push(SQUADS[Math.floor(Math.random()*SQUADS.length)]);
+  seq.push(target); // final landing
+  // pad so landing sits on the marker (item index = seq.length-2 visually centered)
+  track.innerHTML="";
+  seq.forEach(sq=>track.appendChild(reelItem(sq)));
+  track.style.transition="none";
+  track.style.transform="translateY(0)";
+  void track.offsetWidth; // reflow
+
+  const itemH=48;
+  const landIndex=seq.length-2; // center the target under marker
+  const dist=landIndex*itemH;
+  track.style.transition="transform 3.1s cubic-bezier(.13,.78,.18,1)";
+  track.style.transform=`translateY(${-dist}px)`;
+
+  setTimeout(()=>{
+    spinning=false;
+    $("spinBtn").disabled=false;
+    showSquad(target);
+  },3250);
+}
+
+/* ============================================================ SQUAD PANEL */
+function showSquad(sq){
+  currentSquad=sq;
+  $("squadPanel").style.display="block";
+  $("sqFlag").textContent=sq.flag;
+  $("sqTitle").textContent=`${sq.nation} — ${sq.era}`;
+  $("sqMeta").textContent=`${sq.comp} · ${sq.blurb}`;
+  const open=nextOpenIndex();
+  const needPos= open===-1 ? null : roster[open].pos;
+  const list=$("playerList"); list.innerHTML="";
+
+  // sort by position then ovr desc
+  const order={S:0,OPP:1,OH:2,MB:3};
+  const sorted=[...sq.players].sort((a,b)=> (order[a.pos]-order[b.pos]) || (b.ovr-a.ovr));
+
+  sorted.forEach(p=>{
+    const eligible = needPos && p.pos===needPos && !pickedKeys.has(playerKey(p));
+    const card=document.createElement("div");
+    card.className="pcard"+(eligible?"":" disabled");
+    card.innerHTML=`
+      <div class="pos-badge pos-${p.pos}">${p.pos}</div>
+      <div class="pinfo">
+        <div class="pname">${p.name}</div>
+        <div class="pmeta">${POS_NAME[p.pos]}${pickedKeys.has(playerKey(p))?" · already drafted":""}</div>
+      </div>
+      <div class="ovr">${p.ovr}</div>`;
+    if(eligible){
+      card.addEventListener("click",()=>draftPlayer(p,sq));
+    }
+    list.appendChild(card);
+  });
+
+  if(needPos){
+    const h2=$("squadPanel").querySelector("h2");
+    h2.innerHTML=`2 · Draft one <b style="color:var(--accent)">${POS_NAME[needPos]}</b> <span class="pill">tap a highlighted card</span>`;
+  }
+}
+
+function draftPlayer(p,sq){
+  const open=nextOpenIndex();
+  if(open===-1) return;
+  if(roster[open].pos!==p.pos){ toast("Wrong position for this slot."); return; }
+  roster[open].player={...p, from:`${sq.nation} ${sq.era}`, flag:sq.flag};
+  pickedKeys.add(playerKey(p));
+  $("squadPanel").style.display="none";
+  renderRoster();
+  if(rosterFull()){
+    toast("Dream team complete! 🏐");
+  }else{
+    toast(`${p.name} drafted! Spin for the next slot.`);
+  }
+}
+
+/* ============================================================ ROSTER RENDER */
+function renderRoster(){
+  const court=$("court"); court.innerHTML="";
+  const open=nextOpenIndex();
+  roster.forEach((s,i)=>{
+    const div=document.createElement("div");
+    div.className="slot"+(s.player?" filled":"")+(i===open?" next":"");
+    if(s.player){
+      div.innerHTML=`
+        <div class="sovr">${s.player.ovr}</div>
+        <div class="slabel">${s.label}</div>
+        <div class="sname">${s.player.name}</div>
+        <div class="smeta">${s.player.flag} ${s.player.from}</div>`;
+    }else{
+      div.innerHTML=`
+        <div class="slabel">${s.label}</div>
+        <div class="splus">＋</div>`;
+    }
+    court.appendChild(div);
+  });
+
+  const filled=roster.filter(s=>s.player);
+  const str=teamStrength(roster);
+  $("strBar").style.width = filled.length? Math.min(100,(str-60)/40*100)+"%" : "0%";
+  $("strNum").textContent = filled.length? str.toFixed(1) : "—";
+  $("seasonBtn").disabled = !rosterFull();
+  $("rosterHint").textContent = rosterFull()
+    ? "Your six are locked in. Simulate the VNL season!"
+    : `Open slot: ${roster[open].label}. Spin to find a ${POS_NAME[roster[open].pos]}.`;
+}
+
+function teamStrength(r){
+  const ps=r.filter(s=>s.player).map(s=>s.player.ovr);
+  if(!ps.length) return 0;
+  // weight: best players matter a bit more
+  const sorted=[...ps].sort((a,b)=>b-a);
+  let w=0,tot=0;
+  sorted.forEach((v,i)=>{ const wt=1+(sorted.length-i)*0.08; w+=v*wt; tot+=wt; });
+  return w/tot;
+}
+
+/* ============================================================ SEASON SIM
+   VNL-style: preliminary round (round robin, all play all once),
+   top 4 advance to finals (semis + bronze + final).
+============================================================ */
+function simulateSeason(){
+  const myStr=teamStrength(roster);
+  // build 7 opponents from AI pool (random subset), + me = 8 teams
+  const pool=[...AI_TEAMS].sort(()=>Math.random()-0.5).slice(0,7).map(t=>({
+    nation:t.nation, flag:t.flag,
+    str:t.base + (Math.random()*6-3)
+  }));
+  const me={nation:"Your Dream Team", flag:"⭐", str:myStr, me:true};
+  let teams=[me,...pool];
+
+  // init stats
+  teams.forEach(t=>{ t.W=0;t.L=0; t.setW=0;t.setL=0; t.pts=0; });
+
+  // ---- preliminary round robin ----
+  const prelim=[];
+  for(let i=0;i<teams.length;i++){
+    for(let j=i+1;j<teams.length;j++){
+      const m=playMatch(teams[i],teams[j]);
+      prelim.push(m);
+      applyResult(teams[i],teams[j],m);
+    }
+  }
+
+  // standings: by wins, then league points, then set ratio
+  teams.sort((a,b)=> b.W-a.W || b.pts-a.pts || (b.setW-b.setL)-(a.setW-a.setL) || b.str-a.str);
+  teams.forEach((t,i)=>t.rank=i+1);
+
+  // ---- finals: top 4 ----
+  const top4=teams.slice(0,4);
+  const finals={};
+  if(top4.length>=4){
+    // semis: 1v4, 2v3
+    const sf1=playMatch(top4[0],top4[3]);
+    const sf2=playMatch(top4[1],top4[2]);
+    const w1=winnerOf(top4[0],top4[3],sf1), l1=loserOf(top4[0],top4[3],sf1);
+    const w2=winnerOf(top4[1],top4[2],sf2), l2=loserOf(top4[1],top4[2],sf2);
+    const bronze=playMatch(l1,l2);
+    const gold=playMatch(w1,w2);
+    finals.sf=[{m:sf1,a:top4[0],b:top4[3]},{m:sf2,a:top4[1],b:top4[2]}];
+    finals.bronze={m:bronze,a:l1,b:l2,winner:winnerOf(l1,l2,bronze)};
+    finals.gold={m:gold,a:w1,b:w2,winner:winnerOf(w1,w2,gold),runner:loserOf(w1,w2,gold)};
+    finals.champion=finals.gold.winner;
+    finals.silver=finals.gold.runner;
+    finals.bronzeWinner=finals.bronze.winner;
+  }
+
+  renderSeason(teams,prelim,top4,finals,me);
+}
+
+function playMatch(a,b){
+  // best of 5 sets; set win prob from logistic of strength diff
+  let sa=0,sb=0; const setScores=[];
+  while(sa<3 && sb<3){
+    const last = (sa===2&&sb===2);
+    const cap = last?15:25;
+    const pa=setWinProb(a.str,b.str);
+    if(Math.random()<pa){ sa++; setScores.push(makeSetScore(cap,true)); }
+    else { sb++; setScores.push(makeSetScore(cap,false)); }
+  }
+  return {a,b,sa,sb, aWon:sa>sb, setScores};
+}
+function setWinProb(ra,rb){
+  return 1/(1+Math.pow(10,(rb-ra)/9));
+}
+function makeSetScore(cap,aWon){
+  const win=cap+ (Math.random()<0.25? Math.floor(Math.random()*4):0);
+  const lose=Math.max(cap-2-Math.floor(Math.random()* (cap===15?6:12)), Math.min(cap-2, win-2));
+  const lo=Math.min(lose,win-2);
+  return aWon? [win,lo] : [lo,win];
+}
+function applyResult(a,b,m){
+  a.setW+=m.sa; a.setL+=m.sb; b.setW+=m.sb; b.setL+=m.sa;
+  if(m.aWon){ a.W++; b.L++; } else { b.W++; a.L++; }
+  // VNL league points: 3-0/3-1 => 3pts, 3-2 => 2pts winner /1pt loser
+  if(m.sa===3){ a.pts += (m.sb<=1?3:2); b.pts += (m.sb===2?1:0); }
+  else { b.pts += (m.sa<=1?3:2); a.pts += (m.sa===2?1:0); }
+}
+function winnerOf(a,b,m){ return m.aWon?a:b; }
+function loserOf(a,b,m){ return m.aWon?b:a; }
+
+/* ============================================================ SEASON RENDER */
+function renderSeason(teams,prelim,top4,finals,me){
+  const champ=finals.champion;
+  let medal="none", medalTxt="No medal — finish top 3 next time!", emoji="🏐";
+  if(champ){
+    if(finals.champion.me){ medal="gold"; medalTxt="VNL CHAMPIONS!"; emoji="🥇"; }
+    else if(finals.silver.me){ medal="silver"; medalTxt="VNL Silver Medal!"; emoji="🥈"; }
+    else if(finals.bronzeWinner.me){ medal="bronze"; medalTxt="VNL Bronze Medal!"; emoji="🥉"; }
+  }
+
+  const teamSide=(t,right)=>`
+    <div class="t ${right?'right':''} ${t.me?'you':''}">
+      ${right?'':`<span class="fl">${t.flag}</span>`}
+      <span>${t.nation}</span>
+      ${right?`<span class="fl">${t.flag}</span>`:''}
+    </div>`;
+  const matchRow=(m)=>{
+    const aw=m.aWon;
+    return `<div class="match">
+      ${teamSide(m.a,false)}
+      <div class="sets"><span class="${aw?'win':'lose'}">${m.sa}</span>-<span class="${aw?'lose':'win'}">${m.sb}</span></div>
+      ${teamSide(m.b,true)}
+    </div>`;
+  };
+
+  let html=`
+    <button class="close" id="closeModal">✕</button>
+    <h2>🏐 VNL Season Result</h2>
+    <div class="squad-meta">Preliminary round robin · Top 4 to the Finals</div>
+
+    <div class="medal-banner medal-${medal}">
+      <span class="big">${emoji} ${medalTxt}</span>
+      <span class="lil">Your team rating ${teamStrength(roster).toFixed(1)} · finished ${ordinal(me.rank)} in prelims</span>
+    </div>
+
+    <div class="stage">
+      <h3>Final Standings — Preliminary Round</h3>
+      <table class="standings">
+        <tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
+        ${teams.map(t=>`
+          <tr class="${t.me?'me':''}">
+            <td>${t.rank}${t.rank<=4?'<span class="q">FINALS</span>':''}</td>
+            <td class="tn">${t.flag} ${t.nation}</td>
+            <td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td>
+            <td>${t.setW}-${t.setL}</td>
+          </tr>`).join("")}
+      </table>
+    </div>`;
+
+  if(finals.sf){
+    html+=`
+    <div class="stage">
+      <h3>Semifinals</h3>
+      ${matchRow(finals.sf[0].m)}
+      ${matchRow(finals.sf[1].m)}
+    </div>
+    <div class="stage">
+      <h3>Bronze Medal Match</h3>
+      ${matchRow(finals.bronze.m)}
+    </div>
+    <div class="stage">
+      <h3>🏆 Gold Medal Match</h3>
+      ${matchRow(finals.gold.m)}
+      <div class="squad-meta" style="text-align:center;margin-top:8px">
+        🥇 ${finals.champion.flag} ${finals.champion.nation} &nbsp;·&nbsp;
+        🥈 ${finals.silver.flag} ${finals.silver.nation} &nbsp;·&nbsp;
+        🥉 ${finals.bronzeWinner.flag} ${finals.bronzeWinner.nation}
+      </div>
+    </div>`;
+  }
+
+  html+=`
+    <div class="stage">
+      <h3>All Preliminary Matches</h3>
+      ${prelim.map(matchRow).join("")}
+    </div>
+    <div class="roster-actions">
+      <button class="btn-go" id="playAgain">↺ Draft a new team</button>
+    </div>`;
+
+  $("modal").innerHTML=html;
+  $("overlay").classList.add("show");
+  $("closeModal").onclick=()=>$("overlay").classList.remove("show");
+  $("playAgain").onclick=()=>{ $("overlay").classList.remove("show"); resetGame(); };
+}
+function ordinal(n){
+  const s=["th","st","nd","rd"], v=n%100;
+  return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+/* ============================================================ RESET / INIT */
+function resetGame(){
+  roster = SLOTS.map(s=>({...s, player:null}));
+  currentSquad=null; pickedKeys=new Set();
+  $("squadPanel").style.display="none";
+  buildReelStatic();
+  renderRoster();
+}
+
+$("spinBtn").addEventListener("click",spin);
+$("seasonBtn").addEventListener("click",()=>{ if(rosterFull()) simulateSeason(); });
+$("resetBtn").addEventListener("click",resetGame);
+$("overlay").addEventListener("click",e=>{ if(e.target===$("overlay")) $("overlay").classList.remove("show"); });
+
+resetGame();
+</script>
+</body>
+</html>
