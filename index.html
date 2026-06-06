@@ -6,286 +6,482 @@
 <title>VolleyDraft — VNL Dream Team Draft</title>
 <style>
   :root{
-    --bg:#0a0e1a;
-    --bg2:#121a30;
-    --panel:#16203a;
-    --line:#28365c;
-    --accent:#ffce32;
-    --accent2:#ff7a32;
-    --blue:#3a7bff;
-    --green:#27d07a;
-    --red:#ff4d5e;
-    --text:#eef2ff;
-    --muted:#8e9bc4;
+    --bg:#07090f;
+    --surface:#0f1623;
+    --surface2:#141d30;
+    --border:#1c2b45;
+    --border2:#2a3f62;
+    --gold:#f59e0b;
+    --gold2:#d97706;
+    --purple:#8b5cf6;
+    --green:#10b981;
+    --red:#ef4444;
+    --blue:#3b82f6;
+    --text:#f1f5f9;
+    --text2:#94a3b8;
+    --muted:#475569;
   }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
   body{
-    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:radial-gradient(1200px 700px at 70% -10%,#1b2b4f 0%,transparent 60%),linear-gradient(160deg,var(--bg),var(--bg2));
-    background-attachment:fixed;
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    background:var(--bg);
     color:var(--text);
     min-height:100vh;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1080px;margin:0 auto;padding:18px 16px 80px}
-  header.app{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:12px;margin-bottom:18px;flex-wrap:wrap;
-  }
-  .brand{display:flex;align-items:center;gap:12px}
-  .ball{
-    width:46px;height:46px;border-radius:50%;
-    background:
-      radial-gradient(circle at 32% 30%,#fff 0 38%,transparent 39%),
-      conic-gradient(from 20deg,var(--accent),var(--accent2),var(--accent));
-    box-shadow:0 6px 20px rgba(255,122,50,.35),inset 0 -6px 14px rgba(0,0,0,.25);
-    position:relative;flex:0 0 auto;
-  }
-  .ball::before,.ball::after{
-    content:"";position:absolute;inset:0;border-radius:50%;
-    border:2px solid rgba(0,0,0,.35);
-  }
-  .ball::before{transform:rotate(25deg) scaleX(.45)}
-  .ball::after{transform:rotate(-35deg) scaleX(.45)}
-  h1{font-size:22px;margin:0;letter-spacing:.5px}
-  h1 span{color:var(--accent)}
-  .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
 
-  /* NAV BUTTONS */
-  .header-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  button{font-family:inherit;cursor:pointer;border:none;border-radius:12px;font-weight:700}
-  .btn-ghost{background:#22305a;color:var(--text);padding:10px 16px;font-size:13px;border:1px solid var(--line)}
-  .btn-ghost:hover{background:#2a3a6a}
-  .btn-google{
-    background:#fff;color:#1a1a2e;padding:9px 14px;font-size:13px;
-    display:flex;align-items:center;gap:7px;border:1px solid #ccc;
+  /* ── HEADER ── */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;border-bottom:1px solid var(--border);
+    background:rgba(7,9,15,.85);backdrop-filter:blur(12px);
+    position:sticky;top:0;z-index:40;
   }
-  .btn-google:hover{background:#f0f0f0}
-  .btn-google svg{width:17px;height:17px;flex:0 0 auto}
-  .user-chip{
-    display:flex;align-items:center;gap:8px;background:#1d2a48;
-    border:1px solid var(--line);border-radius:12px;padding:6px 12px;font-size:13px;
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-ball{
+    width:40px;height:40px;border-radius:50%;flex:0 0 auto;
+    background:radial-gradient(circle at 33% 30%,#fff 0 34%,transparent 35%),
+               conic-gradient(from 15deg,var(--gold),var(--gold2),var(--gold));
+    box-shadow:0 0 18px rgba(245,158,11,.4);
+    position:relative;
   }
+  .logo-ball::before,.logo-ball::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:2px solid rgba(0,0,0,.3);
+  }
+  .logo-ball::before{transform:rotate(22deg) scaleX(.42)}
+  .logo-ball::after{transform:rotate(-30deg) scaleX(.42)}
+  .logo-text{font-size:20px;font-weight:900;letter-spacing:-.3px}
+  .logo-text span{color:var(--gold)}
+  .logo-sub{font-size:11px;color:var(--muted);margin-top:1px}
+
+  .header-nav{display:flex;align-items:center;gap:8px}
+  button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition:all .15s}
+  .btn-icon{
+    background:var(--surface2);border:1px solid var(--border2);
+    color:var(--text2);width:38px;height:38px;border-radius:10px;
+    font-size:16px;display:flex;align-items:center;justify-content:center;
+  }
+  .btn-icon:hover{background:var(--border2);color:var(--text)}
+  .btn-outline{
+    background:transparent;border:1px solid var(--border2);
+    color:var(--text2);padding:8px 14px;border-radius:10px;font-size:13px;
+  }
+  .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#1a0a00;padding:10px 22px;border-radius:10px;font-size:14px;
+    box-shadow:0 4px 14px rgba(245,158,11,.35);
+  }
+  .btn-primary:hover{filter:brightness(1.08);box-shadow:0 6px 20px rgba(245,158,11,.45)}
+  .btn-primary:active{transform:translateY(1px)}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;filter:none;box-shadow:none}
+  .btn-danger{background:var(--surface2);border:1px solid var(--border2);color:var(--red);padding:8px 14px;border-radius:10px;font-size:13px}
+  .btn-danger:hover{background:rgba(239,68,68,.12)}
+
+  .user-chip{display:flex;align-items:center;gap:8px;background:var(--surface2);
+    border:1px solid var(--border2);border-radius:10px;padding:5px 12px 5px 6px;font-size:13px}
   .user-chip img{width:26px;height:26px;border-radius:50%;object-fit:cover}
-  .user-chip .uname{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .btn-signout{background:none;color:var(--muted);font-size:11px;padding:0;margin-left:4px}
+  .user-chip .uname{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
+  .btn-signout{background:none;color:var(--muted);font-size:11px;padding:0;margin-left:2px}
   .btn-signout:hover{color:var(--red)}
 
-  .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}
-  @media(max-width:880px){.grid{grid-template-columns:1fr}}
-  .panel{
-    background:linear-gradient(180deg,var(--panel),rgba(22,32,58,.6));
-    border:1px solid var(--line);border-radius:16px;padding:16px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+  .btn-google{
+    background:#fff;color:#1a1a2e;padding:8px 14px;border-radius:10px;font-size:13px;
+    display:flex;align-items:center;gap:7px;border:1px solid #ddd;
   }
-  .panel h2{margin:0 0 12px;font-size:15px;letter-spacing:.4px;color:#cdd7ff;text-transform:uppercase}
-  .panel h2 .pill{font-size:11px;color:var(--muted);text-transform:none;margin-left:6px}
+  .btn-google:hover{background:#f5f5f5}
+  .btn-google svg{width:16px;height:16px;flex:0 0 auto}
 
-  /* SPIN */
-  .spin-area{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0 4px}
-  .reel{
-    width:100%;max-width:420px;height:120px;overflow:hidden;position:relative;
-    border:1px solid var(--line);border-radius:14px;background:#0c1326;
-    box-shadow:inset 0 0 40px rgba(0,0,0,.5);
+  /* ── LAYOUT ── */
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 80px}
+  .game-grid{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
+  @media(max-width:900px){.game-grid{grid-template-columns:1fr}}
+
+  /* ── ROUND BADGE ── */
+  .round-bar{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .round-badge{
+    background:var(--surface2);border:1px solid var(--border2);
+    border-radius:20px;padding:6px 16px;font-size:13px;font-weight:700;
+    color:var(--text2);letter-spacing:.5px;
   }
-  .reel::before,.reel::after{content:"";position:absolute;left:0;right:0;height:34px;z-index:3;pointer-events:none}
-  .reel::before{top:0;background:linear-gradient(#0c1326,transparent)}
-  .reel::after{bottom:0;background:linear-gradient(transparent,#0c1326)}
-  .reel-marker{position:absolute;left:0;right:0;top:50%;height:48px;transform:translateY(-50%);
-    border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);z-index:2}
-  .reel-track{position:absolute;left:0;right:0;top:0;will-change:transform}
-  .reel-item{height:48px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:17px}
-  .reel-item .flag{font-size:22px}
-  .reel-item .era{color:var(--muted);font-weight:600;font-size:13px}
+  .round-badge span{color:var(--gold)}
+  .round-dots{display:flex;gap:6px}
+  .round-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:.3s}
+  .round-dot.done{background:var(--green)}
+  .round-dot.active{background:var(--gold);box-shadow:0 0 8px rgba(245,158,11,.6)}
 
+  /* ── SPIN CARDS ── */
+  .spin-section{margin-bottom:20px}
+  .spin-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .spin-card{
+    background:var(--surface);border:2px solid var(--border2);
+    border-radius:16px;padding:20px 16px 18px;text-align:center;
+    position:relative;overflow:hidden;transition:border-color .3s;
+  }
+  .spin-card.nation-card{border-color:var(--gold);box-shadow:0 0 20px rgba(245,158,11,.15)}
+  .spin-card.era-card{border-color:var(--purple);box-shadow:0 0 20px rgba(139,92,246,.15)}
+  .spin-card.spinning .card-val{animation:flicker .08s linear infinite}
+  .card-label{
+    font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);
+    text-transform:uppercase;margin-bottom:12px;
+  }
+  .nation-card .card-label{color:var(--gold)}
+  .era-card .card-label{color:var(--purple)}
+  .card-flag{font-size:36px;line-height:1;margin-bottom:6px;min-height:40px;display:flex;align-items:center;justify-content:center}
+  .card-val{font-size:20px;font-weight:900;line-height:1.2;color:var(--text);min-height:26px}
+  .card-sub{font-size:11px;color:var(--muted);margin-top:5px;min-height:14px}
+  @keyframes flicker{0%,100%{opacity:1}50%{opacity:.7}}
+
+  .spin-btn-row{display:flex;justify-content:center}
   .btn-spin{
-    background:linear-gradient(180deg,var(--accent),var(--accent2));
-    color:#241500;padding:13px 30px;font-size:16px;letter-spacing:.5px;
-    box-shadow:0 8px 22px rgba(255,122,50,.4);transition:transform .08s,filter .2s;
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#1a0a00;padding:14px 48px;border-radius:14px;font-size:16px;
+    letter-spacing:.5px;box-shadow:0 6px 20px rgba(245,158,11,.4);
   }
-  .btn-spin:hover{filter:brightness(1.06)}
+  .btn-spin:hover{filter:brightness(1.08)}
   .btn-spin:active{transform:translateY(2px)}
-  .btn-spin:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.4)}
+  .btn-spin:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5);transform:none}
 
-  /* SQUAD PICK */
-  .squad-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-  .squad-head .flag{font-size:30px}
-  .squad-title{font-weight:800;font-size:18px}
-  .squad-meta{color:var(--muted);font-size:12.5px}
-  .players{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  @media(max-width:520px){.players{grid-template-columns:1fr}}
+  /* ── SQUAD PANEL ── */
+  .squad-panel{
+    background:var(--surface);border:1px solid var(--border2);
+    border-radius:16px;padding:18px;margin-top:16px;
+    animation:slideUp .25s ease;
+  }
+  @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .squad-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .squad-flag{font-size:36px;line-height:1}
+  .squad-name{font-size:18px;font-weight:800}
+  .squad-meta{font-size:12px;color:var(--text2);margin-top:2px}
+  .squad-pick-label{
+    font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--muted);margin-bottom:10px;
+  }
+  .squad-pick-label span{color:var(--gold)}
+
+  .players-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:480px){.players-grid{grid-template-columns:1fr}}
   .pcard{
-    background:#0e1730;border:1px solid var(--line);border-radius:12px;padding:9px 11px;
-    display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:12px;padding:10px 12px;
+    display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s;
   }
-  .pcard:hover{border-color:var(--accent);background:#13203f;transform:translateY(-1px)}
-  .pcard.disabled{opacity:.32;cursor:not-allowed;filter:grayscale(.5)}
-  .pcard.disabled:hover{transform:none;border-color:var(--line);background:#0e1730}
-  .pos-badge{
-    flex:0 0 auto;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:12px;color:#0a0e1a;
+  .pcard:hover{border-color:var(--gold);background:#1a2540;transform:translateY(-1px)}
+  .pcard.disabled{opacity:.28;cursor:not-allowed;filter:grayscale(.6)}
+  .pcard.disabled:hover{transform:none;border-color:var(--border);background:var(--surface2)}
+  .pos-pill{
+    flex:0 0 auto;width:36px;height:36px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:11px;color:#07090f;
   }
-  .pos-S{background:#7ad0ff}.pos-OPP{background:#ff8f6b}.pos-OH{background:#ffd24a}.pos-MB{background:#9be38c}
+  .pos-S{background:#38bdf8}.pos-OPP{background:#fb923c}.pos-OH{background:#fbbf24}.pos-MB{background:#4ade80}
   .pinfo{flex:1;min-width:0}
-  .pname{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pmeta{color:var(--muted);font-size:11px}
-  .ovr{font-weight:800;font-size:16px;color:var(--accent);margin-left:auto}
+  .pname{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ppos{color:var(--text2);font-size:11px;margin-top:1px}
+  .povr{font-weight:900;font-size:17px;color:var(--gold);margin-left:auto;flex:0 0 auto}
 
-  /* ROSTER */
-  .court{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-  .slot{
-    background:#0e1730;border:1.5px dashed var(--line);border-radius:12px;min-height:88px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;position:relative;
+  /* ── COURT ── */
+  .court-wrap{position:relative}
+  .court-title{
+    font-size:11px;font-weight:800;letter-spacing:2px;color:var(--muted);
+    text-transform:uppercase;margin-bottom:12px;text-align:center;
   }
-  .slot.filled{border-style:solid;border-color:var(--green);background:linear-gradient(180deg,#13243f,#0e1730)}
-  .slot.next{border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,206,50,.25)}
-  .slot .slabel{font-size:10px;color:var(--muted);letter-spacing:1px;font-weight:700}
-  .slot .sname{font-weight:700;font-size:13px;margin-top:3px;line-height:1.15}
-  .slot .smeta{font-size:10px;color:var(--muted);margin-top:2px}
-  .slot .sovr{position:absolute;top:6px;right:8px;font-size:12px;font-weight:800;color:var(--accent)}
-  .slot .splus{font-size:26px;color:var(--line)}
+  .court{
+    position:relative;width:100%;aspect-ratio:.75;
+    background:linear-gradient(180deg,#071a30 0%,#0a2040 100%);
+    border:2px solid var(--border2);border-radius:16px;overflow:hidden;
+  }
 
-  .team-strength{display:flex;align-items:center;gap:10px;margin:10px 0 4px}
-  .bar{flex:1;height:10px;background:#0c1326;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
-  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--accent));width:0;transition:width .6s}
-  .strength-num{font-weight:800;font-size:18px;color:var(--accent)}
+  /* court markings */
+  .court-lines{position:absolute;inset:0;pointer-events:none}
+  .court-lines svg{width:100%;height:100%}
 
-  .roster-actions{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
-  .btn-go{background:linear-gradient(180deg,var(--green),#16a85e);color:#03130a;padding:12px 18px;font-size:14px;flex:1}
-  .btn-go:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5)}
-  .hint{color:var(--muted);font-size:12px;text-align:center;padding:18px 8px}
+  /* net */
+  .court-net{
+    position:absolute;left:8%;right:8%;top:50%;
+    height:5px;background:rgba(255,255,255,.22);
+    border-radius:2px;transform:translateY(-50%);
+    box-shadow:0 0 10px rgba(255,255,255,.1);
+  }
+  .court-net::before,.court-net::after{
+    content:"NET";font-size:9px;font-weight:800;letter-spacing:2px;
+    color:rgba(255,255,255,.25);position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+  }
 
-  /* MODAL / OVERLAY */
-  .overlay{position:fixed;inset:0;background:rgba(4,7,16,.78);backdrop-filter:blur(4px);z-index:50;
-    display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 14px}
+  /* opponent zone label */
+  .opp-zone{
+    position:absolute;top:12%;left:50%;transform:translateX(-50%);
+    font-size:10px;letter-spacing:2px;font-weight:700;color:rgba(255,255,255,.12);
+    text-transform:uppercase;
+  }
+  .your-zone{
+    position:absolute;bottom:8%;left:50%;transform:translateX(-50%);
+    font-size:10px;letter-spacing:2px;font-weight:700;color:rgba(255,255,255,.12);
+    text-transform:uppercase;
+  }
+
+  /* slot positions */
+  .court-slot{
+    position:absolute;width:30%;aspect-ratio:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    background:rgba(14,22,40,.75);border:2px dashed var(--border2);
+    border-radius:12px;transition:.2s;
+    transform:translate(-50%,-50%);
+  }
+  .court-slot.filled{
+    border-style:solid;border-color:var(--green);
+    background:rgba(16,185,129,.1);
+  }
+  .court-slot.next-slot{
+    border-color:var(--gold);border-style:solid;
+    background:rgba(245,158,11,.08);
+    box-shadow:0 0 16px rgba(245,158,11,.25);
+    animation:pulse-slot 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-slot{
+    0%,100%{box-shadow:0 0 10px rgba(245,158,11,.25)}
+    50%{box-shadow:0 0 22px rgba(245,158,11,.45)}
+  }
+  .slot-pos-label{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+  .slot-icon{font-size:22px;color:var(--border2)}
+  .slot-player-name{font-size:10px;font-weight:700;line-height:1.2;color:var(--text);padding:0 4px}
+  .slot-player-ovr{
+    font-size:13px;font-weight:900;color:var(--gold);
+    position:absolute;top:5px;right:7px;
+  }
+  .slot-player-from{font-size:8px;color:var(--text2);margin-top:2px;line-height:1.2}
+
+  /* strength bar */
+  .strength-row{
+    display:flex;align-items:center;gap:10px;
+    margin-top:12px;padding:12px 14px;
+    background:var(--surface);border:1px solid var(--border2);border-radius:12px;
+  }
+  .str-label{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--muted);white-space:nowrap}
+  .str-bar{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+  .str-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));width:0;transition:width .6s ease;border-radius:4px}
+  .str-num{font-size:20px;font-weight:900;color:var(--gold);min-width:44px;text-align:right}
+
+  .sim-btn-row{margin-top:10px}
+  .btn-simulate{
+    width:100%;padding:13px;border-radius:12px;font-size:15px;
+    background:linear-gradient(135deg,var(--green),#059669);
+    color:#02130a;box-shadow:0 4px 14px rgba(16,185,129,.35);
+  }
+  .btn-simulate:hover{filter:brightness(1.07)}
+  .btn-simulate:disabled{opacity:.35;cursor:not-allowed;filter:none;box-shadow:none}
+
+  .hint-text{font-size:12px;color:var(--muted);text-align:center;padding:10px 0 0}
+
+  /* ── MODAL ── */
+  .overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);
+    z-index:50;display:none;align-items:flex-start;justify-content:center;
+    overflow:auto;padding:24px 16px;
+  }
   .overlay.show{display:flex}
-  .modal{width:100%;max-width:760px;background:linear-gradient(180deg,#16203a,#0e1730);
-    border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
-  .modal h2{margin:0 0 4px;font-size:20px}
-  .modal .close{float:right;background:#22305a;color:#fff;width:32px;height:32px;border-radius:9px;font-size:16px}
-  .stage{margin:14px 0}
-  .stage h3{font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px}
-  .match{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;margin-bottom:5px;background:#0e1730;border:1px solid var(--line);font-size:13px}
-  .match .t{display:flex;align-items:center;gap:7px}
-  .match .t.right{justify-content:flex-end;text-align:right}
-  .match .you{color:var(--accent);font-weight:800}
-  .match .sets{font-weight:800;font-size:15px;letter-spacing:1px;min-width:54px;text-align:center}
-  .match .win{color:var(--green)}
-  .match .lose{color:var(--muted)}
-  .match .fl{font-size:16px}
+  .modal{
+    width:100%;max-width:760px;
+    background:linear-gradient(160deg,var(--surface),var(--bg));
+    border:1px solid var(--border2);border-radius:20px;
+    padding:24px;box-shadow:0 40px 80px rgba(0,0,0,.6);
+    animation:modalIn .25s ease;
+  }
+  @keyframes modalIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+  .modal-header h2{font-size:20px;font-weight:900}
+  .modal-close{
+    background:var(--surface2);border:1px solid var(--border2);color:var(--text2);
+    width:32px;height:32px;border-radius:9px;font-size:15px;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .modal-close:hover{background:var(--border2);color:var(--text)}
 
-  table.standings{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
-  table.standings th,table.standings td{padding:7px 8px;text-align:center;border-bottom:1px solid var(--line)}
-  table.standings th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-  table.standings td.tn{text-align:left;font-weight:700}
-  table.standings tr.me td{background:rgba(255,206,50,.10)}
-  .q{color:var(--green);font-size:10px;font-weight:800;margin-left:6px}
+  .medal-banner{
+    border-radius:14px;padding:18px 20px;margin-bottom:16px;text-align:center;
+    font-weight:900;
+  }
+  .medal-gold{background:linear-gradient(135deg,#fef3c7,#fbbf24);color:#451a03}
+  .medal-silver{background:linear-gradient(135deg,#f1f5f9,#94a3b8);color:#1e293b}
+  .medal-bronze{background:linear-gradient(135deg,#fde68a,#b45309);color:#1c0a00}
+  .medal-none{background:var(--surface2);color:var(--text2);border:1px solid var(--border2)}
+  .medal-emoji{font-size:36px;display:block;margin-bottom:4px}
+  .medal-title{font-size:22px}
+  .medal-sub{font-size:13px;font-weight:500;opacity:.8;margin-top:4px}
 
-  .medal-banner{text-align:center;padding:18px;border-radius:14px;margin-bottom:6px;font-weight:800}
-  .medal-gold{background:linear-gradient(180deg,#fff0b8,#ffce32);color:#3a2700}
-  .medal-silver{background:linear-gradient(180deg,#eef2ff,#b9c4e0);color:#1a2240}
-  .medal-bronze{background:linear-gradient(180deg,#ffd9a8,#cd7f32);color:#3a1e00}
-  .medal-none{background:#22305a;color:#cdd7ff}
-  .medal-banner .big{font-size:30px;display:block}
-  .medal-banner .lil{font-size:13px;font-weight:600;opacity:.85}
-
-  /* SAVE-TO-LEADERBOARD */
-  .save-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:12px;
-    background:#0c1326;border-radius:12px;border:1px solid var(--line)}
-  .save-row .save-info{flex:1;font-size:13px;color:var(--muted)}
-  .btn-save{background:linear-gradient(180deg,var(--blue),#2255cc);color:#fff;padding:10px 18px;font-size:13px}
+  .save-row{
+    display:flex;align-items:center;gap:12px;
+    background:var(--surface2);border:1px solid var(--border2);
+    border-radius:12px;padding:12px 14px;margin-bottom:16px;
+  }
+  .save-info{flex:1;font-size:13px;color:var(--text2)}
+  .btn-save{
+    background:linear-gradient(135deg,var(--blue),#1d4ed8);
+    color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;
+    white-space:nowrap;flex:0 0 auto;
+  }
   .btn-save:disabled{opacity:.4;cursor:not-allowed}
 
-  /* LEADERBOARD */
-  .lb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-  table.lb{width:100%;border-collapse:collapse;font-size:13px}
-  table.lb th,table.lb td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line)}
-  table.lb th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-  table.lb td.rank{font-weight:800;font-size:16px;width:36px;text-align:center}
-  table.lb td.medal-cell{width:32px;font-size:20px;text-align:center}
-  table.lb tr.mine td{background:rgba(255,206,50,.08)}
-  .lb-avatar{width:26px;height:26px;border-radius:50%;vertical-align:middle;margin-right:7px;object-fit:cover}
-  .lb-player-list{font-size:11px;color:var(--muted);margin-top:2px}
-  .lb-empty{text-align:center;padding:32px;color:var(--muted);font-size:14px}
-  .lb-loading{text-align:center;padding:24px;color:var(--muted)}
+  .section-title{
+    font-size:11px;font-weight:800;letter-spacing:2px;color:var(--muted);
+    text-transform:uppercase;margin:16px 0 8px;
+    padding-bottom:8px;border-bottom:1px solid var(--border);
+  }
+  .match{
+    display:grid;grid-template-columns:1fr 64px 1fr;align-items:center;
+    gap:8px;padding:8px 10px;border-radius:10px;margin-bottom:5px;
+    background:var(--surface2);border:1px solid var(--border);font-size:13px;
+  }
+  .match-team{display:flex;align-items:center;gap:6px}
+  .match-team.right{justify-content:flex-end}
+  .match-team.you{color:var(--gold);font-weight:800}
+  .match-score{font-weight:900;font-size:15px;text-align:center;letter-spacing:1px}
+  .match-score .w{color:var(--green)}.match-score .l{color:var(--muted)}
 
-  footer{color:var(--muted);font-size:11.5px;text-align:center;margin-top:26px;line-height:1.6}
-  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(120%);
-    background:#22305a;border:1px solid var(--line);color:#fff;padding:11px 18px;border-radius:12px;
-    font-size:13px;z-index:60;transition:transform .3s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  table.standings{width:100%;border-collapse:collapse;font-size:13px}
+  table.standings th,table.standings td{padding:8px 9px;text-align:center;border-bottom:1px solid var(--border)}
+  table.standings th{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  table.standings td.tn{text-align:left;font-weight:700}
+  table.standings tr.me td{background:rgba(245,158,11,.08)}
+  .finals-badge{color:var(--green);font-size:10px;font-weight:800;margin-left:5px}
+
+  /* LEADERBOARD */
+  table.lb{width:100%;border-collapse:collapse;font-size:13px}
+  table.lb th,table.lb td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border)}
+  table.lb th{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  table.lb tr.mine td{background:rgba(245,158,11,.07)}
+  table.lb td.rank{font-weight:900;font-size:15px;text-align:center;width:36px}
+  table.lb td.med{font-size:20px;text-align:center;width:32px}
+  .lb-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:7px}
+  .lb-players{font-size:10px;color:var(--text2);margin-top:2px}
+  .lb-empty{text-align:center;padding:36px;color:var(--muted)}
+
+  /* TOAST */
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120%);
+    background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+    padding:11px 20px;border-radius:12px;font-size:13px;font-weight:600;
+    z-index:60;transition:transform .28s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 10px 30px rgba(0,0,0,.5);white-space:nowrap;
+  }
   .toast.show{transform:translateX(-50%) translateY(0)}
+
+  footer{
+    text-align:center;padding:32px 20px;color:var(--muted);
+    font-size:12px;line-height:1.8;border-top:1px solid var(--border);margin-top:48px;
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="app">
-    <div class="brand">
-      <div class="ball"></div>
-      <div>
-        <h1>Volley<span>Draft</span></h1>
-        <div class="sub">Spin a nation &amp; era · draft a legend · win the VNL</div>
-      </div>
-    </div>
-    <div class="header-nav">
-      <button class="btn-ghost" id="lbBtn">🏆 Leaderboard</button>
-      <div id="authArea">
-        <!-- injected by JS: sign-in button or user chip -->
-      </div>
-      <button class="btn-ghost" id="resetBtn">↺ New Game</button>
-    </div>
-  </header>
 
-  <div class="grid">
+<header>
+  <div class="logo">
+    <div class="logo-ball"></div>
     <div>
-      <div class="panel" style="margin-bottom:16px">
-        <h2>1 · Spin for a squad <span class="pill">FIVB 1990s → today</span></h2>
-        <div class="spin-area">
-          <div class="reel">
-            <div class="reel-marker"></div>
-            <div class="reel-track" id="reelTrack"></div>
+      <div class="logo-text">Volley<span>Draft</span></div>
+      <div class="logo-sub">FIVB · VNL · Dream Team</div>
+    </div>
+  </div>
+  <div class="header-nav">
+    <button class="btn-outline" id="lbBtn">🏆 Leaderboard</button>
+    <div id="authArea"></div>
+    <button class="btn-icon" id="resetBtn" title="New Game">↺</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="game-grid">
+
+    <!-- LEFT COLUMN -->
+    <div>
+      <!-- Round progress -->
+      <div class="round-bar">
+        <div class="round-badge">Round <span id="roundNum">1</span> / 6</div>
+        <div class="round-dots" id="roundDots"></div>
+      </div>
+
+      <!-- Spin cards -->
+      <div class="spin-section">
+        <div class="spin-cards">
+          <div class="spin-card nation-card" id="nationCard">
+            <div class="card-label">Nation</div>
+            <div class="card-flag" id="cardFlag">🏐</div>
+            <div class="card-val" id="cardNation">—</div>
+            <div class="card-sub" id="cardComp"></div>
           </div>
-          <button class="btn-spin" id="spinBtn">🎰 SPIN</button>
+          <div class="spin-card era-card" id="eraCard">
+            <div class="card-label">Era</div>
+            <div class="card-flag" style="visibility:hidden">·</div>
+            <div class="card-val" id="cardEra" style="font-size:28px;margin-top:4px">—</div>
+            <div class="card-sub" id="cardBlurb"></div>
+          </div>
+        </div>
+        <div class="spin-btn-row">
+          <button class="btn-spin" id="spinBtn">🎰 &nbsp;SPIN</button>
         </div>
       </div>
 
-      <div class="panel" id="squadPanel" style="display:none">
-        <h2>2 · Draft one player</h2>
-        <div class="squad-head">
-          <div class="flag" id="sqFlag">🏐</div>
+      <!-- Squad panel (appears after spin) -->
+      <div id="squadPanel" style="display:none" class="squad-panel">
+        <div class="squad-header">
+          <div class="squad-flag" id="sqFlag">🏐</div>
           <div>
-            <div class="squad-title" id="sqTitle">—</div>
+            <div class="squad-name" id="sqTitle">—</div>
             <div class="squad-meta" id="sqMeta">—</div>
           </div>
         </div>
-        <div class="players" id="playerList"></div>
+        <div class="squad-pick-label" id="pickLabel">Pick a player</div>
+        <div class="players-grid" id="playerList"></div>
       </div>
     </div>
 
-    <div>
-      <div class="panel">
-        <h2>Your Dream Team</h2>
-        <div class="court" id="court"></div>
-        <div class="team-strength">
-          <span style="font-size:12px;color:var(--muted);font-weight:700">RATING</span>
-          <div class="bar"><i id="strBar"></i></div>
-          <span class="strength-num" id="strNum">—</span>
+    <!-- RIGHT COLUMN: court -->
+    <div class="court-wrap">
+      <div class="court-title">Your Dream Team</div>
+      <div class="court" id="court">
+        <!-- Lines drawn by SVG -->
+        <div class="court-lines">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer boundary -->
+            <rect x="20" y="20" width="260" height="360" stroke="rgba(255,255,255,0.07)" stroke-width="1.5"/>
+            <!-- Attack lines -->
+            <line x1="20" y1="133" x2="280" y2="133" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="20" y1="267" x2="280" y2="267" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <!-- Center line -->
+            <line x1="20" y1="200" x2="280" y2="200" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+          </svg>
         </div>
-        <div class="roster-actions">
-          <button class="btn-go" id="seasonBtn" disabled>🏆 Simulate VNL Season</button>
-        </div>
-        <div class="hint" id="rosterHint">Spin, then pick a player for each open slot.</div>
+        <div class="court-net"></div>
+        <div class="opp-zone">Opponent</div>
+        <div class="your-zone">Your Side</div>
+        <!-- Slots injected by JS -->
+        <div id="courtSlots"></div>
       </div>
+
+      <div class="strength-row">
+        <span class="str-label">RATING</span>
+        <div class="str-bar"><div class="str-bar-fill" id="strBar"></div></div>
+        <span class="str-num" id="strNum">—</span>
+      </div>
+      <div class="sim-btn-row">
+        <button class="btn-simulate" id="seasonBtn" disabled>🏆 &nbsp;Simulate VNL Season</button>
+      </div>
+      <div class="hint-text" id="rosterHint">Spin to draft your first player.</div>
     </div>
+
   </div>
 
   <footer>
-    A fan-made tribute to volleyball history · squads are illustrative roster snapshots from real FIVB campaigns.<br>
-    Inspired by the spin-and-draft format of 82-0.com.
+    A fan-made tribute to volleyball history · squads are illustrative snapshots from real FIVB campaigns<br>
+    Inspired by the spin-and-draft format of 82-0.com
   </footer>
 </div>
 
-<!-- SEASON / LEADERBOARD MODAL -->
+<!-- MODAL -->
 <div class="overlay" id="overlay">
   <div class="modal" id="modal"></div>
 </div>
@@ -293,255 +489,165 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-/* ============================================================
-   SUPABASE CONFIG — replace with your project values
-   Dashboard → Settings → API → Project URL & anon public key
-============================================================ */
+/* ── SUPABASE CONFIG ── */
 const SUPABASE_URL  = 'https://bzfnwhufhqlirznrzkpm.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_a9VC7fUYmrWgTujRDXRo_A_m0fR3wIz';
-
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-/* ============================================================ DATA */
+/* ── DATA ── */
 const SQUADS = [
-  {
-    nation:"Italy", flag:"🇮🇹", era:"1990s", comp:"World Championship & World League",
-    blurb:"La Generazione dei Fenomeni — the most dominant men's team of the decade.",
+  { nation:"Italy", flag:"🇮🇹", era:"1990s", comp:"World Championship & World League",
+    blurb:"La Generazione dei Fenomeni",
     players:[
-      {name:"Lorenzo Bernardi", pos:"OH", ovr:97},
-      {name:"Andrea Giani", pos:"OH", ovr:95},
-      {name:"Andrea Zorzi", pos:"OPP", ovr:93},
-      {name:"Marco Bracci", pos:"OPP", ovr:88},
-      {name:"Samuele Papi", pos:"OH", ovr:90},
-      {name:"Andrea Gardini", pos:"MB", ovr:91},
-      {name:"Pasquale Gravina", pos:"MB", ovr:87},
-      {name:"Andrea Sartoretti", pos:"MB", ovr:84},
-      {name:"Paolo Tofoli", pos:"S", ovr:89},
-    ]
-  },
-  {
-    nation:"Netherlands", flag:"🇳🇱", era:"1996", comp:"Olympic Cycle & World League",
-    blurb:"The golden generation that struck Olympic gold in Atlanta.",
+      {name:"Lorenzo Bernardi",pos:"OH",ovr:97},{name:"Andrea Giani",pos:"OH",ovr:95},
+      {name:"Andrea Zorzi",pos:"OPP",ovr:93},{name:"Marco Bracci",pos:"OPP",ovr:88},
+      {name:"Samuele Papi",pos:"OH",ovr:90},{name:"Andrea Gardini",pos:"MB",ovr:91},
+      {name:"Pasquale Gravina",pos:"MB",ovr:87},{name:"Andrea Sartoretti",pos:"MB",ovr:84},
+      {name:"Paolo Tofoli",pos:"S",ovr:89},
+    ]},
+  { nation:"Netherlands", flag:"🇳🇱", era:"1996", comp:"Olympic Cycle & World League",
+    blurb:"Olympic gold in Atlanta",
     players:[
-      {name:"Bas van de Goor", pos:"MB", ovr:91},
-      {name:"Olof van der Meulen", pos:"MB", ovr:86},
-      {name:"Peter Blangé", pos:"S", ovr:90},
-      {name:"Mike van de Goor", pos:"S", ovr:84},
-      {name:"Richard Schuil", pos:"OPP", ovr:88},
-      {name:"Guido Görtzen", pos:"OH", ovr:89},
-      {name:"Misha Latuhihin", pos:"OH", ovr:85},
-      {name:"Henk-Jan Held", pos:"OH", ovr:87},
-    ]
-  },
-  {
-    nation:"Yugoslavia / Serbia", flag:"🇷🇸", era:"2000", comp:"Olympic Cycle & World League",
-    blurb:"Sydney 2000 gold — power, blocking and the Grbić brothers.",
+      {name:"Bas van de Goor",pos:"MB",ovr:91},{name:"Olof van der Meulen",pos:"MB",ovr:86},
+      {name:"Peter Blangé",pos:"S",ovr:90},{name:"Mike van de Goor",pos:"S",ovr:84},
+      {name:"Richard Schuil",pos:"OPP",ovr:88},{name:"Guido Görtzen",pos:"OH",ovr:89},
+      {name:"Misha Latuhihin",pos:"OH",ovr:85},{name:"Henk-Jan Held",pos:"OH",ovr:87},
+    ]},
+  { nation:"Yugoslavia / Serbia", flag:"🇷🇸", era:"2000", comp:"Olympic Cycle & World League",
+    blurb:"Sydney 2000 gold — the Grbić brothers",
     players:[
-      {name:"Ivan Miljković", pos:"OPP", ovr:95},
-      {name:"Vladimir Grbić", pos:"OH", ovr:93},
-      {name:"Nikola Grbić", pos:"S", ovr:92},
-      {name:"Slobodan Boškan", pos:"OH", ovr:88},
-      {name:"Andrija Gerić", pos:"MB", ovr:88},
-      {name:"Goran Vujević", pos:"MB", ovr:85},
-      {name:"Đula Mešter", pos:"MB", ovr:83},
-      {name:"Vasa Mijić", pos:"OH", ovr:82},
-    ]
-  },
-  {
-    nation:"Brazil", flag:"🇧🇷", era:"2004–2007", comp:"World League & Olympic Cycle",
-    blurb:"Bernardinho's juggernaut — relentless World League dynasty.",
+      {name:"Ivan Miljković",pos:"OPP",ovr:95},{name:"Vladimir Grbić",pos:"OH",ovr:93},
+      {name:"Nikola Grbić",pos:"S",ovr:92},{name:"Slobodan Boškan",pos:"OH",ovr:88},
+      {name:"Andrija Gerić",pos:"MB",ovr:88},{name:"Goran Vujević",pos:"MB",ovr:85},
+      {name:"Đula Mešter",pos:"MB",ovr:83},{name:"Vasa Mijić",pos:"OH",ovr:82},
+    ]},
+  { nation:"Brazil", flag:"🇧🇷", era:"2004–2007", comp:"World League & Olympic Cycle",
+    blurb:"Bernardinho's World League dynasty",
     players:[
-      {name:"Giba", pos:"OH", ovr:96},
-      {name:"Dante Amaral", pos:"OH", ovr:90},
-      {name:"André Nascimento", pos:"OH", ovr:88},
-      {name:"Anderson Rodrigues", pos:"OPP", ovr:89},
-      {name:"Gustavo Endres", pos:"MB", ovr:90},
-      {name:"André Heller", pos:"MB", ovr:87},
-      {name:"Rodrigão", pos:"MB", ovr:86},
-      {name:"Ricardinho", pos:"S", ovr:91},
-      {name:"Maurício Lima", pos:"S", ovr:85},
-    ]
-  },
-  {
-    nation:"USA", flag:"🇺🇸", era:"2008", comp:"World League & Olympic Cycle",
-    blurb:"The Beijing gold-medal team built around a lethal serve.",
+      {name:"Giba",pos:"OH",ovr:96},{name:"Dante Amaral",pos:"OH",ovr:90},
+      {name:"André Nascimento",pos:"OH",ovr:88},{name:"Anderson Rodrigues",pos:"OPP",ovr:89},
+      {name:"Gustavo Endres",pos:"MB",ovr:90},{name:"André Heller",pos:"MB",ovr:87},
+      {name:"Rodrigão",pos:"MB",ovr:86},{name:"Ricardinho",pos:"S",ovr:91},
+      {name:"Maurício Lima",pos:"S",ovr:85},
+    ]},
+  { nation:"USA", flag:"🇺🇸", era:"2008", comp:"World League & Olympic Cycle",
+    blurb:"Beijing Olympic gold",
     players:[
-      {name:"Clayton Stanley", pos:"OPP", ovr:94},
-      {name:"Reid Priddy", pos:"OH", ovr:91},
-      {name:"Riley Salmon", pos:"OH", ovr:85},
-      {name:"Sean Rooney", pos:"OH", ovr:84},
-      {name:"Lloy Ball", pos:"S", ovr:92},
-      {name:"Ryan Millar", pos:"MB", ovr:87},
-      {name:"David Lee", pos:"MB", ovr:86},
-      {name:"Gabriel Gardner", pos:"OH", ovr:83},
-    ]
-  },
-  {
-    nation:"Russia", flag:"🇷🇺", era:"2011–2013", comp:"World League & Olympic Cycle",
-    blurb:"London 2012 champions — towering blockers and Mikhaylov's cannon.",
+      {name:"Clayton Stanley",pos:"OPP",ovr:94},{name:"Reid Priddy",pos:"OH",ovr:91},
+      {name:"Riley Salmon",pos:"OH",ovr:85},{name:"Sean Rooney",pos:"OH",ovr:84},
+      {name:"Lloy Ball",pos:"S",ovr:92},{name:"Ryan Millar",pos:"MB",ovr:87},
+      {name:"David Lee",pos:"MB",ovr:86},{name:"Gabriel Gardner",pos:"OH",ovr:83},
+    ]},
+  { nation:"Russia", flag:"🇷🇺", era:"2011–2013", comp:"World League & Olympic Cycle",
+    blurb:"London 2012 Olympic champions",
     players:[
-      {name:"Maxim Mikhaylov", pos:"OPP", ovr:95},
-      {name:"Dmitriy Muserskiy", pos:"MB", ovr:93},
-      {name:"Alexander Volkov", pos:"MB", ovr:88},
-      {name:"Nikolay Apalikov", pos:"MB", ovr:84},
-      {name:"Sergey Tetyukhin", pos:"OH", ovr:91},
-      {name:"Dmitriy Ilinykh", pos:"OH", ovr:87},
-      {name:"Yury Berezhko", pos:"OH", ovr:84},
-      {name:"Sergey Grankin", pos:"S", ovr:88},
-    ]
-  },
-  {
-    nation:"Bulgaria", flag:"🇧🇬", era:"2006–2009", comp:"World League & World Championship",
-    blurb:"The Kaziyski era — bronze in 2006 and a fearless attacking line.",
+      {name:"Maxim Mikhaylov",pos:"OPP",ovr:95},{name:"Dmitriy Muserskiy",pos:"MB",ovr:93},
+      {name:"Alexander Volkov",pos:"MB",ovr:88},{name:"Nikolay Apalikov",pos:"MB",ovr:84},
+      {name:"Sergey Tetyukhin",pos:"OH",ovr:91},{name:"Dmitriy Ilinykh",pos:"OH",ovr:87},
+      {name:"Yury Berezhko",pos:"OH",ovr:84},{name:"Sergey Grankin",pos:"S",ovr:88},
+    ]},
+  { nation:"Bulgaria", flag:"🇧🇬", era:"2006–2009", comp:"World League & World Championship",
+    blurb:"The Kaziyski era",
     players:[
-      {name:"Matey Kaziyski", pos:"OH", ovr:93},
-      {name:"Vladimir Nikolov", pos:"OH", ovr:90},
-      {name:"Boyan Yordanov", pos:"OPP", ovr:86},
-      {name:"Andrey Zhekov", pos:"MB", ovr:85},
-      {name:"Vladimir Garkov", pos:"MB", ovr:83},
-      {name:"Hristo Tsvetanov", pos:"S", ovr:84},
-      {name:"Teodor Todorov", pos:"OH", ovr:81},
-    ]
-  },
-  {
-    nation:"Poland", flag:"🇵🇱", era:"2014–2018", comp:"World Championship & World League",
-    blurb:"Back-to-back World Champions (2014 & 2018).",
+      {name:"Matey Kaziyski",pos:"OH",ovr:93},{name:"Vladimir Nikolov",pos:"OH",ovr:90},
+      {name:"Boyan Yordanov",pos:"OPP",ovr:86},{name:"Andrey Zhekov",pos:"MB",ovr:85},
+      {name:"Vladimir Garkov",pos:"MB",ovr:83},{name:"Hristo Tsvetanov",pos:"S",ovr:84},
+      {name:"Teodor Todorov",pos:"OH",ovr:81},
+    ]},
+  { nation:"Poland", flag:"🇵🇱", era:"2014–2018", comp:"World Championship & World League",
+    blurb:"Back-to-back World Champions",
     players:[
-      {name:"Bartosz Kurek", pos:"OPP", ovr:94},
-      {name:"Mariusz Wlazły", pos:"OPP", ovr:89},
-      {name:"Michał Kubiak", pos:"OH", ovr:91},
-      {name:"Bartosz Bednorz", pos:"OH", ovr:88},
-      {name:"Aleksander Śliwka", pos:"OH", ovr:88},
-      {name:"Piotr Nowakowski", pos:"MB", ovr:87},
-      {name:"Mateusz Bieniek", pos:"MB", ovr:86},
-      {name:"Fabian Drzyzga", pos:"S", ovr:90},
-    ]
-  },
-  {
-    nation:"France", flag:"🇫🇷", era:"2015–2021", comp:"World League / VNL & Olympic Cycle",
-    blurb:"World League 2015/2017 winners → Tokyo 2020 Olympic champions.",
+      {name:"Bartosz Kurek",pos:"OPP",ovr:94},{name:"Mariusz Wlazły",pos:"OPP",ovr:89},
+      {name:"Michał Kubiak",pos:"OH",ovr:91},{name:"Bartosz Bednorz",pos:"OH",ovr:88},
+      {name:"Aleksander Śliwka",pos:"OH",ovr:88},{name:"Piotr Nowakowski",pos:"MB",ovr:87},
+      {name:"Mateusz Bieniek",pos:"MB",ovr:86},{name:"Fabian Drzyzga",pos:"S",ovr:90},
+    ]},
+  { nation:"France", flag:"🇫🇷", era:"2015–2021", comp:"World League / VNL & Olympic Cycle",
+    blurb:"Tokyo 2020 Olympic champions",
     players:[
-      {name:"Earvin Ngapeth", pos:"OH", ovr:94},
-      {name:"Trévor Clévenot", pos:"OH", ovr:88},
-      {name:"Kévin Tillie", pos:"OH", ovr:85},
-      {name:"Jean Patry", pos:"OPP", ovr:88},
-      {name:"Benjamin Toniutti", pos:"S", ovr:90},
-      {name:"Antoine Brizard", pos:"S", ovr:86},
-      {name:"Barthélémy Chinenyeze", pos:"MB", ovr:88},
-      {name:"Nicolas Le Goff", pos:"MB", ovr:86},
-    ]
-  },
-  {
-    nation:"Brazil", flag:"🇧🇷", era:"2019–2021", comp:"VNL & Olympic Cycle",
-    blurb:"VNL silver medallists led by maestro Bruninho.",
+      {name:"Earvin Ngapeth",pos:"OH",ovr:94},{name:"Trévor Clévenot",pos:"OH",ovr:88},
+      {name:"Kévin Tillie",pos:"OH",ovr:85},{name:"Jean Patry",pos:"OPP",ovr:88},
+      {name:"Benjamin Toniutti",pos:"S",ovr:90},{name:"Antoine Brizard",pos:"S",ovr:86},
+      {name:"Barthélémy Chinenyeze",pos:"MB",ovr:88},{name:"Nicolas Le Goff",pos:"MB",ovr:86},
+    ]},
+  { nation:"Brazil", flag:"🇧🇷", era:"2019–2021", comp:"VNL & Olympic Cycle",
+    blurb:"VNL silver — maestro Bruninho",
     players:[
-      {name:"Wallace de Souza", pos:"OPP", ovr:90},
-      {name:"Alan Souza", pos:"OPP", ovr:86},
-      {name:"Yoandy Leal", pos:"OH", ovr:91},
-      {name:"Douglas Souza", pos:"OH", ovr:87},
-      {name:"Lucarelli", pos:"OH", ovr:88},
-      {name:"Bruno Rezende", pos:"S", ovr:92},
-      {name:"Lucão", pos:"MB", ovr:86},
-      {name:"Maurício Souza", pos:"MB", ovr:85},
-    ]
-  },
-  {
-    nation:"Poland", flag:"🇵🇱", era:"2023–2024", comp:"VNL Champions",
-    blurb:"VNL 2023 winners with Wilfredo Leon firing.",
+      {name:"Wallace de Souza",pos:"OPP",ovr:90},{name:"Alan Souza",pos:"OPP",ovr:86},
+      {name:"Yoandy Leal",pos:"OH",ovr:91},{name:"Douglas Souza",pos:"OH",ovr:87},
+      {name:"Lucarelli",pos:"OH",ovr:88},{name:"Bruno Rezende",pos:"S",ovr:92},
+      {name:"Lucão",pos:"MB",ovr:86},{name:"Maurício Souza",pos:"MB",ovr:85},
+    ]},
+  { nation:"Poland", flag:"🇵🇱", era:"2023–2024", comp:"VNL Champions",
+    blurb:"VNL 2023 — Wilfredo Leon era",
     players:[
-      {name:"Wilfredo Leon", pos:"OH", ovr:95},
-      {name:"Aleksander Śliwka", pos:"OH", ovr:89},
-      {name:"Kamil Semeniuk", pos:"OH", ovr:88},
-      {name:"Bartosz Kurek", pos:"OPP", ovr:90},
-      {name:"Łukasz Kaczmarek", pos:"OPP", ovr:88},
-      {name:"Marcin Komenda", pos:"S", ovr:88},
-      {name:"Jakub Kochanowski", pos:"MB", ovr:87},
-      {name:"Mateusz Bieniek", pos:"MB", ovr:86},
-    ]
-  },
-  {
-    nation:"Italy", flag:"🇮🇹", era:"2021–2023", comp:"World Championship & VNL",
-    blurb:"New-generation World Champions (2022), VNL gold (2022).",
+      {name:"Wilfredo Leon",pos:"OH",ovr:95},{name:"Aleksander Śliwka",pos:"OH",ovr:89},
+      {name:"Kamil Semeniuk",pos:"OH",ovr:88},{name:"Bartosz Kurek",pos:"OPP",ovr:90},
+      {name:"Łukasz Kaczmarek",pos:"OPP",ovr:88},{name:"Marcin Komenda",pos:"S",ovr:88},
+      {name:"Jakub Kochanowski",pos:"MB",ovr:87},{name:"Mateusz Bieniek",pos:"MB",ovr:86},
+    ]},
+  { nation:"Italy", flag:"🇮🇹", era:"2021–2023", comp:"World Championship & VNL",
+    blurb:"World Champions 2022, VNL gold 2022",
     players:[
-      {name:"Alessandro Michieletto", pos:"OH", ovr:93},
-      {name:"Daniele Lavia", pos:"OH", ovr:89},
-      {name:"Yuri Romanò", pos:"OPP", ovr:89},
-      {name:"Simone Giannelli", pos:"S", ovr:93},
-      {name:"Gianluca Galassi", pos:"MB", ovr:86},
-      {name:"Roberto Russo", pos:"MB", ovr:85},
-      {name:"Simone Anzani", pos:"MB", ovr:85},
-      {name:"Mattia Bottolo", pos:"OH", ovr:84},
-    ]
-  },
-  {
-    nation:"USA", flag:"🇺🇸", era:"2018–2021", comp:"VNL & Olympic Cycle",
-    blurb:"Two-time VNL champions (2018, 2019).",
+      {name:"Alessandro Michieletto",pos:"OH",ovr:93},{name:"Daniele Lavia",pos:"OH",ovr:89},
+      {name:"Yuri Romanò",pos:"OPP",ovr:89},{name:"Simone Giannelli",pos:"S",ovr:93},
+      {name:"Gianluca Galassi",pos:"MB",ovr:86},{name:"Roberto Russo",pos:"MB",ovr:85},
+      {name:"Simone Anzani",pos:"MB",ovr:85},{name:"Mattia Bottolo",pos:"OH",ovr:84},
+    ]},
+  { nation:"USA", flag:"🇺🇸", era:"2018–2021", comp:"VNL & Olympic Cycle",
+    blurb:"Two-time VNL champions",
     players:[
-      {name:"Matt Anderson", pos:"OPP", ovr:91},
-      {name:"Aaron Russell", pos:"OH", ovr:88},
-      {name:"T.J. DeFalco", pos:"OH", ovr:86},
-      {name:"Taylor Sander", pos:"OH", ovr:85},
-      {name:"Micah Christenson", pos:"S", ovr:89},
-      {name:"Max Holt", pos:"MB", ovr:87},
-      {name:"David Smith", pos:"MB", ovr:84},
-      {name:"Jeff Jendryk", pos:"MB", ovr:83},
-    ]
-  },
-  {
-    nation:"Argentina", flag:"🇦🇷", era:"2019–2021", comp:"VNL & Olympic Cycle",
-    blurb:"Tokyo 2020 bronze medallists, marshalled by De Cecco.",
+      {name:"Matt Anderson",pos:"OPP",ovr:91},{name:"Aaron Russell",pos:"OH",ovr:88},
+      {name:"T.J. DeFalco",pos:"OH",ovr:86},{name:"Taylor Sander",pos:"OH",ovr:85},
+      {name:"Micah Christenson",pos:"S",ovr:89},{name:"Max Holt",pos:"MB",ovr:87},
+      {name:"David Smith",pos:"MB",ovr:84},{name:"Jeff Jendryk",pos:"MB",ovr:83},
+    ]},
+  { nation:"Argentina", flag:"🇦🇷", era:"2019–2021", comp:"VNL & Olympic Cycle",
+    blurb:"Tokyo 2020 bronze — De Cecco",
     players:[
-      {name:"Luciano De Cecco", pos:"S", ovr:91},
-      {name:"Facundo Conte", pos:"OH", ovr:88},
-      {name:"Cristian Poglajen", pos:"OH", ovr:84},
-      {name:"Ezequiel Palacios", pos:"OH", ovr:83},
-      {name:"Bruno Lima", pos:"OPP", ovr:87},
-      {name:"Sebastián Solé", pos:"MB", ovr:86},
-      {name:"Agustín Loser", pos:"MB", ovr:85},
-    ]
-  },
-  {
-    nation:"Cuba", flag:"🇨🇺", era:"2009–2012", comp:"World League & World Championship",
-    blurb:"Explosive young Cuban side — raw athleticism and a teenage Leon.",
+      {name:"Luciano De Cecco",pos:"S",ovr:91},{name:"Facundo Conte",pos:"OH",ovr:88},
+      {name:"Cristian Poglajen",pos:"OH",ovr:84},{name:"Ezequiel Palacios",pos:"OH",ovr:83},
+      {name:"Bruno Lima",pos:"OPP",ovr:87},{name:"Sebastián Solé",pos:"MB",ovr:86},
+      {name:"Agustín Loser",pos:"MB",ovr:85},
+    ]},
+  { nation:"Cuba", flag:"🇨🇺", era:"2009–2012", comp:"World League & World Championship",
+    blurb:"Raw athleticism — a teenage Leon",
     players:[
-      {name:"Wilfredo Leon", pos:"OH", ovr:90},
-      {name:"Yoandy Leal", pos:"OH", ovr:87},
-      {name:"Henry Bell", pos:"OH", ovr:83},
-      {name:"Oreol Camejo", pos:"OPP", ovr:86},
-      {name:"Robertlandy Simón", pos:"MB", ovr:90},
-      {name:"Fernando Hernández", pos:"MB", ovr:83},
-      {name:"Raydel Hierrezuelo", pos:"S", ovr:84},
-    ]
-  },
-  {
-    nation:"Slovenia", flag:"🇸🇮", era:"2019–2022", comp:"VNL & World Championship",
-    blurb:"Surprise World Championship silver (2022) on a soaring run.",
+      {name:"Wilfredo Leon",pos:"OH",ovr:90},{name:"Yoandy Leal",pos:"OH",ovr:87},
+      {name:"Henry Bell",pos:"OH",ovr:83},{name:"Oreol Camejo",pos:"OPP",ovr:86},
+      {name:"Robertlandy Simón",pos:"MB",ovr:90},{name:"Fernando Hernández",pos:"MB",ovr:83},
+      {name:"Raydel Hierrezuelo",pos:"S",ovr:84},
+    ]},
+  { nation:"Slovenia", flag:"🇸🇮", era:"2019–2022", comp:"VNL & World Championship",
+    blurb:"World Championship silver 2022",
     players:[
-      {name:"Tine Urnaut", pos:"OH", ovr:88},
-      {name:"Klemen Čebulj", pos:"OH", ovr:86},
-      {name:"Rok Možič", pos:"OH", ovr:87},
-      {name:"Tonček Štern", pos:"OPP", ovr:87},
-      {name:"Dejan Vinčić", pos:"S", ovr:84},
-      {name:"Alen Pajenk", pos:"MB", ovr:83},
-      {name:"Jan Kozamernik", pos:"MB", ovr:84},
-    ]
-  },
+      {name:"Tine Urnaut",pos:"OH",ovr:88},{name:"Klemen Čebulj",pos:"OH",ovr:86},
+      {name:"Rok Možič",pos:"OH",ovr:87},{name:"Tonček Štern",pos:"OPP",ovr:87},
+      {name:"Dejan Vinčić",pos:"S",ovr:84},{name:"Alen Pajenk",pos:"MB",ovr:83},
+      {name:"Jan Kozamernik",pos:"MB",ovr:84},
+    ]},
 ];
 
 const AI_TEAMS = [
-  {nation:"Brazil", flag:"🇧🇷", base:90},
-  {nation:"Italy", flag:"🇮🇹", base:90},
-  {nation:"Poland", flag:"🇵🇱", base:91},
-  {nation:"France", flag:"🇫🇷", base:89},
-  {nation:"USA", flag:"🇺🇸", base:88},
-  {nation:"Japan", flag:"🇯🇵", base:88},
-  {nation:"Slovenia", flag:"🇸🇮", base:86},
-  {nation:"Argentina", flag:"🇦🇷", base:86},
-  {nation:"Serbia", flag:"🇷🇸", base:85},
-  {nation:"Germany", flag:"🇩🇪", base:84},
-  {nation:"Netherlands", flag:"🇳🇱", base:83},
-  {nation:"Canada", flag:"🇨🇦", base:83},
+  {nation:"Brazil",flag:"🇧🇷",base:90},{nation:"Italy",flag:"🇮🇹",base:90},
+  {nation:"Poland",flag:"🇵🇱",base:91},{nation:"France",flag:"🇫🇷",base:89},
+  {nation:"USA",flag:"🇺🇸",base:88},{nation:"Japan",flag:"🇯🇵",base:88},
+  {nation:"Slovenia",flag:"🇸🇮",base:86},{nation:"Argentina",flag:"🇦🇷",base:86},
+  {nation:"Serbia",flag:"🇷🇸",base:85},{nation:"Germany",flag:"🇩🇪",base:84},
+  {nation:"Netherlands",flag:"🇳🇱",base:83},{nation:"Canada",flag:"🇨🇦",base:83},
+];
+
+// Court slot layout: [slotIndex, left%, top%]
+// Front row (near net, top of your side): OPP(1), MB(4), OH(2)
+// Back row: OH(3), S(0), MB(5)
+const COURT_POS = [
+  [1, 83, 62],  // OPP  → front-right
+  [4, 50, 62],  // MB1  → front-center
+  [2, 17, 62],  // OH1  → front-left
+  [3, 83, 84],  // OH2  → back-right
+  [0, 50, 84],  // S    → back-center
+  [5, 17, 84],  // MB2  → back-left
 ];
 
 const SLOTS = [
@@ -552,16 +658,16 @@ const SLOTS = [
   {pos:"MB", label:"MIDDLE"},
   {pos:"MB", label:"MIDDLE"},
 ];
-const POS_NAME = {S:"Setter", OPP:"Opposite", OH:"Outside Hitter", MB:"Middle Blocker"};
-const MEDAL_EMOJI = {gold:"🥇", silver:"🥈", bronze:"🥉", none:"🏐"};
+const POS_NAME = {S:"Setter",OPP:"Opposite",OH:"Outside Hitter",MB:"Middle Blocker"};
+const MEDAL_EMOJI = {gold:"🥇",silver:"🥈",bronze:"🥉",none:"🏐"};
 
-/* ============================================================ STATE */
-let roster = SLOTS.map(s=>({...s, player:null}));
+/* ── STATE ── */
+let roster = SLOTS.map(s=>({...s,player:null}));
 let spinning = false;
 let pickedKeys = new Set();
 let currentUser = null;
 
-/* ============================================================ HELPERS */
+/* ── HELPERS ── */
 const $ = id => document.getElementById(id);
 function toast(msg){
   const t=$("toast"); t.textContent=msg; t.classList.add("show");
@@ -570,58 +676,55 @@ function toast(msg){
 function nextOpenIndex(){ return roster.findIndex(s=>!s.player); }
 function rosterFull(){ return roster.every(s=>s.player); }
 function playerKey(p){ return p.name+"|"+p.pos; }
+function ordinal(n){ const s=["th","st","nd","rd"],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
 
-/* ============================================================ AUTH */
+/* ── AUTH ── */
 async function initAuth(){
-  const { data:{ session } } = await sb.auth.getSession();
+  const {data:{session}} = await sb.auth.getSession();
   currentUser = session?.user ?? null;
   renderAuth();
-
-  sb.auth.onAuthStateChange((_e, session)=>{
+  sb.auth.onAuthStateChange((_e,session)=>{
     currentUser = session?.user ?? null;
     renderAuth();
-    // if this is an OAuth callback, close the tab-focus redirect
-    if(_e === 'SIGNED_IN') toast('Signed in as ' + (currentUser?.user_metadata?.full_name || currentUser?.email));
+    if(_e==='SIGNED_IN') toast('Welcome, '+(currentUser?.user_metadata?.full_name||currentUser?.email)+'!');
   });
 }
-
 function renderAuth(){
-  const area = $("authArea");
+  const area=$("authArea");
   if(currentUser){
-    const name = currentUser.user_metadata?.full_name || currentUser.email;
-    const avatar = currentUser.user_metadata?.avatar_url || '';
-    area.innerHTML = `
-      <div class="user-chip">
-        ${avatar ? `<img src="${avatar}" alt="">` : ''}
-        <span class="uname">${name}</span>
-        <button class="btn-signout" id="signOutBtn">sign out</button>
-      </div>`;
-    $("signOutBtn").onclick = ()=> sb.auth.signOut();
+    const name=currentUser.user_metadata?.full_name||currentUser.email;
+    const avatar=currentUser.user_metadata?.avatar_url||'';
+    area.innerHTML=`<div class="user-chip">
+      ${avatar?`<img src="${avatar}" alt="">`:''}
+      <span class="uname">${name}</span>
+      <button class="btn-signout" id="signOutBtn">sign out</button>
+    </div>`;
+    $("signOutBtn").onclick=()=>sb.auth.signOut();
   } else {
-    area.innerHTML = `
-      <button class="btn-google" id="signInBtn">
-        <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-        Sign in with Google
-      </button>`;
-    $("signInBtn").onclick = ()=> sb.auth.signInWithOAuth({
-      provider:'google',
-      options:{ redirectTo: window.location.href }
-    });
+    area.innerHTML=`<button class="btn-google" id="signInBtn">
+      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Sign in
+    </button>`;
+    $("signInBtn").onclick=()=>sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}});
   }
 }
 
-/* ============================================================ REEL */
-function buildReelStatic(){
-  const track=$("reelTrack"); track.innerHTML="";
-  for(let i=0;i<3;i++) track.appendChild(reelItem(SQUADS[i]));
-  track.style.transform="translateY(-48px)";
+/* ── ROUND UI ── */
+function renderRoundUI(){
+  const filled=roster.filter(s=>s.player).length;
+  $("roundNum").textContent=filled+1 > 6 ? 6 : filled+1;
+  const dots=$("roundDots"); dots.innerHTML="";
+  for(let i=0;i<6;i++){
+    const d=document.createElement("div");
+    d.className="round-dot"+(i<filled?" done":i===filled?" active":"");
+    dots.appendChild(d);
+  }
 }
-function reelItem(sq){
-  const d=document.createElement("div");
-  d.className="reel-item";
-  d.innerHTML=`<span class="flag">${sq.flag}</span>${sq.nation} <span class="era">· ${sq.era}</span>`;
-  return d;
-}
+
+/* ── SPIN ── */
+const allNations=[...new Set(SQUADS.map(s=>s.nation))];
+const allEras=[...new Set(SQUADS.map(s=>s.era))];
+
 function spin(){
   if(spinning) return;
   const open=nextOpenIndex();
@@ -631,29 +734,46 @@ function spin(){
   $("squadPanel").style.display="none";
 
   const target=SQUADS[Math.floor(Math.random()*SQUADS.length)];
-  const track=$("reelTrack");
-  const seq=[];
-  for(let i=0;i<22+Math.floor(Math.random()*8);i++) seq.push(SQUADS[Math.floor(Math.random()*SQUADS.length)]);
-  seq.push(target);
-  track.innerHTML="";
-  seq.forEach(sq=>track.appendChild(reelItem(sq)));
-  track.style.transition="none";
-  track.style.transform="translateY(0)";
-  void track.offsetWidth;
-  const dist=(seq.length-2)*48;
-  track.style.transition="transform 3.1s cubic-bezier(.13,.78,.18,1)";
-  track.style.transform=`translateY(${-dist}px)`;
-  setTimeout(()=>{ spinning=false; $("spinBtn").disabled=false; showSquad(target); }, 3250);
+  const nc=$("nationCard"), ec=$("eraCard");
+  nc.classList.add("spinning"); ec.classList.add("spinning");
+  $("cardFlag").textContent="🏐";
+  $("cardNation").textContent="...";
+  $("cardEra").textContent="...";
+  $("cardComp").textContent=""; $("cardBlurb").textContent="";
+
+  let elapsed=0;
+  const iv=setInterval(()=>{
+    const rn=SQUADS[Math.floor(Math.random()*SQUADS.length)];
+    $("cardFlag").textContent=rn.flag;
+    $("cardNation").textContent=rn.nation;
+    $("cardEra").textContent=rn.era;
+    elapsed+=90;
+    if(elapsed>=2800){
+      clearInterval(iv);
+      nc.classList.remove("spinning"); ec.classList.remove("spinning");
+      $("cardFlag").textContent=target.flag;
+      $("cardNation").textContent=target.nation;
+      $("cardEra").textContent=target.era;
+      $("cardComp").textContent=target.comp;
+      $("cardBlurb").textContent=target.blurb;
+      spinning=false;
+      $("spinBtn").disabled=false;
+      showSquad(target);
+    }
+  },90);
 }
 
-/* ============================================================ SQUAD PANEL */
+/* ── SQUAD PANEL ── */
 function showSquad(sq){
   $("squadPanel").style.display="block";
   $("sqFlag").textContent=sq.flag;
   $("sqTitle").textContent=`${sq.nation} — ${sq.era}`;
-  $("sqMeta").textContent=`${sq.comp} · ${sq.blurb}`;
+  $("sqMeta").textContent=sq.comp;
   const open=nextOpenIndex();
   const needPos=open===-1?null:roster[open].pos;
+  $("pickLabel").innerHTML=needPos
+    ?`Pick a <span>${POS_NAME[needPos]}</span> for your team`
+    :"No open slots";
   const list=$("playerList"); list.innerHTML="";
   const order={S:0,OPP:1,OH:2,MB:3};
   [...sq.players].sort((a,b)=>(order[a.pos]-order[b.pos])||(b.ovr-a.ovr)).forEach(p=>{
@@ -661,52 +781,66 @@ function showSquad(sq){
     const card=document.createElement("div");
     card.className="pcard"+(eligible?"":" disabled");
     card.innerHTML=`
-      <div class="pos-badge pos-${p.pos}">${p.pos}</div>
+      <div class="pos-pill pos-${p.pos}">${p.pos}</div>
       <div class="pinfo">
         <div class="pname">${p.name}</div>
-        <div class="pmeta">${POS_NAME[p.pos]}${pickedKeys.has(playerKey(p))?" · already drafted":""}</div>
+        <div class="ppos">${POS_NAME[p.pos]}${pickedKeys.has(playerKey(p))?" · drafted":""}</div>
       </div>
-      <div class="ovr">${p.ovr}</div>`;
+      <div class="povr">${p.ovr}</div>`;
     if(eligible) card.addEventListener("click",()=>draftPlayer(p,sq));
     list.appendChild(card);
   });
-  if(needPos){
-    $("squadPanel").querySelector("h2").innerHTML=
-      `2 · Draft one <b style="color:var(--accent)">${POS_NAME[needPos]}</b> <span class="pill">tap a highlighted card</span>`;
-  }
 }
 
 function draftPlayer(p,sq){
   const open=nextOpenIndex();
   if(open===-1||roster[open].pos!==p.pos) return;
-  roster[open].player={...p, from:`${sq.nation} ${sq.era}`, flag:sq.flag};
+  roster[open].player={...p,from:`${sq.nation} ${sq.era}`,flag:sq.flag};
   pickedKeys.add(playerKey(p));
   $("squadPanel").style.display="none";
-  renderRoster();
-  toast(rosterFull() ? "Dream team complete! 🏐" : `${p.name} drafted! Spin for the next slot.`);
+  renderCourt();
+  renderRoundUI();
+  toast(rosterFull()?"Dream team complete! 🏐":`${p.name} drafted!`);
 }
 
-/* ============================================================ ROSTER */
-function renderRoster(){
-  const court=$("court"); court.innerHTML="";
+/* ── COURT ── */
+function renderCourt(){
+  const container=$("courtSlots"); container.innerHTML="";
   const open=nextOpenIndex();
-  roster.forEach((s,i)=>{
+
+  COURT_POS.forEach(([slotIdx, lp, tp])=>{
+    const s=roster[slotIdx];
+    const isNext=slotIdx===open;
     const div=document.createElement("div");
-    div.className="slot"+(s.player?" filled":"")+(i===open?" next":"");
-    div.innerHTML=s.player
-      ? `<div class="sovr">${s.player.ovr}</div><div class="slabel">${s.label}</div>
-         <div class="sname">${s.player.name}</div><div class="smeta">${s.player.flag} ${s.player.from}</div>`
-      : `<div class="slabel">${s.label}</div><div class="splus">＋</div>`;
-    court.appendChild(div);
+    div.className="court-slot"+(s.player?" filled":"")+(isNext?" next-slot":"");
+    div.style.left=lp+"%";
+    div.style.top=tp+"%";
+
+    if(s.player){
+      div.innerHTML=`
+        <div class="slot-player-ovr">${s.player.ovr}</div>
+        <div class="slot-pos-label">${s.label}</div>
+        <div class="slot-player-name">${s.player.name}</div>
+        <div class="slot-player-from">${s.player.flag} ${s.player.from}</div>`;
+    } else {
+      div.innerHTML=`
+        <div class="slot-pos-label">${s.label}</div>
+        <div class="slot-icon">${isNext?"⚡":"＋"}</div>`;
+    }
+    container.appendChild(div);
   });
-  const str=teamStrength(roster);
+
   const filled=roster.filter(s=>s.player).length;
+  const str=teamStrength(roster);
   $("strBar").style.width=filled?Math.min(100,(str-60)/40*100)+"%":"0%";
   $("strNum").textContent=filled?str.toFixed(1):"—";
   $("seasonBtn").disabled=!rosterFull();
-  $("rosterHint").textContent=rosterFull()
-    ?"Your six are locked in. Simulate the VNL season!"
-    :`Open slot: ${roster[open].label}. Spin to find a ${POS_NAME[roster[open].pos]}.`;
+
+  if(rosterFull()){
+    $("rosterHint").textContent="Your six are locked in — simulate the VNL season!";
+  } else if(open!==-1){
+    $("rosterHint").textContent=`Spin to draft a ${POS_NAME[roster[open].pos]}.`;
+  }
 }
 
 function teamStrength(r){
@@ -718,13 +852,12 @@ function teamStrength(r){
   return w/tot;
 }
 
-/* ============================================================ SEASON SIM */
+/* ── SEASON SIM ── */
 function simulateSeason(){
   const myStr=teamStrength(roster);
-  const pool=[...AI_TEAMS].sort(()=>Math.random()-0.5).slice(0,7).map(t=>({
-    nation:t.nation, flag:t.flag, str:t.base+(Math.random()*6-3)
-  }));
-  const me={nation:"Your Dream Team", flag:"⭐", str:myStr, me:true};
+  const pool=[...AI_TEAMS].sort(()=>Math.random()-.5).slice(0,7)
+    .map(t=>({nation:t.nation,flag:t.flag,str:t.base+(Math.random()*6-3)}));
+  const me={nation:"Your Dream Team",flag:"⭐",str:myStr,me:true};
   let teams=[me,...pool];
   teams.forEach(t=>{ t.W=0;t.L=0;t.setW=0;t.setL=0;t.pts=0; });
 
@@ -738,29 +871,23 @@ function simulateSeason(){
   teams.sort((a,b)=>b.W-a.W||b.pts-a.pts||(b.setW-b.setL)-(a.setW-a.setL)||b.str-a.str);
   teams.forEach((t,i)=>t.rank=i+1);
 
-  const top4=teams.slice(0,4), finals={};
-  if(top4.length>=4){
-    const sf1=playMatch(top4[0],top4[3]), sf2=playMatch(top4[1],top4[2]);
-    const w1=winnerOf(top4[0],top4[3],sf1), l1=loserOf(top4[0],top4[3],sf1);
-    const w2=winnerOf(top4[1],top4[2],sf2), l2=loserOf(top4[1],top4[2],sf2);
-    const bronze=playMatch(l1,l2), gold=playMatch(w1,w2);
-    finals.sf=[{m:sf1,a:top4[0],b:top4[3]},{m:sf2,a:top4[1],b:top4[2]}];
-    finals.bronze={m:bronze,winner:winnerOf(l1,l2,bronze)};
-    finals.gold={m:gold,winner:winnerOf(w1,w2,gold),runner:loserOf(w1,w2,gold)};
-    finals.champion=finals.gold.winner;
-    finals.silver=finals.gold.runner;
-    finals.bronzeWinner=finals.bronze.winner;
-  }
+  const top4=teams.slice(0,4),finals={};
+  const sf1=playMatch(top4[0],top4[3]),sf2=playMatch(top4[1],top4[2]);
+  const w1=winnerOf(top4[0],top4[3],sf1),l1=loserOf(top4[0],top4[3],sf1);
+  const w2=winnerOf(top4[1],top4[2],sf2),l2=loserOf(top4[1],top4[2],sf2);
+  const bronze=playMatch(l1,l2),gold=playMatch(w1,w2);
+  finals.sf=[{m:sf1,a:top4[0],b:top4[3]},{m:sf2,a:top4[1],b:top4[2]}];
+  finals.bronze={m:bronze,winner:winnerOf(l1,l2,bronze)};
+  finals.gold={m:gold,winner:winnerOf(w1,w2,gold),runner:loserOf(w1,w2,gold)};
+  finals.champion=finals.gold.winner;
+  finals.silver=finals.gold.runner;
+  finals.bronzeWinner=finals.bronze.winner;
 
   renderSeason(teams,prelim,finals,me);
 }
-
 function playMatch(a,b){
   let sa=0,sb=0;
-  while(sa<3&&sb<3){
-    const cap=(sa===2&&sb===2)?15:25;
-    Math.random()<setWinProb(a.str,b.str)?sa++:sb++;
-  }
+  while(sa<3&&sb<3) Math.random()<setWinProb(a.str,b.str)?sa++:sb++;
   return {a,b,sa,sb,aWon:sa>sb};
 }
 function setWinProb(ra,rb){ return 1/(1+Math.pow(10,(rb-ra)/9)); }
@@ -773,77 +900,72 @@ function applyResult(a,b,m){
 function winnerOf(a,b,m){ return m.aWon?a:b; }
 function loserOf(a,b,m){ return m.aWon?b:a; }
 
-/* ============================================================ SEASON RENDER */
+/* ── SEASON RENDER ── */
 function renderSeason(teams,prelim,finals,me){
   let medal="none";
-  if(finals.champion){
-    if(finals.champion.me) medal="gold";
-    else if(finals.silver?.me) medal="silver";
-    else if(finals.bronzeWinner?.me) medal="bronze";
-  }
-  const medalTxt={gold:"VNL CHAMPIONS!",silver:"VNL Silver Medal!",bronze:"VNL Bronze Medal!",none:"No medal — finish top 3 next time!"};
-  const emoji=MEDAL_EMOJI[medal];
+  if(finals.champion?.me) medal="gold";
+  else if(finals.silver?.me) medal="silver";
+  else if(finals.bronzeWinner?.me) medal="bronze";
+  const medalTxt={gold:"VNL CHAMPIONS!",silver:"VNL Silver Medal!",bronze:"VNL Bronze Medal!",none:"No medal this time"};
 
-  const teamSide=(t,right)=>`<div class="t ${right?"right":""} ${t.me?"you":""}">
-    ${right?"":` <span class="fl">${t.flag}</span>`}<span>${t.nation}</span>${right?`<span class="fl">${t.flag}</span>`:""}
+  const side=(t,r)=>`<div class="match-team ${r?"right":""} ${t.me?"you":""}">
+    ${r?"":` <span>${t.flag}</span>`}<span>${t.nation}</span>${r?`<span>${t.flag}</span>`:""}
   </div>`;
-  const matchRow=m=>`<div class="match">
-    ${teamSide(m.a,false)}
-    <div class="sets"><span class="${m.aWon?"win":"lose"}">${m.sa}</span>-<span class="${m.aWon?"lose":"win"}">${m.sb}</span></div>
-    ${teamSide(m.b,true)}
+  const row=m=>`<div class="match">
+    ${side(m.a,false)}
+    <div class="match-score"><span class="${m.aWon?"w":"l"}">${m.sa}</span>&nbsp;–&nbsp;<span class="${m.aWon?"l":"w"}">${m.sb}</span></div>
+    ${side(m.b,true)}
   </div>`;
 
-  const saveBlock = currentUser
-    ? `<div class="save-row">
-        <div class="save-info">Signed in as <b>${currentUser.user_metadata?.full_name||currentUser.email}</b> — save this result to the global leaderboard?</div>
-        <button class="btn-save" id="saveScoreBtn">💾 Save Score</button>
-       </div>`
-    : `<div class="save-row">
-        <div class="save-info">Sign in with Google to save your score to the global leaderboard.</div>
-        <button class="btn-google" id="saveSignInBtn" style="white-space:nowrap">
-          <svg viewBox="0 0 48 48" style="width:16px;height:16px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+  const saveBlock=currentUser
+    ?`<div class="save-row">
+        <div class="save-info">Signed in as <b>${currentUser.user_metadata?.full_name||currentUser.email}</b> — save to leaderboard?</div>
+        <button class="btn-save" id="saveScoreBtn">💾 Save</button>
+      </div>`
+    :`<div class="save-row">
+        <div class="save-info">Sign in to save your score to the global leaderboard.</div>
+        <button class="btn-google" id="saveSignInBtn">
+          <svg viewBox="0 0 48 48" style="width:15px;height:15px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Sign in to save
         </button>
-       </div>`;
+      </div>`;
 
   let html=`
-    <button class="close" id="closeModal">✕</button>
-    <h2>🏐 VNL Season Result</h2>
-    <div class="squad-meta">Preliminary round robin · Top 4 to the Finals</div>
+    <div class="modal-header">
+      <h2>🏐 VNL Season Result</h2>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
     <div class="medal-banner medal-${medal}">
-      <span class="big">${emoji} ${medalTxt[medal]}</span>
-      <span class="lil">Team rating ${teamStrength(roster).toFixed(1)} · finished ${ordinal(me.rank)} in prelims</span>
+      <span class="medal-emoji">${MEDAL_EMOJI[medal]}</span>
+      <div class="medal-title">${medalTxt[medal]}</div>
+      <div class="medal-sub">Team rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims</div>
     </div>
     ${saveBlock}
-    <div class="stage">
-      <h3>Final Standings — Preliminary Round</h3>
-      <table class="standings">
-        <tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
-        ${teams.map(t=>`<tr class="${t.me?"me":""}">
-          <td>${t.rank}${t.rank<=4?'<span class="q">FINALS</span>':''}</td>
-          <td class="tn">${t.flag} ${t.nation}</td>
-          <td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td>
-        </tr>`).join("")}
-      </table>
+    <div class="section-title">Preliminary Standings</div>
+    <table class="standings">
+      <tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
+      ${teams.map(t=>`<tr class="${t.me?"me":""}">
+        <td>${t.rank}${t.rank<=4?'<span class="finals-badge">FINALS</span>':''}</td>
+        <td class="tn">${t.flag} ${t.nation}</td>
+        <td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td>
+      </tr>`).join("")}
+    </table>
+    <div class="section-title">Semifinals</div>
+    ${row(finals.sf[0].m)}${row(finals.sf[1].m)}
+    <div class="section-title">Bronze Medal Match</div>
+    ${row(finals.bronze.m)}
+    <div class="section-title">🏆 Gold Medal Match</div>
+    ${row(finals.gold.m)}
+    <div style="text-align:center;font-size:13px;color:var(--text2);margin:10px 0 14px">
+      🥇 ${finals.champion.flag} ${finals.champion.nation} &nbsp;·&nbsp;
+      🥈 ${finals.silver.flag} ${finals.silver.nation} &nbsp;·&nbsp;
+      🥉 ${finals.bronzeWinner.flag} ${finals.bronzeWinner.nation}
+    </div>
+    <div class="section-title">All Prelim Matches</div>
+    ${prelim.map(row).join("")}
+    <div style="margin-top:16px">
+      <button class="btn-primary" style="width:100%;padding:13px;font-size:14px" id="playAgain">↺ &nbsp;Draft a new team</button>
     </div>`;
-
-  if(finals.sf){
-    html+=`
-    <div class="stage"><h3>Semifinals</h3>${matchRow(finals.sf[0].m)}${matchRow(finals.sf[1].m)}</div>
-    <div class="stage"><h3>Bronze Medal Match</h3>${matchRow(finals.bronze.m)}</div>
-    <div class="stage">
-      <h3>🏆 Gold Medal Match</h3>${matchRow(finals.gold.m)}
-      <div class="squad-meta" style="text-align:center;margin-top:8px">
-        🥇 ${finals.champion.flag} ${finals.champion.nation} &nbsp;·&nbsp;
-        🥈 ${finals.silver.flag} ${finals.silver.nation} &nbsp;·&nbsp;
-        🥉 ${finals.bronzeWinner.flag} ${finals.bronzeWinner.nation}
-      </div>
-    </div>`;
-  }
-
-  html+=`
-    <div class="stage"><h3>All Preliminary Matches</h3>${prelim.map(matchRow).join("")}</div>
-    <div class="roster-actions"><button class="btn-go" id="playAgain">↺ Draft a new team</button></div>`;
 
   $("modal").innerHTML=html;
   $("overlay").classList.add("show");
@@ -855,16 +977,14 @@ function renderSeason(teams,prelim,finals,me){
     btn.onclick=async()=>{
       btn.disabled=true; btn.textContent="Saving…";
       const players=roster.filter(s=>s.player).map(s=>({name:s.player.name,pos:s.pos,ovr:s.player.ovr,from:s.player.from}));
-      const { error }=await sb.from("leaderboard").insert({
-        user_id: currentUser.id,
-        display_name: currentUser.user_metadata?.full_name||currentUser.email,
-        avatar_url: currentUser.user_metadata?.avatar_url||null,
-        medal,
-        team_rating: parseFloat(teamStrength(roster).toFixed(2)),
-        prelim_rank: me.rank,
-        players,
+      const {error}=await sb.from("leaderboard").insert({
+        user_id:currentUser.id,
+        display_name:currentUser.user_metadata?.full_name||currentUser.email,
+        avatar_url:currentUser.user_metadata?.avatar_url||null,
+        medal, team_rating:parseFloat(teamStrength(roster).toFixed(2)),
+        prelim_rank:me.rank, players,
       });
-      if(error){ btn.disabled=false; btn.textContent="💾 Save Score"; toast("Error saving: "+error.message); }
+      if(error){ btn.disabled=false; btn.textContent="💾 Save"; toast("Error: "+error.message); }
       else { btn.textContent="✅ Saved!"; toast("Score saved to leaderboard!"); }
     };
   } else if($("saveSignInBtn")){
@@ -872,67 +992,66 @@ function renderSeason(teams,prelim,finals,me){
   }
 }
 
-/* ============================================================ LEADERBOARD */
+/* ── LEADERBOARD ── */
 async function showLeaderboard(){
-  $("modal").innerHTML=`<button class="close" id="closeModal">✕</button><h2>🏆 Global Leaderboard</h2><div class="lb-loading">Loading…</div>`;
+  $("modal").innerHTML=`
+    <div class="modal-header">
+      <h2>🏆 Global Leaderboard</h2>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
+    <div style="text-align:center;padding:32px;color:var(--muted)">Loading…</div>`;
   $("overlay").classList.add("show");
   $("closeModal").onclick=()=>$("overlay").classList.remove("show");
 
+  const {data,error}=await sb.from("leaderboard").select("*").order("team_rating",{ascending:false}).limit(50);
+  if(error||!data){ $("modal").querySelector("div:last-child").textContent="Could not load."; return; }
+
   const medalOrder={gold:0,silver:1,bronze:2,none:3};
-  const { data, error }=await sb.from("leaderboard")
-    .select("*")
-    .order("team_rating",{ascending:false})
-    .limit(50);
-
-  if(error||!data){
-    $("modal").querySelector(".lb-loading").textContent="Could not load leaderboard.";
-    return;
-  }
-
-  // sort by medal rank first, then rating
   data.sort((a,b)=>(medalOrder[a.medal]-medalOrder[b.medal])||b.team_rating-a.team_rating);
 
   const rows=data.map((row,i)=>{
     const isMe=currentUser&&row.user_id===currentUser.id;
-    const avatar=row.avatar_url?`<img class="lb-avatar" src="${row.avatar_url}" alt="">`:"";
+    const av=row.avatar_url?`<img class="lb-avatar" src="${row.avatar_url}" alt="">`:"";
     const ps=(row.players||[]).map(p=>`${p.name} (${p.pos})`).join(" · ");
     return `<tr class="${isMe?"mine":""}">
       <td class="rank">${i+1}</td>
-      <td class="medal-cell">${MEDAL_EMOJI[row.medal]||"🏐"}</td>
-      <td>${avatar}<b>${row.display_name||"Anonymous"}</b><div class="lb-player-list">${ps}</div></td>
-      <td style="font-weight:800;color:var(--accent)">${row.team_rating}</td>
-      <td>${row.prelim_rank?ordinal(row.prelim_rank):"-"}</td>
+      <td class="med">${MEDAL_EMOJI[row.medal]||"🏐"}</td>
+      <td>${av}<b>${row.display_name||"Anonymous"}</b><div class="lb-players">${ps}</div></td>
+      <td style="font-weight:900;color:var(--gold)">${row.team_rating}</td>
+      <td>${row.prelim_rank?ordinal(row.prelim_rank):"—"}</td>
     </tr>`;
   }).join("");
 
   $("modal").innerHTML=`
-    <button class="close" id="closeModal">✕</button>
-    <div class="lb-header">
+    <div class="modal-header">
       <h2>🏆 Global Leaderboard</h2>
-      <span style="font-size:12px;color:var(--muted)">${data.length} entries</span>
+      <button class="modal-close" id="closeModal">✕</button>
     </div>
-    ${data.length===0?'<div class="lb-empty">No scores yet — be the first!</div>':`
-    <table class="lb">
-      <tr><th>#</th><th></th><th>Player</th><th>Rating</th><th>Prelim</th></tr>
-      ${rows}
-    </table>`}
-    <div class="roster-actions" style="margin-top:14px">
-      <button class="btn-go" id="closeLbBtn">← Back to game</button>
+    ${data.length===0
+      ?'<div class="lb-empty">No scores yet — be the first!</div>'
+      :`<table class="lb">
+          <tr><th>#</th><th></th><th>Player</th><th>Rating</th><th>Prelim</th></tr>
+          ${rows}
+        </table>`}
+    <div style="margin-top:16px">
+      <button class="btn-primary" style="width:100%;padding:12px;font-size:14px" id="closeLbBtn">← Back to game</button>
     </div>`;
   $("closeModal").onclick=$("closeLbBtn").onclick=()=>$("overlay").classList.remove("show");
 }
 
-/* ============================================================ RESET / INIT */
-function ordinal(n){ const s=["th","st","nd","rd"],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
-
+/* ── RESET ── */
 function resetGame(){
   roster=SLOTS.map(s=>({...s,player:null}));
   pickedKeys=new Set();
   $("squadPanel").style.display="none";
-  buildReelStatic();
-  renderRoster();
+  $("cardFlag").textContent="🏐"; $("cardNation").textContent="—";
+  $("cardEra").textContent="—"; $("cardComp").textContent="";
+  $("cardBlurb").textContent="";
+  renderCourt();
+  renderRoundUI();
 }
 
+/* ── INIT ── */
 $("spinBtn").addEventListener("click",spin);
 $("seasonBtn").addEventListener("click",()=>{ if(rosterFull()) simulateSeason(); });
 $("resetBtn").addEventListener("click",resetGame);
