@@ -1,0 +1,4 @@
+# Local test harness & generated artifacts (not part of the game)
+shot.mjs
+screens/
+node_modules/
