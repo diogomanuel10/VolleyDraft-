@@ -110,7 +110,7 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 
 /* ── TEAM IDENTITY BAR ── */
 .team-bar{display:flex;align-items:center;gap:14px;background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:14px 16px;margin-bottom:18px;box-shadow:var(--shadow)}
-.crest{flex:0 0 auto;width:54px;height:62px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;border-radius:10px 10px 16px 16px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 -10px 18px rgba(0,0,0,.18);border:2px solid rgba(255,255,255,.25)}
+.crest{flex:0 0 auto;width:52px;height:60px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;letter-spacing:.5px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45);border-radius:10px 10px 16px 16px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 -10px 18px rgba(0,0,0,.18);border:2px solid rgba(255,255,255,.3)}
 .crest::after{content:"";position:absolute;inset:3px;border-radius:8px 8px 14px 14px;border:1px solid rgba(255,255,255,.2);pointer-events:none}
 .team-meta{flex:1;min-width:0}
 .team-name-row{display:flex;align-items:center;gap:8px}
@@ -473,7 +473,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
           <span class="team-name" id="teamName" title="Click to rename">Dream Team</span>
           <button class="team-edit" id="teamEdit" title="Rename">✎</button>
         </div>
-        <div class="team-sub">Coached by <b id="teamCoach">—</b> · 🏟 <b id="teamVenue">—</b></div>
+        <div class="team-sub"><span id="teamFlag">🏐</span> Coached by <b id="teamCoach">—</b> · 🏟 <b id="teamVenue">—</b></div>
       </div>
       <button class="btn-dice" id="teamDice" title="Randomize identity">🎲</button>
     </div>
@@ -701,14 +701,40 @@ const DIFF_CONFIG = {
   elite: {rerolls:0,hideRatings:true},
 };
 
-/* ── TEAM IDENTITY ── */
-const TEAM_PREFIX=["Thunder","Royal","Coastal","Iron","Phoenix","Vortex","Apex","Crimson","Granite","Northern","Solar","Atlas","Titan","Storm","Imperial","Golden","Pacific","Highland"];
-const TEAM_SUFFIX=["Spikers","Aces","Blockers","Smashers","Setters","Risers","Strikers","Kings","Dynamo","United","Volley","Pride","Force","Eagles","Wolves","Titans","Sharks","Dragons"];
-const TEAM_LOGOS=["🦅","🐅","🐉","🦁","🦈","🐺","⚡","🔥","⭐","🛡️","🐂","🦂","🌊","👑","💥","🚀","🐝","🦏"];
-const CREST_COLORS=["#ef4444","#f59e0b","#10b981","#3b82f6","#8b5cf6","#ec4899","#14b8a6","#f97316","#6366f1","#e11d48"];
-const VENUES=["Marina Arena","Summit Dome","Vulcan Hall","Atlantica Pavilion","Olympus Court","Pinnacle Center","Aurora Arena","Granite Hall","Skyline Dome","Harbor Arena","Crown Colosseum","Vanguard Pavilion","Meridian Hall","Cascade Arena"];
-const COACHES_M=["Julio Velasco","Bernardinho","Andrea Anastasi","Vital Heynen","Ferdinando De Giorgi","Nikola Grbić","Slobodan Kovač","Tuomas Sammelvuo","Andrea Giani","Gheorghe Crețu","Laurent Tillie","Philippe Blain"];
-const COACHES_W=["Lang Ping","Giovanni Guidetti","Zé Roberto Guimarães","Daniele Santarelli","Karch Kiraly","Julio Velasco","Massimo Barbolini","Stefano Lavarini","Marco Bonitta","Park Ki-won","Felix Wong","Davide Mazzanti"];
+/* ── TEAM IDENTITY (real clubs) ──
+   NOTE: club logos are trademarked images we can't embed, so each crest is a
+   monogram in the club's real brand colours. Names, venues, coaches and
+   colours are real (recent seasons). */
+const CLUBS_M=[
+  {name:"Sir Susa Vim Perugia",short:"PER",flag:"🇮🇹",color:"#e2001a",venue:"PalaBarton, Perugia",coach:"Angelo Lorenzetti"},
+  {name:"Cucine Lube Civitanova",short:"LUB",flag:"🇮🇹",color:"#b00020",venue:"Eurosuole Forum, Civitanova",coach:"Giampaolo Medei"},
+  {name:"Itas Trentino",short:"TRN",flag:"🇮🇹",color:"#1e4fa3",venue:"il T quotidiano Arena, Trento",coach:"Fabio Soli"},
+  {name:"Allianz Milano",short:"MIL",flag:"🇮🇹",color:"#f2a900",venue:"Allianz Cloud, Milan",coach:"Roberto Piazza"},
+  {name:"Gas Sales Bluenergy Piacenza",short:"PIA",flag:"🇮🇹",color:"#d61f26",venue:"PalabancaSport, Piacenza",coach:"Andrea Anastasi"},
+  {name:"ZAKSA Kędzierzyn-Koźle",short:"ZAK",flag:"🇵🇱",color:"#1aa64a",venue:"Hala Azoty, Kędzierzyn-Koźle",coach:"Tuomas Sammelvuo"},
+  {name:"Jastrzębski Węgiel",short:"JAS",flag:"🇵🇱",color:"#1d4ed8",venue:"Jastor Arena, Jastrzębie-Zdrój",coach:"Marcelo Méndez"},
+  {name:"Asseco Resovia Rzeszów",short:"RES",flag:"🇵🇱",color:"#b91c1c",venue:"Podpromie Hall, Rzeszów",coach:"Giampaolo Medei"},
+  {name:"Projekt Warszawa",short:"WAR",flag:"🇵🇱",color:"#0e7490",venue:"Arena Ursynów, Warsaw",coach:"Piotr Graban"},
+  {name:"Zenit Kazan",short:"KAZ",flag:"🇷🇺",color:"#0ea5e9",venue:"Centre Volleyball, Kazan",coach:"Alexey Verbov"},
+  {name:"Halkbank Ankara",short:"HAL",flag:"🇹🇷",color:"#d8232a",venue:"Başkent Volleyball Hall, Ankara",coach:"Slobodan Kovač"},
+  {name:"Berlin Recycling Volleys",short:"BER",flag:"🇩🇪",color:"#f5a623",venue:"Max-Schmeling-Halle, Berlin",coach:"Joel Banks"},
+  {name:"Tours Volley-Ball",short:"TVB",flag:"🇫🇷",color:"#facc15",venue:"Palais des Sports, Tours",coach:"Hubert Henno"},
+  {name:"Sada Cruzeiro",short:"SAD",flag:"🇧🇷",color:"#1e40af",venue:"Arena Sada, Contagem",coach:"Filipe Ferraz"},
+];
+const CLUBS_W=[
+  {name:"Prosecco Doc Imoco Conegliano",short:"CON",flag:"🇮🇹",color:"#f4b400",venue:"Palaverde, Villorba",coach:"Daniele Santarelli"},
+  {name:"Allianz Vero Volley Milano",short:"MIL",flag:"🇮🇹",color:"#7c3aed",venue:"Opiquad Arena, Monza",coach:"Stefano Lavarini"},
+  {name:"Savino Del Bene Scandicci",short:"SCA",flag:"🇮🇹",color:"#1d4ed8",venue:"Palazzo Wanny, Florence",coach:"Marco Gaspari"},
+  {name:"Igor Gorgonzola Novara",short:"NOV",flag:"🇮🇹",color:"#2563eb",venue:"Pala Igor, Novara",coach:"Bernardo Cuttini"},
+  {name:"VakıfBank İstanbul",short:"VAK",flag:"🇹🇷",color:"#f4c20d",venue:"VakıfBank Spor Sarayı, Istanbul",coach:"Giovanni Guidetti"},
+  {name:"Eczacıbaşı Dynavit İstanbul",short:"ECZ",flag:"🇹🇷",color:"#f97316",venue:"Burhan Felek Hall, Istanbul",coach:"Ferhat Akbaş"},
+  {name:"Fenerbahçe Opet İstanbul",short:"FEN",flag:"🇹🇷",color:"#facc15",venue:"Ülker Sports Arena, Istanbul",coach:"Marcello Abbondanza"},
+  {name:"Dinamo Moscow",short:"DIN",flag:"🇷🇺",color:"#1d4ed8",venue:"Dynamo Palace, Moscow",coach:"Konstantin Ushakov"},
+  {name:"Tianjin Bohai Bank",short:"TJN",flag:"🇨🇳",color:"#d61f26",venue:"Tianjin People's Stadium",coach:"Wang Baoquan"},
+  {name:"Praia Clube",short:"PRA",flag:"🇧🇷",color:"#1aa64a",venue:"Praia Clube, Uberlândia",coach:"Paulo Coco"},
+  {name:"Minas Tênis Clube",short:"MIN",flag:"🇧🇷",color:"#1e40af",venue:"Arena UniBH, Belo Horizonte",coach:"Nicola Negro"},
+  {name:"Developres Rzeszów",short:"RZE",flag:"🇵🇱",color:"#db2777",venue:"Podpromie Hall, Rzeszów",coach:"Stéphane Antiga"},
+];
 
 /* ── SETTINGS STATE ── */
 let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium"};
@@ -718,7 +744,7 @@ let roster, spinning, pickedKeys, currentUser, rerollsLeft, selectedSlotIndex;
 let activeSquad = null;
 let careerSeasons = [];
 let careerSeason = 0;
-let team = {name:"Dream Team",logo:"🦅",color:"#f59e0b",venue:"Marina Arena",coach:"—"};
+let team = {name:"Dream Team",short:"VD",flag:"🏐",color:"#f59e0b",venue:"—",coach:"—"};
 
 /* ── HELPERS ── */
 const $ = id => document.getElementById(id);
@@ -733,26 +759,23 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 
 /* ── TEAM IDENTITY ── */
 function randomizeTeam(){
-  team={
-    name:`${pick(TEAM_PREFIX)} ${pick(TEAM_SUFFIX)}`,
-    logo:pick(TEAM_LOGOS),
-    color:pick(CREST_COLORS),
-    venue:pick(VENUES),
-    coach:pick(settings.gender==="women"?COACHES_W:COACHES_M),
-  };
+  const pool=settings.gender==="women"?CLUBS_W:CLUBS_M;
+  team={...pool[Math.floor(Math.random()*pool.length)]};
   renderTeam();
 }
 function renderTeam(){
-  $("teamCrest").textContent=team.logo;
-  $("teamCrest").style.background=`linear-gradient(160deg,${team.color},${team.color}cc)`;
+  const c=$("teamCrest");
+  c.textContent=team.short;
+  c.style.background=`linear-gradient(160deg,${team.color},${team.color}bb)`;
   $("teamName").textContent=team.name;
+  $("teamFlag").textContent=team.flag;
   $("teamCoach").textContent=team.coach;
   $("teamVenue").textContent=team.venue;
-  const ct=$("courtTitle");if(ct)ct.textContent=`${team.logo} ${team.name}`;
+  const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;
 }
 function renameTeam(){
-  const v=prompt("Name your team:",team.name);
-  if(v&&v.trim()){team.name=v.trim().slice(0,28);renderTeam();}
+  const v=prompt("Rename your club:",team.name);
+  if(v&&v.trim()){team.name=v.trim().slice(0,32);renderTeam();}
 }
 
 /* ── THEME ── */
@@ -1009,7 +1032,7 @@ function simulateSeason(ratingVariance=0){
   const aiPool=currentAI();
   const pool=[...aiPool].sort(()=>Math.random()-.5).slice(0,7)
     .map(t=>({nation:t.nation,flag:t.flag,str:t.base+(Math.random()*6-3)}));
-  const me={nation:team.name,flag:team.logo,str:myStr,me:true};
+  const me={nation:team.name,flag:team.flag,str:myStr,me:true};
   let teams=[me,...pool];
   teams.forEach(t=>{t.W=0;t.L=0;t.setW=0;t.setL=0;t.pts=0;});
   const prelim=[];
@@ -1048,7 +1071,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   const careerHeader=isCareer?`<div style="display:flex;gap:8px;margin-bottom:12px">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" onclick="window._careerTab(${i})">${i+1===seasonNum?`Season ${i+1} ▶`:`Season ${i+1}${careerSeasons[i]?` ${MEDAL_EMOJI[careerSeasons[i].medal]}`:""}`}</button>`).join("")}</div>`:"";
   let html=`<div class="modal-header"><h2>🏐 VNL ${isCareer?`Season ${seasonNum}/${totalSeasons}`:"Season Result"}</h2><button class="modal-close" id="closeModal">✕</button></div>
     ${careerHeader}
-    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.logo} ${team.name}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${team.coach} · 🏟 ${team.venue}</div></div>
+    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.flag} ${team.name}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${team.coach} · 🏟 ${team.venue}</div></div>
     ${isLast?saveBlock:""}
     <div class="section-title">Preliminary Standings</div>
     <table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
