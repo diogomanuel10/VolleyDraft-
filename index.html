@@ -122,6 +122,20 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .team-sub b{color:var(--text);font-weight:700}
 .btn-dice{flex:0 0 auto;background:var(--surface2);border:1px solid var(--border2);color:var(--text);width:42px;height:42px;border-radius:11px;font-size:18px;transition:.18s}
 .btn-dice:hover{border-color:var(--gold);transform:rotate(-12deg) scale(1.06)}
+/* lobby club setup */
+.club-setup{display:flex;align-items:center;gap:14px}
+.club-fields{flex:1;min-width:0}
+.cf{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.cf:last-child{margin-bottom:0}
+.cf-name{font-size:18px;font-weight:900;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.cf-sub{font-size:12px;color:var(--text2)}
+.cf-sub>span:not(.cf-ico){flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-ico{flex:0 0 auto}
+.cf-roll{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);width:26px;height:26px;border-radius:8px;font-size:12px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;transition:.15s}
+.cf-roll:hover{border-color:var(--gold);color:var(--gold);transform:rotate(-12deg)}
+.cf-roll.big{width:44px;height:52px;font-size:18px;align-self:center;border-radius:11px}
+.club-rollall{width:100%;margin-top:14px;padding:11px;border-radius:11px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-size:13px;font-weight:700}
+.club-rollall:hover{border-color:var(--gold);color:var(--gold)}
 
 /* ── ROUND BAR ── */
 .round-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
@@ -450,6 +464,25 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         </div>
       </div>
     </div>
+
+    <div class="settings-card">
+      <div class="settings-label">Your Club</div>
+      <div class="club-setup" id="clubSetup">
+        <div class="crest" id="lobbyCrest">VD</div>
+        <div class="club-fields">
+          <div class="cf">
+            <span class="cf-name" id="lobbyName">Dream Team</span>
+            <button class="cf-roll" data-roll="name" title="Roll name">🎲</button>
+            <button class="cf-roll" data-roll="rename" title="Rename">✎</button>
+          </div>
+          <div class="cf cf-sub"><span class="cf-ico">👔</span><span id="lobbyCoach">—</span><button class="cf-roll" data-roll="coach" title="Roll coach">🎲</button></div>
+          <div class="cf cf-sub"><span class="cf-ico">🏟</span><span id="lobbyVenue">—</span><button class="cf-roll" data-roll="venue" title="Roll venue">🎲</button></div>
+        </div>
+        <button class="cf-roll big" data-roll="logo" title="Roll crest &amp; colour">🎲</button>
+      </div>
+      <button class="club-rollall" id="clubRollAll">🎲 &nbsp;Roll a random club</button>
+    </div>
+
     <button class="start-btn" id="startBtn">⚡ &nbsp;Start Draft</button>
   </div>
 </div>
@@ -529,22 +562,23 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         <div class="hint-text" id="rosterHint">Spin to draft your first player.</div>
       </div>
     </div>
-    <footer>
-      <div class="footer-brand">🏐 Volley<em>Draft</em></div>
-      <div class="footer-slogan">
-        Spin the wheel of volleyball history, draft a lineup of real legends from FIVB's greatest
-        campaigns, and find out if your dream team can conquer a full VNL season.
-      </div>
-      <div class="footer-actions">
-        <a class="btn-feedback" id="feedbackLink" href="mailto:diomanuel10@gmail.com?subject=VolleyDraft%20Feedback&body=Hi!%20Here's%20my%20feedback%20on%20VolleyDraft:%0A%0A">💬 Leave us feedback</a>
-      </div>
-      <div class="footer-fine">
-        A fan-made tribute to volleyball history · squads are illustrative snapshots of real FIVB campaigns<br>
-        Inspired by the spin-and-draft format of 82-0.com
-      </div>
-    </footer>
   </div>
 </div>
+
+<footer>
+  <div class="footer-brand">🏐 Volley<em>Draft</em></div>
+  <div class="footer-slogan">
+    Spin the wheel of volleyball history, draft a lineup of real legends from FIVB's greatest
+    campaigns, and find out if your dream team can conquer a full VNL season.
+  </div>
+  <div class="footer-actions">
+    <a class="btn-feedback" href="mailto:diomanuel10@gmail.com?subject=VolleyDraft%20Feedback&body=Hi!%20Here's%20my%20feedback%20on%20VolleyDraft:%0A%0A">💬 Leave us feedback</a>
+  </div>
+  <div class="footer-fine">
+    A fan-made tribute to volleyball history · squads are illustrative snapshots of real FIVB campaigns<br>
+    Inspired by the spin-and-draft format of 82-0.com
+  </div>
+</footer>
 
 <div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
 <div class="toast" id="toast"></div>
@@ -749,19 +783,23 @@ function currentAI(){return settings.gender==="women"?AI_TEAMS_WOMEN:AI_TEAMS_ME
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
 /* ── TEAM IDENTITY ── */
-function randomizeTeam(){
-  const pool=settings.gender==="women"?CLUBS_W:CLUBS_M;
-  team={...pool[Math.floor(Math.random()*pool.length)]};
+function clubPool(){return settings.gender==="women"?CLUBS_W:CLUBS_M;}
+function rollAll(){team={...pick(clubPool())};renderTeam();}
+function rollField(f){
+  const c=pick(clubPool());
+  if(f==="name")team.name=c.name;
+  else if(f==="coach")team.coach=c.coach;
+  else if(f==="venue")team.venue=c.venue;
+  else if(f==="logo"){team.short=c.short;team.color=c.color;team.flag=c.flag;}
   renderTeam();
 }
+function setAll(ids,fn){ids.forEach(id=>{const e=$(id);if(e)fn(e);});}
 function renderTeam(){
-  const c=$("teamCrest");
-  c.textContent=team.short;
-  c.style.background=`linear-gradient(160deg,${team.color},${team.color}bb)`;
-  $("teamName").textContent=team.name;
-  $("teamFlag").textContent=team.flag;
-  $("teamCoach").textContent=team.coach;
-  $("teamVenue").textContent=team.venue;
+  setAll(["teamCrest","lobbyCrest"],c=>{c.textContent=team.short;c.style.background=`linear-gradient(160deg,${team.color},${team.color}bb)`;});
+  setAll(["teamName","lobbyName"],e=>e.textContent=team.name);
+  setAll(["teamCoach","lobbyCoach"],e=>e.textContent=team.coach);
+  setAll(["teamVenue","lobbyVenue"],e=>e.textContent=team.venue);
+  const tf=$("teamFlag");if(tf)tf.textContent=team.flag;
   const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;
 }
 function renameTeam(){
@@ -808,10 +846,16 @@ function renderAuth(){
 
 /* ── LOBBY ── */
 function setupLobby(){
-  setupToggleGroup("genderGroup","active",v=>settings.gender=v);
+  setupToggleGroup("genderGroup","active",v=>{settings.gender=v;rollAll();});
   setupToggleGroup("draftModeGroup","active-purple",v=>settings.draftMode=v);
   setupToggleGroup("seasonModeGroup","active-blue",v=>settings.seasonMode=v);
   setupToggleGroup("diffGroup","active-green",v=>settings.difficulty=v);
+  $("clubRollAll").onclick=rollAll;
+  $("clubSetup").addEventListener("click",e=>{
+    const b=e.target.closest(".cf-roll");if(!b)return;
+    const f=b.dataset.roll;
+    if(f==="rename")renameTeam();else rollField(f);
+  });
   $("startBtn").onclick=startGame;
   $("logoHome").onclick=e=>{e.preventDefault();if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}};
 }
@@ -838,7 +882,7 @@ function startGame(){
   $("resetBtn").style.display="";
   rerollsLeft=DIFF_CONFIG[settings.difficulty].rerolls;
   careerSeasons=[];careerSeason=0;
-  randomizeTeam();
+  renderTeam();
   resetGame();
 }
 
@@ -1152,12 +1196,13 @@ $("rerollBtn").addEventListener("click",doReroll);
 $("seasonBtn").addEventListener("click",startSimulation);
 $("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
-$("teamDice").addEventListener("click",randomizeTeam);
+$("teamDice").addEventListener("click",rollAll);
 $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
 
 setupLobby();
+rollAll();
 await initAuth();
 </script>
 </body>
