@@ -18,10 +18,10 @@
   --text:#f8fafc;--text2:#aab8d0;--muted:#6b7a99;
   --glow1:rgba(251,191,36,.10);--glow2:rgba(167,139,250,.13);
   --card-grad:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,0));
-  --court-floor:linear-gradient(180deg,#1560a0 0%,#0e3f73 52%,#0c386a 100%);
-  --court-zone:linear-gradient(180deg,#1a6cb0,#15589a);
-  --court-surround:linear-gradient(180deg,#0a2240 0%,#081c34 100%);
-  --court-line:rgba(255,255,255,.62);
+  --court-floor:linear-gradient(180deg,#edd3a1 0%,#ddb87b 55%,#d0a866 100%);
+  --court-zone:linear-gradient(180deg,#e4c488,#d6ad6b);
+  --court-surround:linear-gradient(180deg,#2270c2 0%,#155291 100%);
+  --court-line:rgba(255,255,255,.92);
   --shadow:0 8px 30px rgba(0,0,0,.35);
 }
 [data-theme="light"]{
@@ -30,10 +30,10 @@
   --text:#0f172a;--text2:#3f4f6b;--muted:#7587a3;
   --glow1:rgba(245,158,11,.14);--glow2:rgba(139,92,246,.14);
   --card-grad:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,0));
-  --court-floor:linear-gradient(180deg,#3b82f6 0%,#2563eb 100%);
-  --court-zone:linear-gradient(180deg,#60a5fa,#3b82f6);
-  --court-surround:linear-gradient(180deg,#1e40af 0%,#1d3a9e 100%);
-  --court-line:rgba(255,255,255,.9);
+  --court-floor:linear-gradient(180deg,#edd3a1 0%,#ddb87b 55%,#d0a866 100%);
+  --court-zone:linear-gradient(180deg,#e4c488,#d6ad6b);
+  --court-surround:linear-gradient(180deg,#2a7ad0 0%,#1c5ea3 100%);
+  --court-line:rgba(255,255,255,.95);
   --shadow:0 8px 30px rgba(30,58,138,.12);
 }
 
@@ -201,14 +201,16 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .court-wrap{position:relative}
 .court-title{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:center}
 .court{position:relative;width:100%;aspect-ratio:.66;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
-/* playing floor inside the free zone (9×18m) */
-.court-floor{position:absolute;inset:6.5% 9%;background:var(--court-floor);border:2px solid var(--court-line);border-radius:4px;box-shadow:inset 0 0 50px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.15)}
-/* front zones: brighter band between the two 3m attack lines (lines are its borders) */
-.court-floor::before{content:"";position:absolute;left:0;right:0;top:33.33%;bottom:33.33%;background:var(--court-zone);opacity:.30;border-top:2px solid var(--court-line);border-bottom:2px solid var(--court-line)}
+/* parquet playing floor inside the blue free zone (9×18m) */
+.court-floor{position:absolute;inset:6.5% 9%;border:3px solid var(--court-line);border-radius:3px;
+  background:repeating-linear-gradient(90deg,rgba(120,72,20,.10) 0 1px,transparent 1px 13px),var(--court-floor);
+  box-shadow:inset 0 0 55px rgba(120,72,20,.22),0 0 0 1px rgba(0,0,0,.12)}
+/* front zones (3m) — slightly warmer wood, bounded by the white attack lines */
+.court-floor::before{content:"";position:absolute;left:0;right:0;top:33.33%;bottom:33.33%;background:var(--court-zone);opacity:.55;border-top:3px solid var(--court-line);border-bottom:3px solid var(--court-line)}
 /* centre line under the net */
-.court-floor::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:var(--court-line);opacity:.85}
+.court-floor::after{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:var(--court-line)}
 /* faint rotation-zone numbers for that FIVB-diagram feel */
-.zone-nums{position:absolute;inset:6.5% 9%;pointer-events:none;color:rgba(255,255,255,.16);font-size:9px;font-weight:800}
+.zone-nums{position:absolute;inset:6.5% 9%;pointer-events:none;color:rgba(90,55,15,.32);font-size:9px;font-weight:900}
 .zone-nums span{position:absolute;transform:translate(-50%,-50%)}
 .court-lines{position:absolute;inset:0;pointer-events:none}
 /* net across the middle, with tape + posts + antennas */
@@ -220,7 +222,7 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .court-net::before,.court-net::after{content:"";position:absolute;top:-7px;width:4px;height:27px;border-radius:2px;
   background:repeating-linear-gradient(180deg,#ef4444 0 5px,#fff 5px 10px);box-shadow:0 0 4px rgba(0,0,0,.4)}
 .court-net::before{left:13%}.court-net::after{right:13%}
-.opp-zone,.your-zone{position:absolute;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:800;color:rgba(255,255,255,.28);text-transform:uppercase}
+.opp-zone,.your-zone{position:absolute;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:900;color:rgba(70,45,12,.42);text-transform:uppercase}
 .opp-zone{top:13%}.your-zone{bottom:9%}
 /* slots — compact jersey chips */
 .court-slot{position:absolute;width:20.5%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
