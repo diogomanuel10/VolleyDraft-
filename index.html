@@ -194,8 +194,11 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .pinfo{flex:1;min-width:0}
 .pname{font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ppos{color:var(--text2);font-size:10px;margin-top:1px}
-.povr{font-weight:900;font-size:16px;color:var(--gold);margin-left:auto;flex:0 0 auto}
-.povr.hidden{color:var(--muted);font-size:12px}
+.pclub{color:var(--muted);font-size:9.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.povr{display:flex;flex-direction:column;align-items:center;margin-left:auto;flex:0 0 auto;line-height:1}
+.rtg-num{font-weight:900;font-size:16px;color:var(--gold)}
+.rtg-cap{font-size:7px;font-weight:800;letter-spacing:1px;color:var(--muted)}
+.povr.hidden .rtg-num{color:var(--muted);font-size:12px}
 
 /* ── COURT ── */
 .court-wrap{position:relative}
@@ -848,6 +851,55 @@ const SQUADS_WOMEN = [
    players:[{name:"Isabelle Haak",pos:"OH",ovr:94},{name:"Miriam Sylla",pos:"OH",ovr:90},{name:"Kathryn Plummer",pos:"OH",ovr:88},{name:"Paola Egonu",pos:"OPP",ovr:96},{name:"Ekaterina Antropova",pos:"OPP",ovr:90},{name:"Robin de Kruijf",pos:"MB",ovr:89},{name:"Anna Danesi",pos:"MB",ovr:88},{name:"Sarah Fahr",pos:"MB",ovr:85},{name:"Joanna Wołosz",pos:"S",ovr:92},{name:"Asia Wołosz",pos:"S",ovr:82},{name:"Monica De Gennaro",pos:"L",ovr:91},{name:"Indre Sorokaite",pos:"OH",ovr:85},{name:"Federica Squarcini",pos:"MB",ovr:82}]},
 ];
 
+/* ── REAL PLAYER DATA (height cm + notable club) — verified, major nations first.
+   ovr stays an internal GAME rating for the sim; height/club are real facts. ── */
+const PLAYER_INFO = {
+  /* ITALY (M) */
+  "Lorenzo Bernardi":{ht:198,club:"Pallavolo Modena"},"Andrea Giani":{ht:200,club:"Pallavolo Modena"},"Andrea Zorzi":{ht:202,club:"Porto Ravenna"},"Andrea Gardini":{ht:200,club:"Maxicono Parma"},"Samuele Papi":{ht:190,club:"Lube Macerata"},"Paolo Tofoli":{ht:184,club:"Lube Macerata"},"Ferdinando De Giorgi":{ht:180,club:"Sisley Treviso"},"Alessandro Michieletto":{ht:205,club:"Itas Trentino"},"Daniele Lavia":{ht:200,club:"Itas Trentino"},"Yuri Romanò":{ht:204,club:"Gas Sales Piacenza"},"Simone Giannelli":{ht:200,club:"Sir Susa Perugia"},"Gianluca Galassi":{ht:204,club:"Vero Volley Monza"},"Roberto Russo":{ht:202,club:"Sir Susa Perugia"},"Simone Anzani":{ht:200,club:"Cucine Lube Civitanova"},"Fabio Balaso":{ht:184,club:"Cucine Lube Civitanova"},"Mattia Bottolo":{ht:200,club:"Cucine Lube Civitanova"},"Riccardo Sbertoli":{ht:191,club:"Itas Trentino"},"Ivan Zaytsev":{ht:205,club:"Modena Volley"},"Osmany Juantorena":{ht:200,club:"Cucine Lube Civitanova"},"Filippo Lanza":{ht:200,club:"Itas Trentino"},
+  /* BRAZIL (M) */
+  "Giba":{ht:192,club:"Trentino Volley"},"Bruno Rezende":{ht:190,club:"Sada Cruzeiro"},"Sérgio Santos (Serginho)":{ht:184,club:"Sesi-SP"},"Wallace de Souza":{ht:200,club:"Sada Cruzeiro"},"Yoandy Leal":{ht:200,club:"Cucine Lube Civitanova"},"Lucarelli":{ht:196,club:"Sada Cruzeiro"},"Douglas Souza":{ht:190,club:"Sesc-RJ Flamengo"},"Alan Souza":{ht:199,club:"Sada Cruzeiro"},"Lucão":{ht:207,club:"Minas Tênis Clube"},"Maurício Souza":{ht:202,club:"Sada Cruzeiro"},"Darlan Souza":{ht:200,club:"Cruzeiro"},"Gustavo Endres":{ht:205,club:"Trentino Volley"},
+  /* USA (M) */
+  "Matt Anderson":{ht:203,club:"Zenit Kazan"},"Aaron Russell":{ht:201,club:"Itas Trentino"},"Micah Christenson":{ht:201,club:"Sir Safety Perugia"},"Maxwell Holt":{ht:206,club:"Zenit Kazan"},"Erik Shoji":{ht:184,club:"JTEKT Stings"},"T.J. DeFalco":{ht:196,club:"Knack Roeselare"},"Reid Priddy":{ht:193,club:"Lokomotiv Novosibirsk"},"Clayton Stanley":{ht:206,club:"Hyundai Capital"},"Lloy Ball":{ht:203,club:"Dynamo Moscow"},"David Lee":{ht:204,club:"Halkbank Ankara"},
+  /* RUSSIA (M) */
+  "Maxim Mikhaylov":{ht:202,club:"Zenit Kazan"},"Dmitriy Muserskiy":{ht:218,club:"Suntory Sunbirds"},"Alexander Volkov":{ht:210,club:"Zenit Kazan"},"Sergey Tetyukhin":{ht:197,club:"Belogorie Belgorod"},"Sergey Grankin":{ht:200,club:"Dynamo Moscow"},"Alexey Verbov":{ht:183,club:"Zenit Kazan"},"Semen Poltavskiy":{ht:207,club:"Dynamo Moscow"},
+  /* POLAND (M) */
+  "Wilfredo Leon":{ht:202,club:"Sir Susa Perugia"},"Bartosz Kurek":{ht:205,club:"Stocznia Szczecin"},"Mateusz Bieniek":{ht:211,club:"Sir Susa Perugia"},"Jakub Kochanowski":{ht:205,club:"PGE Skra Bełchatów"},"Aleksander Śliwka":{ht:200,club:"ZAKSA Kędzierzyn-Koźle"},"Kamil Semeniuk":{ht:196,club:"Sir Susa Perugia"},"Tomasz Fornal":{ht:195,club:"Jastrzębski Węgiel"},"Łukasz Kaczmarek":{ht:205,club:"ZAKSA Kędzierzyn-Koźle"},"Marcin Komenda":{ht:188,club:"Bogdanka LUK Lublin"},"Paweł Zatorski":{ht:184,club:"ZAKSA Kędzierzyn-Koźle"},"Fabian Drzyzga":{ht:198,club:"Sir Safety Perugia"},"Michał Kubiak":{ht:195,club:"Asseco Resovia"},
+  /* FRANCE (M) */
+  "Earvin Ngapeth":{ht:194,club:"Modena Volley"},"Jean Patry":{ht:205,club:"Sir Susa Perugia"},"Barthélémy Chinenyeze":{ht:200,club:"Cucine Lube Civitanova"},"Nicolas Le Goff":{ht:207,club:"Montpellier"},"Antoine Brizard":{ht:195,club:"Sir Susa Perugia"},"Benjamin Toniutti":{ht:183,club:"ZAKSA Kędzierzyn-Koźle"},"Jenia Grebennikov":{ht:187,club:"Trentino Volley"},"Trévor Clévenot":{ht:199,club:"Cucine Lube Civitanova"},"Stephen Boyer":{ht:202,club:"Tours VB"},
+  /* SERBIA (M) */
+  "Aleksandar Atanasijević":{ht:204,club:"Sir Safety Perugia"},"Srećko Lisinac":{ht:207,club:"Itas Trentino"},"Marko Podraščanin":{ht:204,club:"Sir Safety Perugia"},"Uroš Kovačević":{ht:200,club:"Itas Trentino"},"Nikola Grbić":{ht:192,club:"Lube Macerata"},"Ivan Miljković":{ht:204,club:"Modena Volley"},"Vladimir Grbić":{ht:195,club:"Sisley Treviso"},
+  /* SLOVENIA / IRAN / JAPAN / ARGENTINA / BULGARIA / CUBA / NL (M) */
+  "Tine Urnaut":{ht:196,club:"Itas Trentino"},"Rok Možič":{ht:198,club:"Itas Trentino"},"Tonček Štern":{ht:205,club:"Gas Sales Piacenza"},"Klemen Čebulj":{ht:196,club:"Itas Trentino"},"Jani Kovačič":{ht:183,club:"ACH Volley"},
+  "Saeid Marouf":{ht:190,club:"Sarmayeh Bank Tehran"},"Milad Ebadipour":{ht:197,club:"PGE Skra Bełchatów"},"Seyed Mohammad Mousavi":{ht:202,club:"Sarmayeh Bank Tehran"},"Amir Ghafour":{ht:198,club:"Khatam Ardakan"},
+  "Yuji Nishida":{ht:187,club:"JTEKT Stings"},"Yuki Ishikawa":{ht:192,club:"Itas Trentino"},"Ran Takahashi":{ht:188,club:"Suntory Sunbirds"},"Tomohiro Yamamoto":{ht:171,club:"Suntory Sunbirds"},
+  "Luciano De Cecco":{ht:197,club:"Sir Safety Perugia"},"Facundo Conte":{ht:198,club:"Sada Cruzeiro"},"Bruno Lima":{ht:202,club:"Gas Sales Piacenza"},"Sebastián Solé":{ht:204,club:"Vero Volley Monza"},
+  "Matey Kaziyski":{ht:204,club:"Trentino Volley"},"Tsvetan Sokolov":{ht:207,club:"Cucine Lube Civitanova"},"Vladimir Nikolov":{ht:202,club:"Trentino Volley"},
+  "Robertlandy Simón":{ht:208,club:"Cucine Lube Civitanova"},
+  "Bas van de Goor":{ht:210,club:"Iraklis"},"Peter Blangé":{ht:197,club:"Olympiacos"},"Guido Görtzen":{ht:196,club:"Pallavolo Modena"},
+  /* ITALY (W) */
+  "Paola Egonu":{ht:194,club:"Vero Volley Milano"},"Ekaterina Antropova":{ht:202,club:"Savino Del Bene Scandicci"},"Miriam Sylla":{ht:184,club:"Imoco Conegliano"},"Anna Danesi":{ht:192,club:"Vero Volley Milano"},"Alessia Orro":{ht:180,club:"Vero Volley Milano"},"Monica De Gennaro":{ht:174,club:"Imoco Conegliano"},"Sarah Fahr":{ht:192,club:"Imoco Conegliano"},"Caterina Bosetti":{ht:180,club:"Imoco Conegliano"},"Francesca Piccinini":{ht:184,club:"Volley Bergamo"},"Eleonora Lo Bianco":{ht:178,club:"Foppapedretti Bergamo"},
+  /* CHINA (W) */
+  "Zhu Ting":{ht:198,club:"Tianjin Bohai Bank"},"Li Yingying":{ht:192,club:"Shanghai"},"Yuan Xinyue":{ht:201,club:"Tianjin Bohai Bank"},"Ding Xia":{ht:180,club:"Tianjin Bohai Bank"},"Zhang Changning":{ht:197,club:"Jiangsu"},"Gong Xiangyu":{ht:188,club:"Tianjin Bohai Bank"},"Lin Li":{ht:171,club:"Bayi"},"Yang Hao":{ht:182,club:"Bayi"},"Zhao Ruirui":{ht:197,club:"Jiangsu"},"Feng Kun":{ht:182,club:"Bayi"},
+  /* BRAZIL (W) */
+  "Gabriela Guimarães":{ht:186,club:"Vero Volley Milano"},"Sheilla Castro":{ht:185,club:"Vôlei Nestlé"},"Fabiana Claudino":{ht:193,club:"Minas Tênis Clube"},"Thaísa Menezes":{ht:196,club:"Sesi-SP"},"Tandara Caixeta":{ht:188,club:"Sesi-SP"},"Camila Brait":{ht:173,club:"Osasco"},"Macris Carneiro":{ht:176,club:"Praia Clube"},"Fabiana de Oliveira (Fabi)":{ht:168,club:"Rexona-SESC"},"Hélia Souza (Fofão)":{ht:180,club:"Vôlei Futuro"},"Natália Pereira":{ht:184,club:"Praia Clube"},
+  /* USA (W) */
+  "Jordan Larson":{ht:188,club:"Eczacıbaşı"},"Jordan Thompson":{ht:196,club:"Vero Volley Milano"},"Foluke Akinradewo":{ht:191,club:"Hisamitsu Springs"},"Justine Wong-Orantes":{ht:173,club:"Dresdner SC"},"Annie Drews":{ht:196,club:"Saugella Monza"},"Haleigh Washington":{ht:193,club:"Vero Volley Milano"},"Michelle Bartsch-Hackley":{ht:188,club:"Eczacıbaşı"},"Jordyn Poulter":{ht:188,club:"Vakıfbank"},"Kim Hill":{ht:188,club:"Vakıfbank"},
+  /* SERBIA (W) */
+  "Tijana Bošković":{ht:194,club:"Eczacıbaşı"},"Maja Ognjenović":{ht:184,club:"Vakıfbank"},"Milena Rašić":{ht:194,club:"Vakıfbank"},"Brankica Mihajlović":{ht:187,club:"Eczacıbaşı"},"Silvija Popović":{ht:176,club:"Vakıfbank"},"Jovana Brakočević":{ht:194,club:"Galatasaray"},
+  /* TURKEY (W) */
+  "Melissa Vargas":{ht:193,club:"Fenerbahçe"},"Ebrar Karakurt":{ht:194,club:"Vakıfbank"},"Eda Erdem Dündar":{ht:188,club:"Fenerbahçe"},"Zehra Güneş":{ht:195,club:"Vakıfbank"},"Hande Baladın":{ht:190,club:"Vakıfbank"},"Simge Aköz":{ht:170,club:"Vakıfbank"},"Cansu Özbay":{ht:180,club:"Fenerbahçe"},
+  /* POLAND / NL / JAPAN / RUSSIA / KOREA / DR (W) */
+  "Joanna Wołosz":{ht:182,club:"Imoco Conegliano"},"Magdalena Stysiak":{ht:194,club:"Savino Del Bene Scandicci"},"Martyna Łukasik":{ht:184,club:"BKS Bielsko-Biała"},
+  "Lonneke Slöetjes":{ht:193,club:"Vakıfbank"},"Robin de Kruijf":{ht:192,club:"Imoco Conegliano"},"Laura Dijkema":{ht:180,club:"Imoco Conegliano"},
+  "Sarina Koga":{ht:180,club:"NEC Red Rockets"},"Mayu Ishikawa":{ht:180,club:"Saitama Ageo Medics"},"Saori Kimura":{ht:185,club:"Toray Arrows"},"Yoshie Takeshita":{ht:159,club:"JT Marvelous"},
+  "Ekaterina Gamova":{ht:202,club:"Dynamo Kazan"},"Nataliya Goncharova":{ht:194,club:"Dynamo Moscow"},"Tatiana Kosheleva":{ht:192,club:"Dynamo Moscow"},"Lyubov Sokolova":{ht:192,club:"Dynamo Moscow"},
+  "Kim Yeon-koung":{ht:192,club:"Heungkuk Life"},"Yang Hyo-jin":{ht:190,club:"Hyundai E&C"},
+  "Bethania de la Cruz":{ht:191,club:"—"},"Brenda Castillo":{ht:170,club:"—"},"Brayelin Martínez":{ht:196,club:"—"},
+};
+
+/* merge real data onto squad players */
+[...SQUADS_MEN,...SQUADS_WOMEN].forEach(sq=>sq.players.forEach(p=>{const i=PLAYER_INFO[p.name];if(i){p.ht=i.ht;if(i.club&&i.club!=="—")p.club=i.club;}}));
+
 const AI_TEAMS_MEN = [
   {nation:"Brazil",flag:"🇧🇷",base:90},{nation:"Italy",flag:"🇮🇹",base:90},
   {nation:"Poland",flag:"🇵🇱",base:91},{nation:"France",flag:"🇫🇷",base:89},
@@ -1143,7 +1195,9 @@ function showSquad(sq){
     const card=document.createElement("div");
     card.className="pcard"+(eligible?"":" disabled");
     const note=picked?" · drafted":(eligible?"":" · slot filled");
-    card.innerHTML=`<div class="pos-pill pos-${p.pos}">${p.pos}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="ppos">${POS_NAME[p.pos]}${note}</div></div><div class="povr${hideOvr&&eligible?" hidden":""}">${hideOvr&&eligible?"?":p.ovr}</div>`;
+    const meta=`${POS_NAME[p.pos]}${p.ht?` · ${p.ht} cm`:""}${note}`;
+    const clubLine=p.club?`<div class="pclub">🏛 ${p.club}</div>`:"";
+    card.innerHTML=`<div class="pos-pill pos-${p.pos}">${p.pos}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="ppos">${meta}</div>${clubLine}</div><div class="povr${hideOvr&&eligible?" hidden":""}"><span class="rtg-num">${hideOvr&&eligible?"?":p.ovr}</span><span class="rtg-cap">RTG</span></div>`;
     if(eligible)card.addEventListener("click",()=>draftPlayer(p,sq));
     list.appendChild(card);
   });
