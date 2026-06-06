@@ -18,8 +18,10 @@
   --text:#f8fafc;--text2:#aab8d0;--muted:#6b7a99;
   --glow1:rgba(251,191,36,.10);--glow2:rgba(167,139,250,.13);
   --card-grad:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,0));
-  --court-bg:linear-gradient(180deg,#0b2342 0%,#0f2f5c 100%);
-  --court-line:rgba(255,255,255,0.09);--court-net:rgba(255,255,255,0.28);
+  --court-floor:linear-gradient(180deg,#1560a0 0%,#0e3f73 52%,#0c386a 100%);
+  --court-zone:linear-gradient(180deg,#1a6cb0,#15589a);
+  --court-surround:linear-gradient(180deg,#0a2240 0%,#081c34 100%);
+  --court-line:rgba(255,255,255,.62);
   --shadow:0 8px 30px rgba(0,0,0,.35);
 }
 [data-theme="light"]{
@@ -28,8 +30,10 @@
   --text:#0f172a;--text2:#3f4f6b;--muted:#7587a3;
   --glow1:rgba(245,158,11,.14);--glow2:rgba(139,92,246,.14);
   --card-grad:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,0));
-  --court-bg:linear-gradient(180deg,#1d4ed8 0%,#2563eb 100%);
-  --court-line:rgba(255,255,255,0.22);--court-net:rgba(255,255,255,0.5);
+  --court-floor:linear-gradient(180deg,#3b82f6 0%,#2563eb 100%);
+  --court-zone:linear-gradient(180deg,#60a5fa,#3b82f6);
+  --court-surround:linear-gradient(180deg,#1e40af 0%,#1d3a9e 100%);
+  --court-line:rgba(255,255,255,.9);
   --shadow:0 8px 30px rgba(30,58,138,.12);
 }
 
@@ -104,6 +108,21 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .game-grid{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
 @media(max-width:900px){.game-grid{grid-template-columns:1fr}}
 
+/* ── TEAM IDENTITY BAR ── */
+.team-bar{display:flex;align-items:center;gap:14px;background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:14px 16px;margin-bottom:18px;box-shadow:var(--shadow)}
+.crest{flex:0 0 auto;width:54px;height:62px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;border-radius:10px 10px 16px 16px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 -10px 18px rgba(0,0,0,.18);border:2px solid rgba(255,255,255,.25)}
+.crest::after{content:"";position:absolute;inset:3px;border-radius:8px 8px 14px 14px;border:1px solid rgba(255,255,255,.2);pointer-events:none}
+.team-meta{flex:1;min-width:0}
+.team-name-row{display:flex;align-items:center;gap:8px}
+.team-name{font-size:20px;font-weight:900;letter-spacing:-.3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text}
+.team-name:hover{color:var(--gold)}
+.team-edit{background:none;color:var(--muted);font-size:14px;padding:2px;flex:0 0 auto}
+.team-edit:hover{color:var(--gold)}
+.team-sub{font-size:12px;color:var(--text2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.team-sub b{color:var(--text);font-weight:700}
+.btn-dice{flex:0 0 auto;background:var(--surface2);border:1px solid var(--border2);color:var(--text);width:42px;height:42px;border-radius:11px;font-size:18px;transition:.18s}
+.btn-dice:hover{border-color:var(--gold);transform:rotate(-12deg) scale(1.06)}
+
 /* ── ROUND BAR ── */
 .round-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .round-badge{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;color:var(--text2);letter-spacing:.5px}
@@ -167,26 +186,38 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 /* ── COURT ── */
 .court-wrap{position:relative}
 .court-title{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:center}
-.court{position:relative;width:100%;aspect-ratio:.68;background:var(--court-bg);border:2px solid var(--border2);border-radius:16px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 60px rgba(0,0,0,.25)}
+.court{position:relative;width:100%;aspect-ratio:.66;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
+/* playing floor inside the free zone */
+.court-floor{position:absolute;inset:6.5% 9%;background:var(--court-floor);border:2px solid var(--court-line);border-radius:4px;box-shadow:inset 0 0 50px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.15)}
+/* attack (3m) lines + faint front-zone shading */
+.court-floor::before{content:"";position:absolute;left:0;right:0;top:calc(50% - 18.5%);height:37%;background:var(--court-zone);opacity:.22;border-top:2px solid var(--court-line);border-bottom:2px solid var(--court-line)}
 .court-lines{position:absolute;inset:0;pointer-events:none}
-.court-lines svg{width:100%;height:100%}
-.court-net{position:absolute;left:8%;right:8%;top:50%;height:5px;background:var(--court-net);border-radius:2px;transform:translateY(-50%);box-shadow:0 0 10px rgba(255,255,255,.08)}
-.opp-zone{position:absolute;top:11%;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:2px;font-weight:700;color:rgba(255,255,255,.15);text-transform:uppercase}
-.your-zone{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:2px;font-weight:700;color:rgba(255,255,255,.15);text-transform:uppercase}
-.court-slot{position:absolute;width:27%;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(14,22,40,.75);border:2px dashed var(--border2);border-radius:11px;transition:.2s;transform:translate(-50%,-50%);cursor:default}
+/* net across the middle, with tape + posts + antennas */
+.court-net{position:absolute;left:6%;right:6%;top:50%;height:13px;transform:translateY(-50%);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.32) 0 1px,transparent 1px 6px),
+             repeating-linear-gradient(0deg,rgba(255,255,255,.32) 0 1px,transparent 1px 6px);
+  border-top:3px solid #fff;border-bottom:2px solid rgba(255,255,255,.55);
+  box-shadow:0 0 12px rgba(255,255,255,.18)}
+.court-net::before,.court-net::after{content:"";position:absolute;top:-7px;width:4px;height:27px;border-radius:2px;
+  background:repeating-linear-gradient(180deg,#ef4444 0 5px,#fff 5px 10px);box-shadow:0 0 4px rgba(0,0,0,.4)}
+.court-net::before{left:13%}.court-net::after{right:13%}
+.opp-zone,.your-zone{position:absolute;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:800;color:rgba(255,255,255,.28);text-transform:uppercase}
+.opp-zone{top:13%}.your-zone{bottom:9%}
+/* slots — compact jersey chips */
+.court-slot{position:absolute;width:20.5%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:rgba(8,16,32,.62);backdrop-filter:blur(3px);border:1.5px solid rgba(255,255,255,.22);border-radius:13px;
+  transition:.2s;transform:translate(-50%,-50%);cursor:default;padding:2px;box-shadow:0 3px 10px rgba(0,0,0,.3)}
 .court-slot.clickable{cursor:pointer}
-.court-slot.clickable:hover{border-color:var(--blue);background:rgba(59,130,246,.08)}
-.court-slot.selected{border-color:var(--blue);border-style:solid;background:rgba(59,130,246,.1);box-shadow:0 0 14px rgba(59,130,246,.3);animation:pulse-blue 1.5s ease-in-out infinite}
-.court-slot.open{border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.05)}
-.court-slot.filled{border-style:solid;border-color:var(--green);background:rgba(16,185,129,.12)}
-.court-slot.next-slot{border-color:var(--gold);border-style:solid;background:rgba(245,158,11,.08);box-shadow:0 0 14px rgba(245,158,11,.22);animation:pulse-slot 1.5s ease-in-out infinite}
-@keyframes pulse-slot{0%,100%{box-shadow:0 0 10px rgba(245,158,11,.22)}50%{box-shadow:0 0 20px rgba(245,158,11,.42)}}
-@keyframes pulse-blue{0%,100%{box-shadow:0 0 10px rgba(59,130,246,.25)}50%{box-shadow:0 0 20px rgba(59,130,246,.45)}}
-.slot-pos-label{font-size:8px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
-.slot-icon{font-size:20px;color:var(--border2)}
-.slot-player-name{font-size:9px;font-weight:700;line-height:1.2;color:var(--text);padding:0 3px}
-.slot-player-ovr{font-size:12px;font-weight:900;color:var(--gold);position:absolute;top:4px;right:6px}
-.slot-player-from{font-size:7px;color:var(--text2);margin-top:1px;line-height:1.2}
+.court-slot.clickable:hover{border-color:var(--blue);background:rgba(59,130,246,.18);transform:translate(-50%,-50%) scale(1.05)}
+.court-slot.selected{border-color:var(--blue);background:rgba(59,130,246,.2);box-shadow:0 0 16px rgba(59,130,246,.45);animation:pulse-blue 1.5s ease-in-out infinite}
+.court-slot.open{border-style:dashed;border-color:rgba(251,191,36,.6);background:rgba(245,158,11,.1)}
+.court-slot.filled{border-color:var(--green);background:linear-gradient(180deg,rgba(16,185,129,.28),rgba(8,16,32,.72))}
+@keyframes pulse-blue{0%,100%{box-shadow:0 0 10px rgba(59,130,246,.3)}50%{box-shadow:0 0 20px rgba(59,130,246,.55)}}
+.slot-pos-label{font-size:7px;font-weight:800;letter-spacing:1px;color:rgba(255,255,255,.55);text-transform:uppercase;margin-bottom:1px}
+.slot-icon{font-size:16px;color:rgba(255,255,255,.4)}
+.slot-player-name{font-size:8px;font-weight:700;line-height:1.15;color:#fff;padding:0 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.slot-player-ovr{font-size:10px;font-weight:900;color:#1a0a00;background:var(--gold);border-radius:6px;padding:0 4px;position:absolute;top:-7px;right:-5px;box-shadow:0 2px 5px rgba(0,0,0,.35)}
+.slot-player-from{font-size:6.5px;color:rgba(255,255,255,.6);margin-top:1px;line-height:1.1}
 .strength-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding:11px 13px;background:var(--surface);border:1px solid var(--border2);border-radius:11px}
 .str-label{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--muted);white-space:nowrap}
 .str-bar{flex:1;height:7px;background:var(--surface2);border-radius:4px;overflow:hidden}
@@ -435,6 +466,17 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
 <!-- GAME -->
 <div id="gameArea" style="display:none">
   <div class="wrap">
+    <div class="team-bar" id="teamBar">
+      <div class="crest" id="teamCrest">🦅</div>
+      <div class="team-meta">
+        <div class="team-name-row">
+          <span class="team-name" id="teamName" title="Click to rename">Dream Team</span>
+          <button class="team-edit" id="teamEdit" title="Rename">✎</button>
+        </div>
+        <div class="team-sub">Coached by <b id="teamCoach">—</b> · 🏟 <b id="teamVenue">—</b></div>
+      </div>
+      <button class="btn-dice" id="teamDice" title="Randomize identity">🎲</button>
+    </div>
     <div class="game-grid">
       <div>
         <div class="round-bar">
@@ -477,18 +519,11 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         </div>
       </div>
       <div class="court-wrap">
-        <div class="court-title">Your Dream Team</div>
+        <div class="court-title" id="courtTitle">Your Dream Team</div>
         <div class="court" id="court">
-          <div class="court-lines">
-            <svg viewBox="0 0 300 400" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="20" y="20" width="260" height="360" stroke="var(--court-line)" stroke-width="1.5"/>
-              <line x1="20" y1="133" x2="280" y2="133" stroke="var(--court-line)" stroke-width="1"/>
-              <line x1="20" y1="267" x2="280" y2="267" stroke="var(--court-line)" stroke-width="1"/>
-              <line x1="20" y1="200" x2="280" y2="200" stroke="var(--court-net)" stroke-width="2"/>
-            </svg>
-          </div>
-          <div class="court-net"></div>
+          <div class="court-floor"></div>
           <div class="opp-zone">Opponent</div>
+          <div class="court-net"></div>
           <div class="your-zone">Your Side</div>
           <div id="courtSlots"></div>
         </div>
@@ -647,9 +682,9 @@ const AI_TEAMS_WOMEN = [
 ];
 
 const COURT_POS = [
-  [1, 82, 56],[4, 50, 56],[2, 18, 56],
-  [3, 82, 74],[0, 50, 74],[5, 18, 74],
-  [6, 50, 90],
+  [1, 74, 60],[4, 50, 60],[2, 26, 60],
+  [3, 74, 79],[0, 50, 79],[5, 26, 79],
+  [6, 50, 91],
 ];
 const SLOTS = [
   {pos:"S",label:"SETTER"},{pos:"OPP",label:"OPPOSITE"},
@@ -666,6 +701,15 @@ const DIFF_CONFIG = {
   elite: {rerolls:0,hideRatings:true},
 };
 
+/* ── TEAM IDENTITY ── */
+const TEAM_PREFIX=["Thunder","Royal","Coastal","Iron","Phoenix","Vortex","Apex","Crimson","Granite","Northern","Solar","Atlas","Titan","Storm","Imperial","Golden","Pacific","Highland"];
+const TEAM_SUFFIX=["Spikers","Aces","Blockers","Smashers","Setters","Risers","Strikers","Kings","Dynamo","United","Volley","Pride","Force","Eagles","Wolves","Titans","Sharks","Dragons"];
+const TEAM_LOGOS=["🦅","🐅","🐉","🦁","🦈","🐺","⚡","🔥","⭐","🛡️","🐂","🦂","🌊","👑","💥","🚀","🐝","🦏"];
+const CREST_COLORS=["#ef4444","#f59e0b","#10b981","#3b82f6","#8b5cf6","#ec4899","#14b8a6","#f97316","#6366f1","#e11d48"];
+const VENUES=["Marina Arena","Summit Dome","Vulcan Hall","Atlantica Pavilion","Olympus Court","Pinnacle Center","Aurora Arena","Granite Hall","Skyline Dome","Harbor Arena","Crown Colosseum","Vanguard Pavilion","Meridian Hall","Cascade Arena"];
+const COACHES_M=["Julio Velasco","Bernardinho","Andrea Anastasi","Vital Heynen","Ferdinando De Giorgi","Nikola Grbić","Slobodan Kovač","Tuomas Sammelvuo","Andrea Giani","Gheorghe Crețu","Laurent Tillie","Philippe Blain"];
+const COACHES_W=["Lang Ping","Giovanni Guidetti","Zé Roberto Guimarães","Daniele Santarelli","Karch Kiraly","Julio Velasco","Massimo Barbolini","Stefano Lavarini","Marco Bonitta","Park Ki-won","Felix Wong","Davide Mazzanti"];
+
 /* ── SETTINGS STATE ── */
 let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium"};
 
@@ -674,6 +718,7 @@ let roster, spinning, pickedKeys, currentUser, rerollsLeft, selectedSlotIndex;
 let activeSquad = null;
 let careerSeasons = [];
 let careerSeason = 0;
+let team = {name:"Dream Team",logo:"🦅",color:"#f59e0b",venue:"Marina Arena",coach:"—"};
 
 /* ── HELPERS ── */
 const $ = id => document.getElementById(id);
@@ -684,6 +729,31 @@ function playerKey(p){return p.name+"|"+p.pos}
 function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
 function currentSquads(){return settings.gender==="women"?SQUADS_WOMEN:SQUADS_MEN}
 function currentAI(){return settings.gender==="women"?AI_TEAMS_WOMEN:AI_TEAMS_MEN}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ── TEAM IDENTITY ── */
+function randomizeTeam(){
+  team={
+    name:`${pick(TEAM_PREFIX)} ${pick(TEAM_SUFFIX)}`,
+    logo:pick(TEAM_LOGOS),
+    color:pick(CREST_COLORS),
+    venue:pick(VENUES),
+    coach:pick(settings.gender==="women"?COACHES_W:COACHES_M),
+  };
+  renderTeam();
+}
+function renderTeam(){
+  $("teamCrest").textContent=team.logo;
+  $("teamCrest").style.background=`linear-gradient(160deg,${team.color},${team.color}cc)`;
+  $("teamName").textContent=team.name;
+  $("teamCoach").textContent=team.coach;
+  $("teamVenue").textContent=team.venue;
+  const ct=$("courtTitle");if(ct)ct.textContent=`${team.logo} ${team.name}`;
+}
+function renameTeam(){
+  const v=prompt("Name your team:",team.name);
+  if(v&&v.trim()){team.name=v.trim().slice(0,28);renderTeam();}
+}
 
 /* ── THEME ── */
 function initTheme(){
@@ -754,6 +824,7 @@ function startGame(){
   $("resetBtn").style.display="";
   rerollsLeft=DIFF_CONFIG[settings.difficulty].rerolls;
   careerSeasons=[];careerSeason=0;
+  randomizeTeam();
   resetGame();
 }
 
@@ -938,7 +1009,7 @@ function simulateSeason(ratingVariance=0){
   const aiPool=currentAI();
   const pool=[...aiPool].sort(()=>Math.random()-.5).slice(0,7)
     .map(t=>({nation:t.nation,flag:t.flag,str:t.base+(Math.random()*6-3)}));
-  const me={nation:"Your Dream Team",flag:"⭐",str:myStr,me:true};
+  const me={nation:team.name,flag:team.logo,str:myStr,me:true};
   let teams=[me,...pool];
   teams.forEach(t=>{t.W=0;t.L=0;t.setW=0;t.setL=0;t.pts=0;});
   const prelim=[];
@@ -977,7 +1048,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   const careerHeader=isCareer?`<div style="display:flex;gap:8px;margin-bottom:12px">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" onclick="window._careerTab(${i})">${i+1===seasonNum?`Season ${i+1} ▶`:`Season ${i+1}${careerSeasons[i]?` ${MEDAL_EMOJI[careerSeasons[i].medal]}`:""}`}</button>`).join("")}</div>`:"";
   let html=`<div class="modal-header"><h2>🏐 VNL ${isCareer?`Season ${seasonNum}/${totalSeasons}`:"Season Result"}</h2><button class="modal-close" id="closeModal">✕</button></div>
     ${careerHeader}
-    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${medalTxt[medal]}</div><div class="medal-sub">Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims</div></div>
+    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.logo} ${team.name}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${team.coach} · 🏟 ${team.venue}</div></div>
     ${isLast?saveBlock:""}
     <div class="section-title">Preliminary Standings</div>
     <table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
@@ -1067,6 +1138,9 @@ $("rerollBtn").addEventListener("click",doReroll);
 $("seasonBtn").addEventListener("click",startSimulation);
 $("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
+$("teamDice").addEventListener("click",randomizeTeam);
+$("teamEdit").addEventListener("click",renameTeam);
+$("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
 
 setupLobby();
