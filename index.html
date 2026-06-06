@@ -2,34 +2,54 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VolleyDraft — VNL Dream Team Draft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0e1a" />
+<title>VolleyDraft — Spin · Draft · Dominate</title>
+<meta name="description" content="VolleyDraft — spin for a nation and era, draft a lineup of real volleyball legends, and simulate a full VNL season." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Cdefs%3E%3CradialGradient%20id='g'%20cx='35%25'%20cy='28%25'%20r='75%25'%3E%3Cstop%20offset='0%25'%20stop-color='%23fde68a'/%3E%3Cstop%20offset='55%25'%20stop-color='%23f59e0b'/%3E%3Cstop%20offset='100%25'%20stop-color='%23b45309'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle%20cx='16'%20cy='16'%20r='15'%20fill='url(%23g)'/%3E%3Cg%20stroke='%23000'%20stroke-opacity='.28'%20stroke-width='1.6'%20fill='none'%20stroke-linecap='round'%3E%3Cpath%20d='M3%2016Q16%206%2029%2016'/%3E%3Cpath%20d='M3%2016Q16%2026%2029%2016'/%3E%3Cpath%20d='M16%201Q8%2016%2016%2031'/%3E%3Cpath%20d='M16%201Q24%2016%2016%2031'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Ccircle%20cx='16'%20cy='16'%20r='15'%20fill='%23f59e0b'/%3E%3Cg%20stroke='%23000'%20stroke-opacity='.28'%20stroke-width='1.6'%20fill='none'%20stroke-linecap='round'%3E%3Cpath%20d='M3%2016Q16%206%2029%2016'/%3E%3Cpath%20d='M3%2016Q16%2026%2029%2016'/%3E%3Cpath%20d='M16%201Q8%2016%2016%2031'/%3E%3Cpath%20d='M16%201Q24%2016%2016%2031'/%3E%3C/g%3E%3C/svg%3E" />
 <style>
 /* ── TOKENS ── */
 :root{
-  --bg:#07090f;--surface:#0f1623;--surface2:#141d30;
-  --border:#1c2b45;--border2:#2a3f62;
-  --gold:#f59e0b;--gold2:#d97706;--purple:#8b5cf6;
-  --green:#10b981;--red:#ef4444;--blue:#3b82f6;
-  --text:#f1f5f9;--text2:#94a3b8;--muted:#475569;
-  --court-bg:linear-gradient(180deg,#071a30 0%,#0a2040 100%);
-  --court-line:rgba(255,255,255,0.07);--court-net:rgba(255,255,255,0.22);
+  --bg:#0a0e1a;--surface:#141b2e;--surface2:#1c2740;
+  --border:#283651;--border2:#3a4f78;
+  --gold:#fbbf24;--gold2:#f59e0b;--purple:#a78bfa;
+  --green:#34d399;--red:#f87171;--blue:#60a5fa;
+  --text:#f8fafc;--text2:#aab8d0;--muted:#6b7a99;
+  --glow1:rgba(251,191,36,.10);--glow2:rgba(167,139,250,.13);
+  --card-grad:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,0));
+  --court-bg:linear-gradient(180deg,#0b2342 0%,#0f2f5c 100%);
+  --court-line:rgba(255,255,255,0.09);--court-net:rgba(255,255,255,0.28);
+  --shadow:0 8px 30px rgba(0,0,0,.35);
 }
 [data-theme="light"]{
-  --bg:#f0f4f8;--surface:#ffffff;--surface2:#e8edf5;
-  --border:#c8d5e8;--border2:#94a3b8;
-  --text:#0f172a;--text2:#334155;--muted:#64748b;
-  --court-bg:linear-gradient(180deg,#1a3a6b 0%,#1e4a8a 100%);
-  --court-line:rgba(255,255,255,0.15);--court-net:rgba(255,255,255,0.4);
+  --bg:#eef2f9;--surface:#ffffff;--surface2:#f1f5fc;
+  --border:#d6e0f0;--border2:#9fb2d4;
+  --text:#0f172a;--text2:#3f4f6b;--muted:#7587a3;
+  --glow1:rgba(245,158,11,.14);--glow2:rgba(139,92,246,.14);
+  --card-grad:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,0));
+  --court-bg:linear-gradient(180deg,#1d4ed8 0%,#2563eb 100%);
+  --court-line:rgba(255,255,255,0.22);--court-net:rgba(255,255,255,0.5);
+  --shadow:0 8px 30px rgba(30,58,138,.12);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+  color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;
+  transition:background .2s,color .2s;
+  background:
+    radial-gradient(1000px 560px at 12% -8%, var(--glow1), transparent 60%),
+    radial-gradient(900px 560px at 100% 0%, var(--glow2), transparent 55%),
+    var(--bg);
+  background-attachment:fixed;
+}
 
 /* ── HEADER ── */
-header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:40;backdrop-filter:blur(12px)}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 24px;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--surface) 82%,transparent);position:sticky;top:0;z-index:40;backdrop-filter:blur(14px) saturate(1.3)}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.logo-icon{filter:drop-shadow(0 0 10px rgba(245,158,11,.45))}
 .logo-icon svg{display:block}
 .logo-text{font-size:20px;font-weight:900;letter-spacing:-.3px;line-height:1}
 .logo-text em{color:var(--gold);font-style:normal}
@@ -61,7 +81,7 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .lobby-title{font-size:32px;font-weight:900;letter-spacing:-.5px}
 .lobby-title em{color:var(--gold);font-style:normal}
 .lobby-desc{font-size:14px;color:var(--text2);margin-top:8px;line-height:1.6}
-.settings-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:20px;margin-bottom:16px}
+.settings-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:18px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
 .settings-row{margin-bottom:20px}
 .settings-row:last-child{margin-bottom:0}
 .settings-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -98,9 +118,10 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 /* ── SPIN CARDS ── */
 .spin-section{margin-bottom:18px}
 .spin-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.spin-card{background:var(--surface);border:2px solid var(--border2);border-radius:14px;padding:18px 14px 16px;text-align:center;position:relative;overflow:hidden;transition:border-color .3s}
-.spin-card.nation-card{border-color:var(--gold);box-shadow:0 0 18px rgba(245,158,11,.12)}
-.spin-card.era-card{border-color:var(--purple);box-shadow:0 0 18px rgba(139,92,246,.12)}
+.spin-card{background:var(--card-grad),var(--surface);border:2px solid var(--border2);border-radius:16px;padding:18px 14px 16px;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .2s,box-shadow .3s}
+.spin-card.nation-card{border-color:var(--gold);box-shadow:0 0 26px rgba(245,158,11,.18)}
+.spin-card.era-card{border-color:var(--purple);box-shadow:0 0 26px rgba(167,139,250,.18)}
+.spin-card.spinning{transform:translateY(-2px)}
 .spin-card.spinning .card-val{animation:flicker .08s linear infinite}
 .card-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
 .nation-card .card-label{color:var(--gold)}.era-card .card-label{color:var(--purple)}
@@ -121,7 +142,7 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .pos-first-hint.show{display:block}
 
 /* ── SQUAD PANEL ── */
-.squad-panel{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-top:14px;animation:slideUp .22s ease}
+.squad-panel{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:16px;margin-top:14px;animation:slideUp .22s ease;box-shadow:var(--shadow)}
 @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .squad-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .squad-flag{font-size:32px;line-height:1}
@@ -146,7 +167,7 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 /* ── COURT ── */
 .court-wrap{position:relative}
 .court-title{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:center}
-.court{position:relative;width:100%;aspect-ratio:.68;background:var(--court-bg);border:2px solid var(--border2);border-radius:14px;overflow:hidden}
+.court{position:relative;width:100%;aspect-ratio:.68;background:var(--court-bg);border:2px solid var(--border2);border-radius:16px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 60px rgba(0,0,0,.25)}
 .court-lines{position:absolute;inset:0;pointer-events:none}
 .court-lines svg{width:100%;height:100%}
 .court-net{position:absolute;left:8%;right:8%;top:50%;height:5px;background:var(--court-net);border-radius:2px;transform:translateY(-50%);box-shadow:0 0 10px rgba(255,255,255,.08)}
@@ -156,7 +177,8 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .court-slot.clickable{cursor:pointer}
 .court-slot.clickable:hover{border-color:var(--blue);background:rgba(59,130,246,.08)}
 .court-slot.selected{border-color:var(--blue);border-style:solid;background:rgba(59,130,246,.1);box-shadow:0 0 14px rgba(59,130,246,.3);animation:pulse-blue 1.5s ease-in-out infinite}
-.court-slot.filled{border-style:solid;border-color:var(--green);background:rgba(16,185,129,.1)}
+.court-slot.open{border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.05)}
+.court-slot.filled{border-style:solid;border-color:var(--green);background:rgba(16,185,129,.12)}
 .court-slot.next-slot{border-color:var(--gold);border-style:solid;background:rgba(245,158,11,.08);box-shadow:0 0 14px rgba(245,158,11,.22);animation:pulse-slot 1.5s ease-in-out infinite}
 @keyframes pulse-slot{0%,100%{box-shadow:0 0 10px rgba(245,158,11,.22)}50%{box-shadow:0 0 20px rgba(245,158,11,.42)}}
 @keyframes pulse-blue{0%,100%{box-shadow:0 0 10px rgba(59,130,246,.25)}50%{box-shadow:0 0 20px rgba(59,130,246,.45)}}
@@ -224,7 +246,54 @@ table.lb td.med{font-size:18px;text-align:center;width:30px}
 .lb-empty{text-align:center;padding:32px;color:var(--muted)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:11px;font-size:12px;font-weight:600;z-index:60;transition:transform .28s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
-footer{text-align:center;padding:28px 20px;color:var(--muted);font-size:11px;line-height:1.8;border-top:1px solid var(--border);margin-top:40px}
+footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text-align:center}
+.footer-brand{display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:900;margin-bottom:6px}
+.footer-brand em{color:var(--gold);font-style:normal}
+.footer-slogan{font-size:13px;color:var(--text2);max-width:520px;margin:0 auto 16px;line-height:1.6}
+.footer-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.btn-feedback{background:var(--card-grad),var(--surface);border:1px solid var(--border2);color:var(--text);padding:9px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.btn-feedback:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+.footer-fine{font-size:11px;color:var(--muted);line-height:1.7}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .game-grid{grid-template-columns:1fr}
+  .court-wrap{max-width:440px;margin:0 auto;width:100%}
+}
+@media(max-width:680px){
+  header{padding:10px 14px}
+  .logo-sub{display:none}
+  .logo-text{font-size:18px}
+  .header-right{gap:6px}
+  .btn-outline{padding:8px 10px}
+  .btn-lbl{display:none}
+  .user-chip .uname{max-width:72px}
+  .wrap{padding:18px 14px 64px}
+  .lobby-wrap{padding:28px 14px 64px}
+  .lobby-title{font-size:27px}
+  .settings-card{padding:16px}
+  .toggle-btn{min-width:calc(50% - 4px)}
+  .toggle-btn .tb-sub{font-size:9px}
+  .spin-cards{gap:8px}
+  .spin-card{padding:14px 10px 12px}
+  .card-flag{font-size:28px;min-height:32px}
+  .card-val{font-size:16px}
+  #cardEra{font-size:22px!important}
+  .btn-spin{padding:13px 0;flex:1}
+  .btn-reroll{flex:0 0 auto}
+  .spin-btn-row{gap:8px}
+  .players-grid{grid-template-columns:1fr}
+  .modal{padding:18px 16px;border-radius:16px}
+  .modal-header h2{font-size:17px}
+  .medal-title{font-size:19px}
+  .match{grid-template-columns:1fr 54px 1fr;font-size:11px;gap:5px}
+  .save-row{flex-direction:column;align-items:stretch;text-align:center}
+  .btn-save{width:100%}
+  table.standings th,table.standings td{padding:6px 5px;font-size:11px}
+  table.lb th,table.lb td{padding:7px 6px}
+  .lb-players{display:none}
+  footer{padding:28px 16px}
+}
 </style>
 </head>
 <body>
@@ -255,7 +324,7 @@ footer{text-align:center;padding:28px 20px;color:var(--muted);font-size:11px;lin
     </div>
   </a>
   <div class="header-right">
-    <button class="btn-outline" id="lbBtn">🏆 Leaderboard</button>
+    <button class="btn-outline" id="lbBtn">🏆<span class="btn-lbl">&nbsp;Leaderboard</span></button>
     <div id="authArea"></div>
     <button class="btn-icon" id="themeBtn" title="Toggle theme">🌙</button>
     <button class="btn-icon" id="resetBtn" title="New Game" style="display:none">↺</button>
@@ -284,7 +353,7 @@ footer{text-align:center;padding:28px 20px;color:var(--muted);font-size:11px;lin
         </svg>
       </div>
       <div class="lobby-title">Volley<em>Draft</em></div>
-      <div class="lobby-desc">Spin for a nation &amp; era · Draft six real players · Simulate the VNL</div>
+      <div class="lobby-desc"><b>Spin · Draft · Dominate.</b><br>Spin for a nation &amp; era, draft a lineup of real volleyball legends, and simulate a full VNL season.</div>
     </div>
 
     <div class="settings-card">
@@ -435,8 +504,18 @@ footer{text-align:center;padding:28px 20px;color:var(--muted);font-size:11px;lin
       </div>
     </div>
     <footer>
-      A fan-made tribute to volleyball history · squads are illustrative snapshots from real FIVB campaigns<br>
-      Inspired by the spin-and-draft format of 82-0.com
+      <div class="footer-brand">🏐 Volley<em>Draft</em></div>
+      <div class="footer-slogan">
+        Spin the wheel of volleyball history, draft a lineup of real legends from FIVB's greatest
+        campaigns, and find out if your dream team can conquer a full VNL season.
+      </div>
+      <div class="footer-actions">
+        <a class="btn-feedback" id="feedbackLink" href="mailto:diomanuel10@gmail.com?subject=VolleyDraft%20Feedback&body=Hi!%20Here's%20my%20feedback%20on%20VolleyDraft:%0A%0A">💬 Leave us feedback</a>
+      </div>
+      <div class="footer-fine">
+        A fan-made tribute to volleyball history · squads are illustrative snapshots of real FIVB campaigns<br>
+        Inspired by the spin-and-draft format of 82-0.com
+      </div>
     </footer>
   </div>
 </div>
@@ -744,31 +823,54 @@ function doReroll(){
 }
 
 /* ── SQUAD PANEL ── */
+function openPositions(){
+  const s=new Set();
+  roster.forEach(r=>{if(!r.player)s.add(r.pos);});
+  return s;
+}
 function showSquad(sq){
-  const open=settings.draftMode==="position"?selectedSlotIndex:nextOpenIndex();
+  const posMode=settings.draftMode==="position";
+  const selPos=posMode&&selectedSlotIndex!==-1?roster[selectedSlotIndex].pos:null;
+  const open=openPositions();
   $("squadPanel").style.display="block";
   $("sqFlag").textContent=sq.flag;
   $("sqTitle").textContent=sq.type==="club"?`${sq.nation} (${sq.era})`:`${sq.nation} — ${sq.era}`;
   $("sqMeta").textContent=sq.comp;
-  const needPos=open===-1?null:roster[open].pos;
-  $("pickLabel").innerHTML=needPos?`Pick a <span>${POS_NAME[needPos]}</span>`:"No open slots";
+  // pick label: position-mode targets one slot; squad-mode shows remaining positions
+  if(posMode){
+    $("pickLabel").innerHTML=selPos?`Pick a <span>${POS_NAME[selPos]}</span>`:"Select a slot first";
+  }else{
+    const ORDER=["S","OPP","OH","MB","L"];
+    const names=ORDER.filter(p=>open.has(p)).map(p=>POS_NAME[p]).join(", ");
+    $("pickLabel").innerHTML=open.size?`Full squad — still need: <span>${names}</span>`:"No open slots";
+  }
   const list=$("playerList");list.innerHTML="";
   const hideOvr=DIFF_CONFIG[settings.difficulty].hideRatings;
   const order={S:0,OPP:1,OH:2,MB:3,L:4};
   [...sq.players].sort((a,b)=>(order[a.pos]-order[b.pos])||(b.ovr-a.ovr)).forEach(p=>{
-    const eligible=needPos&&p.pos===needPos&&!pickedKeys.has(playerKey(p));
+    const picked=pickedKeys.has(playerKey(p));
+    const eligible=posMode
+      ? (!!selPos && p.pos===selPos && !picked)
+      : (open.has(p.pos) && !picked);
     const card=document.createElement("div");
     card.className="pcard"+(eligible?"":" disabled");
-    card.innerHTML=`<div class="pos-pill pos-${p.pos}">${p.pos}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="ppos">${POS_NAME[p.pos]}${pickedKeys.has(playerKey(p))?" · drafted":""}</div></div><div class="povr${hideOvr&&eligible?" hidden":""}">${hideOvr&&eligible?"?":p.ovr}</div>`;
+    const note=picked?" · drafted":(eligible?"":" · slot filled");
+    card.innerHTML=`<div class="pos-pill pos-${p.pos}">${p.pos}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="ppos">${POS_NAME[p.pos]}${note}</div></div><div class="povr${hideOvr&&eligible?" hidden":""}">${hideOvr&&eligible?"?":p.ovr}</div>`;
     if(eligible)card.addEventListener("click",()=>draftPlayer(p,sq));
     list.appendChild(card);
   });
 }
 
 function draftPlayer(p,sq){
-  const open=settings.draftMode==="position"?selectedSlotIndex:nextOpenIndex();
-  if(open===-1||roster[open].pos!==p.pos)return;
-  roster[open].player={...p,from:`${sq.nation} ${sq.era}`,flag:sq.flag};
+  let slot;
+  if(settings.draftMode==="position"){
+    slot=selectedSlotIndex;
+    if(slot===-1||roster[slot].player||roster[slot].pos!==p.pos)return;
+  }else{
+    slot=roster.findIndex(r=>!r.player&&r.pos===p.pos);
+    if(slot===-1)return;
+  }
+  roster[slot].player={...p,from:`${sq.nation} ${sq.era}`,flag:sq.flag};
   pickedKeys.add(playerKey(p));
   activeSquad=null;selectedSlotIndex=-1;
   $("squadPanel").style.display="none";
@@ -780,23 +882,24 @@ function draftPlayer(p,sq){
 function renderCourt(){
   const container=$("courtSlots");container.innerHTML="";
   const open=settings.draftMode==="position"?selectedSlotIndex:nextOpenIndex();
+  const posMode=settings.draftMode==="position";
   COURT_POS.forEach(([slotIdx,lp,tp])=>{
     const s=roster[slotIdx];
-    const isNext=settings.draftMode==="squad"&&slotIdx===open;
-    const isSelected=settings.draftMode==="position"&&slotIdx===selectedSlotIndex;
-    const isClickable=settings.draftMode==="position"&&!s.player;
+    const isSelected=posMode&&slotIdx===selectedSlotIndex;
+    const isClickable=posMode&&!s.player;
+    const isOpen=!posMode&&!s.player;
     const div=document.createElement("div");
     let cls="court-slot";
     if(s.player)cls+=" filled";
     else if(isSelected)cls+=" selected";
-    else if(isNext)cls+=" next-slot";
+    else if(isOpen)cls+=" open";
     if(isClickable)cls+=" clickable";
     div.className=cls;div.style.left=lp+"%";div.style.top=tp+"%";
     if(s.player){
       const hideOvr=DIFF_CONFIG[settings.difficulty].hideRatings;
       div.innerHTML=`<div class="slot-player-ovr">${hideOvr?"?":s.player.ovr}</div><div class="slot-pos-label">${s.label}</div><div class="slot-player-name">${s.player.name}</div><div class="slot-player-from">${s.player.flag} ${s.player.from}</div>`;
     }else{
-      div.innerHTML=`<div class="slot-pos-label">${s.label}</div><div class="slot-icon">${isSelected?"📍":isNext?"⚡":"＋"}</div>`;
+      div.innerHTML=`<div class="slot-pos-label">${s.label}</div><div class="slot-icon">${isSelected?"📍":"＋"}</div>`;
       if(isClickable)div.addEventListener("click",()=>selectSlot(slotIdx));
     }
     container.appendChild(div);
@@ -806,10 +909,10 @@ function renderCourt(){
   $("strBar").style.width=filled?Math.min(100,(str-60)/40*100)+"%":"0%";
   $("strNum").textContent=filled?str.toFixed(1):"—";
   $("seasonBtn").disabled=!rosterFull();
-  if(rosterFull()) $("rosterHint").textContent="Your six are locked — simulate the VNL season!";
-  else if(settings.draftMode==="position"&&selectedSlotIndex!==-1) $("rosterHint").textContent=`Spin to draft a ${POS_NAME[roster[selectedSlotIndex].pos]}.`;
-  else if(settings.draftMode==="squad"&&open!==-1) $("rosterHint").textContent=`Spin to draft a ${POS_NAME[roster[open].pos]}.`;
-  else $("rosterHint").textContent="Select a slot or spin!";
+  if(rosterFull()) $("rosterHint").textContent="Your lineup is locked — simulate the VNL season!";
+  else if(posMode&&selectedSlotIndex!==-1) $("rosterHint").textContent=`Spin, then draft a ${POS_NAME[roster[selectedSlotIndex].pos]}.`;
+  else if(posMode) $("rosterHint").textContent="Tap an open slot on the court, then spin.";
+  else $("rosterHint").textContent="Spin, then pick any player for an open position.";
 }
 
 function selectSlot(idx){
