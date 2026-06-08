@@ -74,6 +74,8 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .user-chip .uname{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
 .btn-signout{background:none;color:var(--muted);font-size:10px;padding:0;margin-left:2px}
 .btn-signout:hover{color:var(--red)}
+.btn-edit-user{background:none;color:var(--muted);font-size:11px;padding:0;line-height:1}
+.btn-edit-user:hover{color:var(--gold)}
 .btn-google{background:#fff;color:#1a1a2e;padding:7px 13px;border-radius:9px;font-size:12px;display:flex;align-items:center;gap:6px;border:1px solid #ddd}
 .btn-google:hover{background:#f5f5f5}
 .btn-google svg{width:14px;height:14px;flex:0 0 auto}
@@ -1198,7 +1200,7 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 /* ── TEAM IDENTITY ── */
 function clubPool(){return settings.gender==="women"?CLUBS_W:CLUBS_M;}
 // Coach is always the signed-in user's name (falls back to "You" when offline).
-function coachName(){return currentUser?(currentUser.user_metadata?.full_name||currentUser.email):"You";}
+function coachName(){return currentUser?userName():"You";}
 function applyCoach(){team.coach=coachName();renderTeam();}
 function rollAll(){team={...pick(clubPool())};team.coach=coachName();renderTeam();}
 function rollField(f){
@@ -1244,17 +1246,37 @@ async function initAuth(){
     if(window.location.hash.includes('access_token')){
       try{history.replaceState(null,'',authRedirect());}catch(_){}
     }
-    if(_e==='SIGNED_IN') toast('Welcome, '+(currentUser?.user_metadata?.full_name||currentUser?.email)+'!');
+    if(_e==='SIGNED_IN'){
+      toast('Welcome, '+userName()+'!');
+      // First sign-in with no chosen username → let them pick one.
+      if(currentUser&&!currentUser.user_metadata?.username) editUsername(true);
+    }
   });
+}
+// Display name = chosen username → Google name → "Anonymous" (never the email).
+function userName(){return currentUser?.user_metadata?.username||currentUser?.user_metadata?.full_name||"Anonymous";}
+async function editUsername(firstTime){
+  if(!sb||!currentUser)return;
+  const cur=currentUser.user_metadata?.username||currentUser.user_metadata?.full_name||"";
+  const v=prompt(firstTime?"Choose a username (shown on the leaderboard):":"Change your username:",cur);
+  if(v===null)return;
+  const name=v.trim().slice(0,24);
+  if(!name){toast("Username can't be empty.");return;}
+  const {error}=await sb.auth.updateUser({data:{username:name}});
+  if(error){toast("Couldn't save username: "+error.message);return;}
+  currentUser.user_metadata={...currentUser.user_metadata,username:name};
+  renderAuth();applyCoach();
+  toast("Username set: "+name);
 }
 function renderAuth(){
   const area=$("authArea");
   if(!sb){area.innerHTML='';return;}
   if(currentUser){
-    const name=currentUser.user_metadata?.full_name||currentUser.email;
-    const avatar=currentUser.user_metadata?.avatar_url||'';
-    area.innerHTML=`<div class="user-chip">${avatar?`<img src="${avatar}" alt="">`:''}<span class="uname">${name}</span><button class="btn-signout" id="signOutBtn">sign out</button></div>`;
+    const name=userName();
+    const avatar=safeImg(currentUser.user_metadata?.avatar_url);
+    area.innerHTML=`<div class="user-chip">${avatar?`<img src="${esc(avatar)}" alt="">`:''}<span class="uname">${esc(name)}</span><button class="btn-edit-user" id="editUserBtn" title="Change username">✎</button><button class="btn-signout" id="signOutBtn">sign out</button></div>`;
     $("signOutBtn").onclick=()=>sb.auth.signOut();
+    $("editUserBtn").onclick=()=>editUsername(false);
   }else{
     area.innerHTML=`<button class="btn-google" id="signInBtn"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in</button>`;
     $("signInBtn").onclick=()=>sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:authRedirect()}});
@@ -1539,7 +1561,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   const isCareer=settings.seasonMode==="career";
   const isLast=!isCareer||seasonNum>=totalSeasons;
   const saveBlock=currentUser
-    ?`<div class="save-row"><div class="save-info">Signed in as <b>${esc(currentUser.user_metadata?.full_name||currentUser.email)}</b> — save to leaderboard?</div><button class="btn-save" id="saveScoreBtn">💾 Save</button></div>`
+    ?`<div class="save-row"><div class="save-info">Saving as <b>${esc(userName())}</b> — save to leaderboard?</div><button class="btn-save" id="saveScoreBtn">💾 Save</button></div>`
     :`<div class="save-row"><div class="save-info">Sign in to save your score.</div><button class="btn-google" id="saveSignInBtn"><svg viewBox="0 0 48 48" style="width:14px;height:14px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in</button></div>`;
   const careerHeader=isCareer?`<div style="display:flex;gap:8px;margin-bottom:12px">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" onclick="window._careerTab(${i})">${i+1===seasonNum?`Season ${i+1} ▶`:`Season ${i+1}${careerSeasons[i]?` ${MEDAL_EMOJI[careerSeasons[i].medal]}`:""}`}</button>`).join("")}</div>`:"";
   let html=`<div class="modal-header"><h2>🏐 VNL ${isCareer?`Season ${seasonNum}/${totalSeasons}`:"Season Result"}</h2><button class="modal-close" id="closeModal">✕</button></div>
@@ -1579,7 +1601,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
       btn.disabled=true;btn.textContent="Saving…";
       const bestMedal=careerSeasons.length?['gold','silver','bronze','none'].find(m=>careerSeasons.some(s=>s.medal===m))||medal:medal;
       const players=roster.filter(s=>s.player).map(s=>({name:s.player.name,pos:s.pos,ovr:s.player.ovr,from:s.player.from}));
-      const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:currentUser.user_metadata?.full_name||"Anonymous",team_name:team.name||"My Team",avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
+      const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:userName(),team_name:team.name||"My Team",avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
       if(error){btn.disabled=false;btn.textContent="💾 Save";toast("Error: "+error.message);}
       else{btn.textContent="✅ Saved!";toast("Score saved! Opening leaderboard…");setTimeout(showLeaderboard,700);}
     };
