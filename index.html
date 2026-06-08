@@ -1304,6 +1304,13 @@ function renderRoundUI(){
     $("posFirstHint").classList.toggle("show",selectedSlotIndex===-1&&!rosterFull());
   }else{$("posFirstHint").classList.remove("show");}
   updateRerollBtn();
+  updateSpinBtn();
+}
+// Spin is locked after a squad appears — you must draft a player (or reroll) before spinning again.
+function updateSpinBtn(){
+  const btn=$("spinBtn");if(!btn)return;
+  const needSlot=settings.draftMode==="position"&&selectedSlotIndex===-1;
+  btn.disabled=spinning||activeSquad!==null||rosterFull()||needSlot;
 }
 function updateRerollBtn(){
   const btn=$("rerollBtn");
@@ -1317,6 +1324,7 @@ function updateRerollBtn(){
 /* ── SPIN ── */
 function spin(){
   if(spinning)return;
+  if(activeSquad!==null){toast("Draft a player or use a reroll first!");return;}
   if(settings.draftMode==="position"&&selectedSlotIndex===-1){toast("Click a position slot first!");return;}
   const open=settings.draftMode==="position"?selectedSlotIndex:nextOpenIndex();
   if(open===-1){toast("Roster is full — simulate your season!");return;}
@@ -1340,8 +1348,8 @@ function spin(){
       $("cardFlag").textContent=target.flag;$("cardNation").textContent=target.nation;
       $("cardEra").textContent=target.era;$("cardComp").textContent=target.comp;
       $("cardBlurb").textContent=target.blurb;
-      spinning=false;$("spinBtn").disabled=false;
-      activeSquad=target;updateRerollBtn();
+      spinning=false;
+      activeSquad=target;updateRerollBtn();updateSpinBtn();
       showSquad(target);
     }
   },90);
