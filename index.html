@@ -506,20 +506,17 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
     </div>
 
     <div class="settings-card">
-      <div class="settings-label">Your Club</div>
+      <div class="settings-label">Your Team</div>
       <div class="club-setup" id="clubSetup">
         <div class="crest" id="lobbyCrest">VD</div>
         <div class="club-fields">
           <div class="cf">
             <input class="cf-name" id="lobbyName" maxlength="32" placeholder="Your team name" spellcheck="false" autocomplete="off">
-            <button class="cf-roll" data-roll="name" title="Roll a random name">🎲</button>
           </div>
           <div class="cf cf-sub"><span class="cf-ico">👔</span><span id="lobbyCoach">—</span></div>
-          <div class="cf cf-sub"><span class="cf-ico">🏟</span><input class="cf-sub-input" id="lobbyVenue" maxlength="42" placeholder="Your venue" spellcheck="false" autocomplete="off"><button class="cf-roll" data-roll="venue" title="Roll venue">🎲</button></div>
+          <div class="cf cf-sub"><span class="cf-ico">🏟</span><input class="cf-sub-input" id="lobbyVenue" maxlength="42" placeholder="Your venue" spellcheck="false" autocomplete="off"></div>
         </div>
-        <button class="cf-roll big" data-roll="logo" title="Roll crest &amp; colour">🎲</button>
       </div>
-      <button class="club-rollall" id="clubRollAll">🎲 &nbsp;Roll a random club</button>
     </div>
 
     <button class="start-btn" id="startBtn">⚡ &nbsp;Start Draft</button>
@@ -538,7 +535,6 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         </div>
         <div class="team-sub"><span id="teamFlag">🏐</span> Coached by <b id="teamCoach">—</b> · 🏟 <b id="teamVenue">—</b></div>
       </div>
-      <button class="btn-dice" id="teamDice" title="Randomize identity">🎲</button>
     </div>
     <div class="game-grid">
       <div>
@@ -767,15 +763,6 @@ const SQUADS_MEN = [
    players:[{name:"Guy Patrick Owona",pos:"OH",ovr:77},{name:"Simon Pierre Mbarga",pos:"OH",ovr:75},{name:"Boris Mbala",pos:"OH",ovr:74},{name:"Jean Patrice Ndaki",pos:"OH",ovr:72},{name:"Nathan Wounembaïna",pos:"OPP",ovr:78},{name:"Yvan Tchami",pos:"OPP",ovr:75},{name:"Salomon Mbianda",pos:"MB",ovr:76},{name:"Christ Touaga",pos:"MB",ovr:75},{name:"Daniel Eboumbou",pos:"MB",ovr:73},{name:"Olivier Bossombi",pos:"S",ovr:76},{name:"Fabrice Mvogo",pos:"S",ovr:72},{name:"Joseph Ekani",pos:"L",ovr:74}]},
   {nation:"India",flag:"🇮🇳",era:"2020s",comp:"Asian Championship & SAFF Games",blurb:"Emerging Asian minnows",gender:"men",
    players:[{name:"Vinit Kumar",pos:"OH",ovr:75},{name:"T.M. Prabagaran",pos:"OH",ovr:74},{name:"Amit Gulia",pos:"OH",ovr:73},{name:"Erin Varghese",pos:"OH",ovr:72},{name:"Ashwal Rai",pos:"OPP",ovr:76},{name:"Gurinder Singh",pos:"OPP",ovr:73},{name:"Akhin G.S.",pos:"MB",ovr:74},{name:"Ranjit Singh",pos:"MB",ovr:73},{name:"Karthik A.V.",pos:"MB",ovr:72},{name:"Saqlain Tariq",pos:"S",ovr:74},{name:"Angamuthu Ramaswamy",pos:"S",ovr:71},{name:"Jerome Vinith",pos:"L",ovr:74}]},
-  /* ═══ CLUB TEAMS (Men) ═══ */
-  {nation:"Trentino",flag:"🇮🇹",era:"2009–2012",comp:"Champions League · Club World Cup",blurb:"Kaziyski & Grbić — Italian dynasty",gender:"men",type:"club",
-   players:[{name:"Matey Kaziyski",pos:"OH",ovr:93},{name:"Osmany Juantorena",pos:"OH",ovr:90},{name:"Vanya Valchinov",pos:"OH",ovr:87},{name:"Michal Lasko",pos:"OH",ovr:83},{name:"Raphael Vieira",pos:"OPP",ovr:89},{name:"Jan Štokr",pos:"OPP",ovr:84},{name:"Emanuele Birarelli",pos:"MB",ovr:88},{name:"Saša Starović",pos:"MB",ovr:85},{name:"Andrea Bari",pos:"L",ovr:87},{name:"Nikola Grbić",pos:"S",ovr:91},{name:"Simone Giannelli",pos:"S",ovr:82},{name:"Hristo Zlatanov",pos:"OPP",ovr:84},{name:"Marco Falaschi",pos:"S",ovr:81}]},
-  {nation:"Zenit Kazan",flag:"🇷🇺",era:"2015–2019",comp:"Champions League & Russian Super League",blurb:"Leon + Mikhaylov — European titans",gender:"men",type:"club",
-   players:[{name:"Wilfredo Leon",pos:"OH",ovr:95},{name:"Andrey Ananiev",pos:"OH",ovr:85},{name:"Aleksandr Volkov",pos:"OH",ovr:83},{name:"Maxim Mikhaylov",pos:"OPP",ovr:93},{name:"Earvin Ngapeth",pos:"OH",ovr:90},{name:"Nikolay Apalikov",pos:"MB",ovr:87},{name:"Artem Volvich",pos:"MB",ovr:86},{name:"Artur Udriss",pos:"MB",ovr:82},{name:"Alexander Butko",pos:"S",ovr:86},{name:"Nikita Alekseyev",pos:"S",ovr:84},{name:"Alexey Verbov",pos:"L",ovr:88},{name:"Oleg Antonov",pos:"OH",ovr:84},{name:"Lukáš Vašina",pos:"OH",ovr:82}]},
-  {nation:"Sir Safety Perugia",flag:"🇮🇹",era:"2018–2022",comp:"Champions League & Italian SuperLega",blurb:"Leon + Rychlicki — the complete team",gender:"men",type:"club",
-   players:[{name:"Wilfredo Leon",pos:"OH",ovr:95},{name:"Kamil Rychlicki",pos:"OH",ovr:89},{name:"Oleh Plotnytskyi",pos:"OH",ovr:86},{name:"Aleksandar Atanasijević",pos:"OPP",ovr:91},{name:"Matthew Anderson",pos:"OPP",ovr:88},{name:"Marko Podraščanin",pos:"MB",ovr:88},{name:"Roberto Russo",pos:"MB",ovr:86},{name:"Fabio Ricci",pos:"MB",ovr:83},{name:"Luciano De Cecco",pos:"S",ovr:91},{name:"Dragan Travica",pos:"S",ovr:83},{name:"Massimo Colaci",pos:"L",ovr:88},{name:"Donovan Dzavoronok",pos:"OH",ovr:84},{name:"Thijs Ter Horst",pos:"OH",ovr:83}]},
-  {nation:"Cucine Lube Civitanova",flag:"🇮🇹",era:"2019–2021",comp:"Champions League & Italian SuperLega",blurb:"World Club Cup champions 2019",gender:"men",type:"club",
-   players:[{name:"Osmany Juantorena",pos:"OH",ovr:88},{name:"Yoandy Leal",pos:"OH",ovr:91},{name:"Jiri Kovar",pos:"OH",ovr:83},{name:"Ivan Zaytsev",pos:"OPP",ovr:90},{name:"Tsvetan Sokolov",pos:"OPP",ovr:87},{name:"Robertlandy Simón",pos:"MB",ovr:90},{name:"Enrico Cester",pos:"MB",ovr:85},{name:"Marko Anzanello",pos:"MB",ovr:82},{name:"Bruno Rezende",pos:"S",ovr:92},{name:"Luciano De Cecco",pos:"S",ovr:88},{name:"Fabio Balaso",pos:"L",ovr:87},{name:"Marlon Yared",pos:"OPP",ovr:82},{name:"Gabriele D'Amico",pos:"L",ovr:81}]},
 ];
 
 const SQUADS_WOMEN = [
@@ -872,11 +859,6 @@ const SQUADS_WOMEN = [
    players:[{name:"Farida Ahmed",pos:"OH",ovr:75},{name:"Hadeer Wahid",pos:"OH",ovr:74},{name:"Yara Hesham",pos:"OH",ovr:73},{name:"Malak Hesham",pos:"OH",ovr:72},{name:"Nada Mohamed",pos:"OPP",ovr:76},{name:"Malak Eldemerdash",pos:"OPP",ovr:73},{name:"Aya Elshamy",pos:"MB",ovr:74},{name:"Salma Elsayed",pos:"MB",ovr:73},{name:"Rana Ahmed",pos:"MB",ovr:72},{name:"Aya Khaled",pos:"S",ovr:74},{name:"Habiba Tarek",pos:"S",ovr:71},{name:"Mariam Mahmoud",pos:"L",ovr:74}]},
   {nation:"Dominican Republic",flag:"🇩🇴",era:"2010s",comp:"NORCECA · Pan Am · World Grand Prix",blurb:"Caribbean power — de la Cruz & Martínez",gender:"women",
    players:[{name:"Brayelin Martínez",pos:"OH",ovr:87},{name:"Gaila González",pos:"OH",ovr:82},{name:"Yonkaira Peña",pos:"OH",ovr:82},{name:"Prisilla Rivera",pos:"OH",ovr:83},{name:"Bethania de la Cruz",pos:"OPP",ovr:88},{name:"Gina Mambrú",pos:"OPP",ovr:83},{name:"Jeoselyna Rodríguez",pos:"OPP",ovr:82},{name:"Lisvel Eve",pos:"MB",ovr:84},{name:"Annerys Vargas",pos:"MB",ovr:83},{name:"Jineiry Martínez",pos:"MB",ovr:81},{name:"Cándida Arias",pos:"MB",ovr:82},{name:"Niverka Marte",pos:"S",ovr:84},{name:"Jenny López",pos:"S",ovr:80},{name:"Winifer Fernández",pos:"S",ovr:80},{name:"Brenda Castillo",pos:"L",ovr:91},{name:"Larysmer Martínez",pos:"L",ovr:82}]},
-  /* ═══ CLUB TEAMS (Women) ═══ */
-  {nation:"Vakıfbank Istanbul",flag:"🇹🇷",era:"2017–2022",comp:"CEV Champions League",blurb:"Bošković + Zhu Ting — dream club",gender:"women",type:"club",
-   players:[{name:"Zhu Ting",pos:"OH",ovr:96},{name:"Gabriela Guimarães",pos:"OH",ovr:93},{name:"Hande Baladın",pos:"OH",ovr:88},{name:"Kim Hill",pos:"OH",ovr:87},{name:"Tijana Bošković",pos:"OPP",ovr:97},{name:"Lonneke Slöetjes",pos:"OPP",ovr:90},{name:"Milena Rašić",pos:"MB",ovr:87},{name:"Zehra Güneş",pos:"MB",ovr:88},{name:"Senna Derrien",pos:"MB",ovr:84},{name:"Naz Aydın",pos:"S",ovr:89},{name:"Cansu Özbay",pos:"S",ovr:84},{name:"Orsolya Sándor",pos:"L",ovr:85},{name:"Gizem Örge",pos:"L",ovr:84}]},
-  {nation:"Imoco Conegliano",flag:"🇮🇹",era:"2019–2023",comp:"CEV Champions League · Club World Cup",blurb:"Egonu + Haak — unbeaten champions",gender:"women",type:"club",
-   players:[{name:"Isabelle Haak",pos:"OH",ovr:94},{name:"Miriam Sylla",pos:"OH",ovr:90},{name:"Kathryn Plummer",pos:"OH",ovr:88},{name:"Paola Egonu",pos:"OPP",ovr:96},{name:"Ekaterina Antropova",pos:"OPP",ovr:90},{name:"Robin de Kruijf",pos:"MB",ovr:89},{name:"Anna Danesi",pos:"MB",ovr:88},{name:"Sarah Fahr",pos:"MB",ovr:85},{name:"Joanna Wołosz",pos:"S",ovr:92},{name:"Asia Wołosz",pos:"S",ovr:82},{name:"Monica De Gennaro",pos:"L",ovr:91},{name:"Indre Sorokaite",pos:"OH",ovr:85},{name:"Federica Squarcini",pos:"MB",ovr:82}]},
 ];
 
 /* ── REAL PLAYER DATA (height cm + notable club) — verified, major nations first.
@@ -1103,7 +1085,7 @@ const PLAYER_INFO = {
 };
 
 /* merge real data onto squad players */
-[...SQUADS_MEN,...SQUADS_WOMEN].forEach(sq=>sq.players.forEach(p=>{const i=PLAYER_INFO[p.name];if(i){p.ht=i.ht;if(i.club&&i.club!=="—")p.club=i.club;}}));
+[...SQUADS_MEN,...SQUADS_WOMEN].forEach(sq=>sq.players.forEach(p=>{const i=PLAYER_INFO[p.name];if(i){p.ht=i.ht;}}));
 
 // AI base strengths tuned down by 3 vs real form so medals are more attainable.
 const AI_TEAMS_MEN = [
@@ -1151,37 +1133,6 @@ const DIFF_CONFIG = {
    NOTE: club logos are trademarked images we can't embed, so each crest is a
    monogram in the club's real brand colours. Names, venues, coaches and
    colours are real (recent seasons). */
-const CLUBS_M=[
-  {name:"Sir Susa Vim Perugia",short:"PER",flag:"🇮🇹",color:"#e2001a",venue:"PalaBarton, Perugia",coach:"Angelo Lorenzetti"},
-  {name:"Cucine Lube Civitanova",short:"LUB",flag:"🇮🇹",color:"#b00020",venue:"Eurosuole Forum, Civitanova",coach:"Giampaolo Medei"},
-  {name:"Itas Trentino",short:"TRN",flag:"🇮🇹",color:"#1e4fa3",venue:"il T quotidiano Arena, Trento",coach:"Fabio Soli"},
-  {name:"Allianz Milano",short:"MIL",flag:"🇮🇹",color:"#f2a900",venue:"Allianz Cloud, Milan",coach:"Roberto Piazza"},
-  {name:"Gas Sales Bluenergy Piacenza",short:"PIA",flag:"🇮🇹",color:"#d61f26",venue:"PalabancaSport, Piacenza",coach:"Andrea Anastasi"},
-  {name:"ZAKSA Kędzierzyn-Koźle",short:"ZAK",flag:"🇵🇱",color:"#1aa64a",venue:"Hala Azoty, Kędzierzyn-Koźle",coach:"Tuomas Sammelvuo"},
-  {name:"Jastrzębski Węgiel",short:"JAS",flag:"🇵🇱",color:"#1d4ed8",venue:"Jastor Arena, Jastrzębie-Zdrój",coach:"Marcelo Méndez"},
-  {name:"Asseco Resovia Rzeszów",short:"RES",flag:"🇵🇱",color:"#b91c1c",venue:"Podpromie Hall, Rzeszów",coach:"Giampaolo Medei"},
-  {name:"Projekt Warszawa",short:"WAR",flag:"🇵🇱",color:"#0e7490",venue:"Arena Ursynów, Warsaw",coach:"Piotr Graban"},
-  {name:"Zenit Kazan",short:"KAZ",flag:"🇷🇺",color:"#0ea5e9",venue:"Centre Volleyball, Kazan",coach:"Alexey Verbov"},
-  {name:"Halkbank Ankara",short:"HAL",flag:"🇹🇷",color:"#d8232a",venue:"Başkent Volleyball Hall, Ankara",coach:"Slobodan Kovač"},
-  {name:"Berlin Recycling Volleys",short:"BER",flag:"🇩🇪",color:"#f5a623",venue:"Max-Schmeling-Halle, Berlin",coach:"Joel Banks"},
-  {name:"Tours Volley-Ball",short:"TVB",flag:"🇫🇷",color:"#facc15",venue:"Palais des Sports, Tours",coach:"Hubert Henno"},
-  {name:"Sada Cruzeiro",short:"SAD",flag:"🇧🇷",color:"#1e40af",venue:"Arena Sada, Contagem",coach:"Filipe Ferraz"},
-];
-const CLUBS_W=[
-  {name:"Prosecco Doc Imoco Conegliano",short:"CON",flag:"🇮🇹",color:"#f4b400",venue:"Palaverde, Villorba",coach:"Daniele Santarelli"},
-  {name:"Allianz Vero Volley Milano",short:"MIL",flag:"🇮🇹",color:"#7c3aed",venue:"Opiquad Arena, Monza",coach:"Stefano Lavarini"},
-  {name:"Savino Del Bene Scandicci",short:"SCA",flag:"🇮🇹",color:"#1d4ed8",venue:"Palazzo Wanny, Florence",coach:"Marco Gaspari"},
-  {name:"Igor Gorgonzola Novara",short:"NOV",flag:"🇮🇹",color:"#2563eb",venue:"Pala Igor, Novara",coach:"Bernardo Cuttini"},
-  {name:"VakıfBank İstanbul",short:"VAK",flag:"🇹🇷",color:"#f4c20d",venue:"VakıfBank Spor Sarayı, Istanbul",coach:"Giovanni Guidetti"},
-  {name:"Eczacıbaşı Dynavit İstanbul",short:"ECZ",flag:"🇹🇷",color:"#f97316",venue:"Burhan Felek Hall, Istanbul",coach:"Ferhat Akbaş"},
-  {name:"Fenerbahçe Opet İstanbul",short:"FEN",flag:"🇹🇷",color:"#facc15",venue:"Ülker Sports Arena, Istanbul",coach:"Marcello Abbondanza"},
-  {name:"Dinamo Moscow",short:"DIN",flag:"🇷🇺",color:"#1d4ed8",venue:"Dynamo Palace, Moscow",coach:"Konstantin Ushakov"},
-  {name:"Tianjin Bohai Bank",short:"TJN",flag:"🇨🇳",color:"#d61f26",venue:"Tianjin People's Stadium",coach:"Wang Baoquan"},
-  {name:"Praia Clube",short:"PRA",flag:"🇧🇷",color:"#1aa64a",venue:"Praia Clube, Uberlândia",coach:"Paulo Coco"},
-  {name:"Minas Tênis Clube",short:"MIN",flag:"🇧🇷",color:"#1e40af",venue:"Arena UniBH, Belo Horizonte",coach:"Nicola Negro"},
-  {name:"Developres Rzeszów",short:"RZE",flag:"🇵🇱",color:"#db2777",venue:"Podpromie Hall, Rzeszów",coach:"Stéphane Antiga"},
-];
-
 /* ── SETTINGS STATE ── */
 let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium"};
 
@@ -1211,23 +1162,16 @@ function currentAI(){return settings.gender==="women"?AI_TEAMS_WOMEN:AI_TEAMS_ME
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
 /* ── TEAM IDENTITY ── */
-function clubPool(){return settings.gender==="women"?CLUBS_W:CLUBS_M;}
 // Coach is always the signed-in user's name (falls back to "You" when offline).
 function coachName(){return currentUser?userName():"You";}
 function applyCoach(){team.coach=coachName();renderTeam();}
-function rollAll(){team={...pick(clubPool())};team.coach=coachName();renderTeam();}
-function rollField(f){
-  const c=pick(clubPool());
-  if(f==="name")team.name=c.name;
-  else if(f==="venue")team.venue=c.venue;
-  else if(f==="logo"){team.short=c.short;team.color=c.color;team.flag=c.flag;}
-  renderTeam();
-}
+// Crest = initials of the team name (e.g. "Lisbon Spikers" → "LS"), default "VD".
+function initials(name){const w=(name||"").trim().split(/\s+/).filter(Boolean);if(!w.length)return "VD";if(w.length===1)return w[0].slice(0,2).toUpperCase();return (w[0][0]+w[1][0]).toUpperCase();}
 function setAll(ids,fn){ids.forEach(id=>{const e=$(id);if(e)fn(e);});}
 function setText(e,v){if(e.tagName==="INPUT"){if(document.activeElement!==e)e.value=v;}else e.textContent=v;}
-function renameTeam(){const v=prompt("Rename your club:",team.name);if(v&&v.trim()){team.name=v.trim().slice(0,32);renderTeam();}}
+function renameTeam(){const v=prompt("Rename your team:",team.name);if(v&&v.trim()){team.name=v.trim().slice(0,32);renderTeam();}}
 function renderTeam(){
-  setAll(["teamCrest","lobbyCrest"],c=>{c.textContent=team.short;c.style.background=`linear-gradient(160deg,${team.color},${team.color}bb)`;});
+  setAll(["teamCrest","lobbyCrest"],c=>{c.textContent=initials(team.name);c.style.background=`linear-gradient(160deg,${team.color},${team.color}bb)`;});
   setAll(["teamName","lobbyName"],e=>setText(e,team.name));
   setAll(["teamCoach","lobbyCoach"],e=>setText(e,team.coach));
   setAll(["teamVenue","lobbyVenue"],e=>setText(e,team.venue));
@@ -1298,16 +1242,11 @@ function renderAuth(){
 
 /* ── LOBBY ── */
 function setupLobby(){
-  setupToggleGroup("genderGroup","active",v=>{settings.gender=v;rollAll();});
+  setupToggleGroup("genderGroup","active",v=>{settings.gender=v;});
   setupToggleGroup("draftModeGroup","active-purple",v=>settings.draftMode=v);
   setupToggleGroup("seasonModeGroup","active-blue",v=>settings.seasonMode=v);
   setupToggleGroup("diffGroup","active-green",v=>settings.difficulty=v);
-  $("clubRollAll").onclick=rollAll;
-  $("clubSetup").addEventListener("click",e=>{
-    const b=e.target.closest(".cf-roll");if(!b)return;
-    rollField(b.dataset.roll);
-  });
-  $("lobbyName").addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;});
+  $("lobbyName").addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const lc=$("lobbyCrest");if(lc)lc.textContent=initials(team.name);const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;});
   $("lobbyVenue").addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);const tv=$("teamVenue");if(tv)tv.textContent=team.venue;});
   $("startBtn").onclick=startGame;
   $("logoHome").onclick=e=>{e.preventDefault();if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}};
@@ -1428,7 +1367,7 @@ function showSquad(sq){
   const open=openPositions();
   $("squadPanel").style.display="block";
   $("sqFlag").textContent=sq.flag;
-  $("sqTitle").textContent=sq.type==="club"?`${sq.nation} (${sq.era})`:`${sq.nation} — ${sq.era}`;
+  $("sqTitle").textContent=`${sq.nation} — ${sq.era}`;
   $("sqMeta").textContent=sq.comp;
   // pick label: position-mode targets one slot; squad-mode shows remaining positions
   if(posMode){
@@ -1450,8 +1389,7 @@ function showSquad(sq){
     card.className="pcard"+(eligible?"":" disabled");
     const note=picked?" · drafted":(eligible?"":" · slot filled");
     const meta=`${POS_NAME[p.pos]}${p.ht?` · ${p.ht} cm`:""}${note}`;
-    const clubLine=p.club?`<div class="pclub">🏛 ${p.club}</div>`:"";
-    card.innerHTML=`<div class="pos-pill pos-${p.pos}">${p.pos}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="ppos">${meta}</div>${clubLine}</div><div class="povr${hideOvr&&eligible?" hidden":""}"><span class="rtg-num">${hideOvr&&eligible?"?":p.ovr}</span><span class="rtg-cap">RTG</span></div>`;
+    card.innerHTML=`<div class="pos-pill pos-${p.pos}">${p.pos}</div><div class="pinfo"><div class="pname">${esc(p.name)}</div><div class="ppos">${meta}</div></div><div class="povr${hideOvr&&eligible?" hidden":""}"><span class="rtg-num">${hideOvr&&eligible?"?":p.ovr}</span><span class="rtg-cap">RTG</span></div>`;
     if(eligible)card.addEventListener("click",()=>draftPlayer(p,sq));
     list.appendChild(card);
   });
@@ -1693,7 +1631,6 @@ $("seasonBtn").addEventListener("click",startSimulation);
 $("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
 $("howBtn").addEventListener("click",showHowToPlay);
-$("teamDice").addEventListener("click",rollAll);
 $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
