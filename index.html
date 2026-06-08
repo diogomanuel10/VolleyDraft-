@@ -1093,21 +1093,22 @@ const PLAYER_INFO = {
 /* merge real data onto squad players */
 [...SQUADS_MEN,...SQUADS_WOMEN].forEach(sq=>sq.players.forEach(p=>{const i=PLAYER_INFO[p.name];if(i){p.ht=i.ht;if(i.club&&i.club!=="—")p.club=i.club;}}));
 
+// AI base strengths tuned down by 3 vs real form so medals are more attainable.
 const AI_TEAMS_MEN = [
-  {nation:"Brazil",flag:"🇧🇷",base:90},{nation:"Italy",flag:"🇮🇹",base:90},
-  {nation:"Poland",flag:"🇵🇱",base:91},{nation:"France",flag:"🇫🇷",base:89},
-  {nation:"USA",flag:"🇺🇸",base:88},{nation:"Japan",flag:"🇯🇵",base:87},
-  {nation:"Slovenia",flag:"🇸🇮",base:86},{nation:"Argentina",flag:"🇦🇷",base:86},
-  {nation:"Serbia",flag:"🇷🇸",base:85},{nation:"Germany",flag:"🇩🇪",base:84},
-  {nation:"Iran",flag:"🇮🇷",base:85},{nation:"Canada",flag:"🇨🇦",base:83},
+  {nation:"Brazil",flag:"🇧🇷",base:87},{nation:"Italy",flag:"🇮🇹",base:87},
+  {nation:"Poland",flag:"🇵🇱",base:88},{nation:"France",flag:"🇫🇷",base:86},
+  {nation:"USA",flag:"🇺🇸",base:85},{nation:"Japan",flag:"🇯🇵",base:84},
+  {nation:"Slovenia",flag:"🇸🇮",base:83},{nation:"Argentina",flag:"🇦🇷",base:83},
+  {nation:"Serbia",flag:"🇷🇸",base:82},{nation:"Germany",flag:"🇩🇪",base:81},
+  {nation:"Iran",flag:"🇮🇷",base:82},{nation:"Canada",flag:"🇨🇦",base:80},
 ];
 const AI_TEAMS_WOMEN = [
-  {nation:"Brazil",flag:"🇧🇷",base:91},{nation:"Italy",flag:"🇮🇹",base:90},
-  {nation:"Serbia",flag:"🇷🇸",base:91},{nation:"China",flag:"🇨🇳",base:90},
-  {nation:"USA",flag:"🇺🇸",base:88},{nation:"Japan",flag:"🇯🇵",base:87},
-  {nation:"Netherlands",flag:"🇳🇱",base:87},{nation:"Turkey",flag:"🇹🇷",base:86},
-  {nation:"Poland",flag:"🇵🇱",base:85},{nation:"South Korea",flag:"🇰🇷",base:84},
-  {nation:"Germany",flag:"🇩🇪",base:82},{nation:"Canada",flag:"🇨🇦",base:82},
+  {nation:"Brazil",flag:"🇧🇷",base:88},{nation:"Italy",flag:"🇮🇹",base:87},
+  {nation:"Serbia",flag:"🇷🇸",base:88},{nation:"China",flag:"🇨🇳",base:87},
+  {nation:"USA",flag:"🇺🇸",base:85},{nation:"Japan",flag:"🇯🇵",base:84},
+  {nation:"Netherlands",flag:"🇳🇱",base:84},{nation:"Turkey",flag:"🇹🇷",base:83},
+  {nation:"Poland",flag:"🇵🇱",base:82},{nation:"South Korea",flag:"🇰🇷",base:81},
+  {nation:"Germany",flag:"🇩🇪",base:79},{nation:"Canada",flag:"🇨🇦",base:79},
 ];
 
 // Your half only — 6 starters on the wood, libero in the blue free zone behind the court.
