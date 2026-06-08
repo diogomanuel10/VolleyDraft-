@@ -1581,7 +1581,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
       const players=roster.filter(s=>s.player).map(s=>({name:s.player.name,pos:s.pos,ovr:s.player.ovr,from:s.player.from}));
       const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:currentUser.user_metadata?.full_name||"Anonymous",team_name:team.name||"My Team",avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
       if(error){btn.disabled=false;btn.textContent="💾 Save";toast("Error: "+error.message);}
-      else{btn.textContent="✅ Saved!";toast("Score saved!");}
+      else{btn.textContent="✅ Saved!";toast("Score saved! Opening leaderboard…");setTimeout(showLeaderboard,700);}
     };
   }else if($("saveSignInBtn")){
     $("saveSignInBtn").onclick=()=>sb?sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:authRedirect()}}):toast("Sign-in unavailable (offline).");
