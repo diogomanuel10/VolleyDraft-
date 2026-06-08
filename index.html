@@ -233,7 +233,7 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .court-net>span{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:8px;letter-spacing:3px;font-weight:900;color:var(--muted)}
 .your-zone{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:900;color:rgba(70,45,12,.42);text-transform:uppercase}
 /* slots — compact jersey chips */
-.court-slot{position:absolute;width:19%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+.court-slot{position:absolute;width:18%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
   background:rgba(8,16,32,.62);backdrop-filter:blur(3px);border:1.5px solid rgba(255,255,255,.22);border-radius:13px;
   transition:.2s;transform:translate(-50%,-50%);cursor:default;padding:2px;box-shadow:0 3px 10px rgba(0,0,0,.3)}
 .court-slot.clickable{cursor:pointer}
@@ -489,7 +489,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         <div class="crest" id="lobbyCrest">VD</div>
         <div class="club-fields">
           <div class="cf">
-            <input class="cf-name" id="lobbyName" maxlength="32" placeholder="Your team name" value="Dream Team" spellcheck="false" autocomplete="off">
+            <input class="cf-name" id="lobbyName" maxlength="32" placeholder="Your team name" spellcheck="false" autocomplete="off">
             <button class="cf-roll" data-roll="name" title="Roll a random name">🎲</button>
           </div>
           <div class="cf cf-sub"><span class="cf-ico">👔</span><span id="lobbyCoach">—</span></div>
@@ -1100,7 +1100,7 @@ const COURT_POS = [
   // front row (near net): OPP · MB · OH
   [1, 22, 31],[4, 50, 31],[2, 78, 31],
   // back row: OH · MB · S · LIBERO
-  [3, 16, 68],[5, 39, 68],[0, 62, 68],[6, 85, 68],
+  [3, 18, 68],[5, 39, 68],[0, 60, 68],[6, 81, 68],
 ];
 const SLOTS = [
   {pos:"S",label:"SETTER"},{pos:"OPP",label:"OPPOSITE"},
@@ -1160,7 +1160,7 @@ let roster, spinning, pickedKeys, currentUser, rerollsLeft, selectedSlotIndex;
 let activeSquad = null;
 let careerSeasons = [];
 let careerSeason = 0;
-let team = {name:"Dream Team",short:"VD",flag:"🏐",color:"#f59e0b",venue:"—",coach:"You"};
+let team = {name:"",short:"VD",flag:"🏐",color:"#f59e0b",venue:"",coach:"You"};
 
 /* ── HELPERS ── */
 const $ = id => document.getElementById(id);
@@ -1269,9 +1269,10 @@ function showLobby(){
   $("resetBtn").style.display="none";
 }
 function startGame(){
-  // Each new game can use a freshly typed team name / venue.
-  const ln=$("lobbyName");if(ln&&ln.value.trim())team.name=ln.value.trim().slice(0,32);
-  const lv=$("lobbyVenue");if(lv&&lv.value.trim())team.venue=lv.value.trim().slice(0,42);
+  // Each new game can use a freshly typed team name / venue (blank → sensible default).
+  const ln=$("lobbyName");team.name=((ln&&ln.value.trim())||"").slice(0,32)||"My Team";
+  const lv=$("lobbyVenue");team.venue=((lv&&lv.value.trim())||"").slice(0,42)||"Home Arena";
+  renderTeam();
   $("lobbyArea").style.display="none";
   $("gameArea").style.display="";
   $("resetBtn").style.display="";
@@ -1626,7 +1627,7 @@ $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
 
 setupLobby();
-rollAll();
+renderTeam();
 await initAuth();
 </script>
 </body>
