@@ -1172,6 +1172,10 @@ let team = {name:"",short:"VD",flag:"🏐",color:"#f59e0b",venue:"",coach:"You"}
 
 /* ── HELPERS ── */
 const $ = id => document.getElementById(id);
+// Escape untrusted text before injecting into innerHTML (prevents XSS).
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// Only allow safe https image URLs for avatars.
+const safeImg = u => (typeof u==="string" && /^https:\/\//i.test(u)) ? u : "";
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2600)}
 function nextOpenIndex(){return roster.findIndex(s=>!s.player)}
 function rosterFull(){return roster.every(s=>s.player)}
@@ -1516,27 +1520,27 @@ function winnerOf(a,b,m){return m.aWon?a:b}function loserOf(a,b,m){return m.aWon
 function renderSeasonResult(result,seasonNum,totalSeasons){
   const {teams,prelim,finals,me,medal}=result;
   const medalTxt={gold:"VNL CHAMPIONS!",silver:"VNL Silver Medal!",bronze:"VNL Bronze Medal!",none:"No medal this time"};
-  const side=(t,r)=>`<div class="match-team ${r?"right":""} ${t.me?"you":""}">${r?"":` <span>${t.flag}</span>`}<span>${t.nation}</span>${r?`<span>${t.flag}</span>`:""}</div>`;
+  const side=(t,r)=>`<div class="match-team ${r?"right":""} ${t.me?"you":""}">${r?"":` <span>${t.flag}</span>`}<span>${esc(t.nation)}</span>${r?`<span>${t.flag}</span>`:""}</div>`;
   const row=m=>`<div class="match">${side(m.a,false)}<div class="match-score"><span class="${m.aWon?"w":"l"}">${m.sa}</span>&nbsp;–&nbsp;<span class="${m.aWon?"l":"w"}">${m.sb}</span></div>${side(m.b,true)}</div>`;
   const isCareer=settings.seasonMode==="career";
   const isLast=!isCareer||seasonNum>=totalSeasons;
   const saveBlock=currentUser
-    ?`<div class="save-row"><div class="save-info">Signed in as <b>${currentUser.user_metadata?.full_name||currentUser.email}</b> — save to leaderboard?</div><button class="btn-save" id="saveScoreBtn">💾 Save</button></div>`
+    ?`<div class="save-row"><div class="save-info">Signed in as <b>${esc(currentUser.user_metadata?.full_name||currentUser.email)}</b> — save to leaderboard?</div><button class="btn-save" id="saveScoreBtn">💾 Save</button></div>`
     :`<div class="save-row"><div class="save-info">Sign in to save your score.</div><button class="btn-google" id="saveSignInBtn"><svg viewBox="0 0 48 48" style="width:14px;height:14px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in</button></div>`;
   const careerHeader=isCareer?`<div style="display:flex;gap:8px;margin-bottom:12px">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" onclick="window._careerTab(${i})">${i+1===seasonNum?`Season ${i+1} ▶`:`Season ${i+1}${careerSeasons[i]?` ${MEDAL_EMOJI[careerSeasons[i].medal]}`:""}`}</button>`).join("")}</div>`:"";
   let html=`<div class="modal-header"><h2>🏐 VNL ${isCareer?`Season ${seasonNum}/${totalSeasons}`:"Season Result"}</h2><button class="modal-close" id="closeModal">✕</button></div>
     ${careerHeader}
-    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.flag} ${team.name}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${team.coach} · 🏟 ${team.venue}</div></div>
+    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.flag} ${esc(team.name)}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${esc(team.coach)} · 🏟 ${esc(team.venue)}</div></div>
     ${isLast?saveBlock:""}
     <div class="section-title">Preliminary Standings</div>
     <table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
-    ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${t.nation}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
+    ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${esc(t.nation)}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
     </table>
     <div class="section-title">Quarterfinals</div>${finals.qf.map(x=>row(x.m)).join("")}
     <div class="section-title">Semifinals</div>${row(finals.sf[0].m)}${row(finals.sf[1].m)}
     <div class="section-title">Bronze Match</div>${row(finals.bronze.m)}
     <div class="section-title">🏆 Gold Match</div>${row(finals.gold.m)}
-    <div style="text-align:center;font-size:12px;color:var(--text2);margin:8px 0 12px">🥇 ${finals.champion.flag} ${finals.champion.nation} &nbsp;·&nbsp; 🥈 ${finals.silver.flag} ${finals.silver.nation} &nbsp;·&nbsp; 🥉 ${finals.bronzeWinner.flag} ${finals.bronzeWinner.nation}</div>
+    <div style="text-align:center;font-size:12px;color:var(--text2);margin:8px 0 12px">🥇 ${finals.champion.flag} ${esc(finals.champion.nation)} &nbsp;·&nbsp; 🥈 ${finals.silver.flag} ${esc(finals.silver.nation)} &nbsp;·&nbsp; 🥉 ${finals.bronzeWinner.flag} ${esc(finals.bronzeWinner.nation)}</div>
     <div class="section-title">All Prelim Matches</div>${prelim.map(row).join("")}
     <div style="margin-top:14px;display:flex;gap:8px">
       ${!isLast?`<button class="btn-primary" style="flex:1;padding:12px;font-size:14px" id="nextSeasonBtn">▶ Season ${seasonNum+1}</button>`:""}
@@ -1561,7 +1565,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
       btn.disabled=true;btn.textContent="Saving…";
       const bestMedal=careerSeasons.length?['gold','silver','bronze','none'].find(m=>careerSeasons.some(s=>s.medal===m))||medal:medal;
       const players=roster.filter(s=>s.player).map(s=>({name:s.player.name,pos:s.pos,ovr:s.player.ovr,from:s.player.from}));
-      const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:currentUser.user_metadata?.full_name||currentUser.email,avatar_url:currentUser.user_metadata?.avatar_url||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
+      const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:currentUser.user_metadata?.full_name||"Anonymous",avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
       if(error){btn.disabled=false;btn.textContent="💾 Save";toast("Error: "+error.message);}
       else{btn.textContent="✅ Saved!";toast("Score saved!");}
     };
@@ -1610,9 +1614,10 @@ async function showLeaderboard(){
   data.sort((a,b)=>(medalOrder[a.medal]-medalOrder[b.medal])||b.team_rating-a.team_rating);
   const rows=data.map((row,i)=>{
     const isMe=currentUser&&row.user_id===currentUser.id;
-    const av=row.avatar_url?`<img class="lb-avatar" src="${row.avatar_url}" alt="">`:"";
-    const ps=(row.players||[]).map(p=>`${p.name} (${p.pos})`).join(" · ");
-    return `<tr class="${isMe?"mine":""}"><td class="rank">${i+1}</td><td class="med">${MEDAL_EMOJI[row.medal]||"🏐"}</td><td>${av}<b>${row.display_name||"Anonymous"}</b><div class="lb-players">${ps}</div></td><td style="font-weight:900;color:var(--gold)">${row.team_rating}</td><td>${row.prelim_rank?ordinal(row.prelim_rank):"—"}</td></tr>`;
+    const safeAv=safeImg(row.avatar_url);
+    const av=safeAv?`<img class="lb-avatar" src="${esc(safeAv)}" alt="">`:"";
+    const ps=(row.players||[]).map(p=>`${esc(p.name)} (${esc(p.pos)})`).join(" · ");
+    return `<tr class="${isMe?"mine":""}"><td class="rank">${i+1}</td><td class="med">${MEDAL_EMOJI[row.medal]||"🏐"}</td><td>${av}<b>${esc(row.display_name||"Anonymous")}</b><div class="lb-players">${ps}</div></td><td style="font-weight:900;color:var(--gold)">${esc(row.team_rating)}</td><td>${row.prelim_rank?ordinal(row.prelim_rank):"—"}</td></tr>`;
   }).join("");
   $("modal").innerHTML=`<div class="modal-header"><h2>🏆 Global Leaderboard</h2><button class="modal-close" id="closeModal">✕</button></div>${data.length===0?'<div class="lb-empty">No scores yet — be the first!</div>':`<table class="lb"><tr><th>#</th><th></th><th>Player</th><th>Rating</th><th>Prelim</th></tr>${rows}</table>`}<div style="margin-top:14px"><button class="btn-primary" style="width:100%;padding:11px;font-size:13px" id="closeLbBtn">← Back to game</button></div>`;
   $("closeModal").onclick=$("closeLbBtn").onclick=()=>$("overlay").classList.remove("show");
