@@ -1565,7 +1565,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
       btn.disabled=true;btn.textContent="Saving…";
       const bestMedal=careerSeasons.length?['gold','silver','bronze','none'].find(m=>careerSeasons.some(s=>s.medal===m))||medal:medal;
       const players=roster.filter(s=>s.player).map(s=>({name:s.player.name,pos:s.pos,ovr:s.player.ovr,from:s.player.from}));
-      const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:currentUser.user_metadata?.full_name||"Anonymous",avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
+      const {error}=await sb.from("leaderboard").insert({user_id:currentUser.id,display_name:currentUser.user_metadata?.full_name||"Anonymous",team_name:team.name||"My Team",avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
       if(error){btn.disabled=false;btn.textContent="💾 Save";toast("Error: "+error.message);}
       else{btn.textContent="✅ Saved!";toast("Score saved!");}
     };
@@ -1617,7 +1617,8 @@ async function showLeaderboard(){
     const safeAv=safeImg(row.avatar_url);
     const av=safeAv?`<img class="lb-avatar" src="${esc(safeAv)}" alt="">`:"";
     const ps=(row.players||[]).map(p=>`${esc(p.name)} (${esc(p.pos)})`).join(" · ");
-    return `<tr class="${isMe?"mine":""}"><td class="rank">${i+1}</td><td class="med">${MEDAL_EMOJI[row.medal]||"🏐"}</td><td>${av}<b>${esc(row.display_name||"Anonymous")}</b><div class="lb-players">${ps}</div></td><td style="font-weight:900;color:var(--gold)">${esc(row.team_rating)}</td><td>${row.prelim_rank?ordinal(row.prelim_rank):"—"}</td></tr>`;
+    const teamLabel=row.team_name?`<b>${esc(row.team_name)}</b> <span style="color:var(--muted);font-weight:600">by ${esc(row.display_name||"Anonymous")}</span>`:`<b>${esc(row.display_name||"Anonymous")}</b>`;
+    return `<tr class="${isMe?"mine":""}"><td class="rank">${i+1}</td><td class="med">${MEDAL_EMOJI[row.medal]||"🏐"}</td><td>${av}${teamLabel}<div class="lb-players">${ps}</div></td><td style="font-weight:900;color:var(--gold)">${esc(row.team_rating)}</td><td>${row.prelim_rank?ordinal(row.prelim_rank):"—"}</td></tr>`;
   }).join("");
   $("modal").innerHTML=`<div class="modal-header"><h2>🏆 Global Leaderboard</h2><button class="modal-close" id="closeModal">✕</button></div>${data.length===0?'<div class="lb-empty">No scores yet — be the first!</div>':`<table class="lb"><tr><th>#</th><th></th><th>Player</th><th>Rating</th><th>Prelim</th></tr>${rows}</table>`}<div style="margin-top:14px"><button class="btn-primary" style="width:100%;padding:11px;font-size:13px" id="closeLbBtn">← Back to game</button></div>`;
   $("closeModal").onclick=$("closeLbBtn").onclick=()=>$("overlay").classList.remove("show");
