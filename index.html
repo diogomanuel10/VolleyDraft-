@@ -132,6 +132,10 @@ input.cf-name{background:transparent;border:none;border-bottom:1px dashed var(--
 input.cf-name:hover{border-bottom-color:var(--text2)}
 input.cf-name:focus{border-bottom-color:var(--gold)}
 input.cf-name::placeholder{color:var(--text2);font-weight:700}
+input.cf-sub-input{flex:1;min-width:0;background:transparent;border:none;border-bottom:1px dashed var(--border2);color:var(--text2);font-size:12px;padding:1px 2px;outline:none;transition:border-color .15s}
+input.cf-sub-input:hover{border-bottom-color:var(--text2)}
+input.cf-sub-input:focus{border-bottom-color:var(--gold)}
+input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .cf-sub{font-size:12px;color:var(--text2)}
 .cf-sub>span:not(.cf-ico){flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cf-ico{flex:0 0 auto}
@@ -207,32 +211,29 @@ input.cf-name::placeholder{color:var(--text2);font-weight:700}
 /* ── COURT ── */
 .court-wrap{position:relative}
 .court-title{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:center}
-.court{position:relative;width:100%;aspect-ratio:.66;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
-/* parquet playing floor inside the blue free zone (9×18m) */
-.court-floor{position:absolute;inset:6.5% 9%;border:3px solid var(--court-line);border-radius:3px;
+.court{position:relative;width:100%;aspect-ratio:1.2;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
+/* parquet playing floor — your half of the court (9×9m), net along the top */
+.court-floor{position:absolute;inset:11% 8% 7% 8%;border:3px solid var(--court-line);border-radius:3px;
   background:repeating-linear-gradient(90deg,rgba(120,72,20,.10) 0 1px,transparent 1px 13px),var(--court-floor);
   box-shadow:inset 0 0 55px rgba(120,72,20,.22),0 0 0 1px rgba(0,0,0,.12)}
-/* front zones (3m) — slightly warmer wood, bounded by the white attack lines */
-.court-floor::before{content:"";position:absolute;left:0;right:0;top:33.33%;bottom:33.33%;background:var(--court-zone);opacity:.55;border-top:3px solid var(--court-line);border-bottom:3px solid var(--court-line)}
-/* centre line under the net */
-.court-floor::after{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:var(--court-line)}
-/* faint rotation-zone numbers for that FIVB-diagram feel */
-.zone-nums{position:absolute;inset:6.5% 9%;pointer-events:none;color:rgba(90,55,15,.32);font-size:9px;font-weight:900}
-.zone-nums span{position:absolute;transform:translate(-50%,-50%)}
+/* front zone (3m) — slightly warmer wood between net and the attack line */
+.court-floor::before{content:"";position:absolute;left:0;right:0;top:0;height:38%;background:var(--court-zone);opacity:.5}
+/* attack line (3m line) */
+.court-floor::after{content:"";position:absolute;left:0;right:0;top:38%;height:3px;margin-top:-1.5px;background:var(--court-line)}
 .court-lines{position:absolute;inset:0;pointer-events:none}
-/* net across the middle, with tape + posts + antennas */
-.court-net{position:absolute;left:6%;right:6%;top:50%;height:13px;transform:translateY(-50%);
+/* net along the top, with tape + posts + antennas */
+.court-net{position:absolute;left:8%;right:8%;top:11%;height:13px;transform:translateY(-50%);
   background:repeating-linear-gradient(90deg,rgba(255,255,255,.32) 0 1px,transparent 1px 6px),
              repeating-linear-gradient(0deg,rgba(255,255,255,.32) 0 1px,transparent 1px 6px);
   border-top:3px solid #fff;border-bottom:2px solid rgba(255,255,255,.55);
   box-shadow:0 0 12px rgba(255,255,255,.18)}
 .court-net::before,.court-net::after{content:"";position:absolute;top:-7px;width:4px;height:27px;border-radius:2px;
   background:repeating-linear-gradient(180deg,#ef4444 0 5px,#fff 5px 10px);box-shadow:0 0 4px rgba(0,0,0,.4)}
-.court-net::before{left:13%}.court-net::after{right:13%}
-.opp-zone,.your-zone{position:absolute;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:900;color:rgba(70,45,12,.42);text-transform:uppercase}
-.opp-zone{top:13%}.your-zone{bottom:9%}
+.court-net::before{left:2%}.court-net::after{right:2%}
+.court-net>span{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:8px;letter-spacing:3px;font-weight:900;color:var(--muted)}
+.your-zone{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:900;color:rgba(70,45,12,.42);text-transform:uppercase}
 /* slots — compact jersey chips */
-.court-slot{position:absolute;width:20.5%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+.court-slot{position:absolute;width:19%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
   background:rgba(8,16,32,.62);backdrop-filter:blur(3px);border:1.5px solid rgba(255,255,255,.22);border-radius:13px;
   transition:.2s;transform:translate(-50%,-50%);cursor:default;padding:2px;box-shadow:0 3px 10px rgba(0,0,0,.3)}
 .court-slot.clickable{cursor:pointer}
@@ -492,7 +493,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
             <button class="cf-roll" data-roll="name" title="Roll a random name">🎲</button>
           </div>
           <div class="cf cf-sub"><span class="cf-ico">👔</span><span id="lobbyCoach">—</span></div>
-          <div class="cf cf-sub"><span class="cf-ico">🏟</span><span id="lobbyVenue">—</span><button class="cf-roll" data-roll="venue" title="Roll venue">🎲</button></div>
+          <div class="cf cf-sub"><span class="cf-ico">🏟</span><input class="cf-sub-input" id="lobbyVenue" maxlength="42" placeholder="Your venue" spellcheck="false" autocomplete="off"><button class="cf-roll" data-roll="venue" title="Roll venue">🎲</button></div>
         </div>
         <button class="cf-roll big" data-roll="logo" title="Roll crest &amp; colour">🎲</button>
       </div>
@@ -562,12 +563,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         <div class="court-title" id="courtTitle">Your Dream Team</div>
         <div class="court" id="court">
           <div class="court-floor"></div>
-          <div class="zone-nums">
-            <span style="left:22%;top:16%">5</span><span style="left:50%;top:16%">6</span><span style="left:78%;top:16%">1</span>
-            <span style="left:22%;top:38%">4</span><span style="left:50%;top:38%">3</span><span style="left:78%;top:38%">2</span>
-          </div>
-          <div class="opp-zone">Opponent</div>
-          <div class="court-net"></div>
+          <div class="court-net"><span>NET</span></div>
           <div class="your-zone">Your Side</div>
           <div id="courtSlots"></div>
         </div>
@@ -1099,10 +1095,12 @@ const AI_TEAMS_WOMEN = [
   {nation:"Germany",flag:"🇩🇪",base:82},{nation:"Canada",flag:"🇨🇦",base:82},
 ];
 
+// Your half only — front row near the net, back row behind the attack line.
 const COURT_POS = [
-  [1, 74, 60],[4, 50, 60],[2, 26, 60],
-  [3, 74, 79],[0, 50, 79],[5, 26, 79],
-  [6, 50, 91],
+  // front row (near net): OPP · MB · OH
+  [1, 22, 31],[4, 50, 31],[2, 78, 31],
+  // back row: OH · MB · S · LIBERO
+  [3, 16, 68],[5, 39, 68],[0, 62, 68],[6, 85, 68],
 ];
 const SLOTS = [
   {pos:"S",label:"SETTER"},{pos:"OPP",label:"OPPOSITE"},
@@ -1249,6 +1247,7 @@ function setupLobby(){
     rollField(b.dataset.roll);
   });
   $("lobbyName").addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;});
+  $("lobbyVenue").addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);const tv=$("teamVenue");if(tv)tv.textContent=team.venue;});
   $("startBtn").onclick=startGame;
   $("logoHome").onclick=e=>{e.preventDefault();if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}};
 }
@@ -1270,6 +1269,9 @@ function showLobby(){
   $("resetBtn").style.display="none";
 }
 function startGame(){
+  // Each new game can use a freshly typed team name / venue.
+  const ln=$("lobbyName");if(ln&&ln.value.trim())team.name=ln.value.trim().slice(0,32);
+  const lv=$("lobbyVenue");if(lv&&lv.value.trim())team.venue=lv.value.trim().slice(0,42);
   $("lobbyArea").style.display="none";
   $("gameArea").style.display="";
   $("resetBtn").style.display="";
