@@ -211,9 +211,9 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 /* ── COURT ── */
 .court-wrap{position:relative}
 .court-title{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:center}
-.court{position:relative;width:100%;aspect-ratio:1.2;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
-/* parquet playing floor — your half of the court (9×9m), net along the top */
-.court-floor{position:absolute;inset:11% 8% 7% 8%;border:3px solid var(--court-line);border-radius:3px;
+.court{position:relative;width:100%;aspect-ratio:1.05;background:var(--court-surround);border:2px solid var(--border2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 70px rgba(0,0,0,.35)}
+/* parquet playing floor — your half (9×9m), net along the top, blue free zone behind */
+.court-floor{position:absolute;inset:10% 8% 24% 8%;border:3px solid var(--court-line);border-radius:3px;
   background:repeating-linear-gradient(90deg,rgba(120,72,20,.10) 0 1px,transparent 1px 13px),var(--court-floor);
   box-shadow:inset 0 0 55px rgba(120,72,20,.22),0 0 0 1px rgba(0,0,0,.12)}
 /* front zone (3m) — slightly warmer wood between net and the attack line */
@@ -222,7 +222,7 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .court-floor::after{content:"";position:absolute;left:0;right:0;top:38%;height:3px;margin-top:-1.5px;background:var(--court-line)}
 .court-lines{position:absolute;inset:0;pointer-events:none}
 /* net along the top, with tape + posts + antennas */
-.court-net{position:absolute;left:8%;right:8%;top:11%;height:13px;transform:translateY(-50%);
+.court-net{position:absolute;left:8%;right:8%;top:10%;height:13px;transform:translateY(-50%);
   background:repeating-linear-gradient(90deg,rgba(255,255,255,.32) 0 1px,transparent 1px 6px),
              repeating-linear-gradient(0deg,rgba(255,255,255,.32) 0 1px,transparent 1px 6px);
   border-top:3px solid #fff;border-bottom:2px solid rgba(255,255,255,.55);
@@ -231,7 +231,7 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
   background:repeating-linear-gradient(180deg,#ef4444 0 5px,#fff 5px 10px);box-shadow:0 0 4px rgba(0,0,0,.4)}
 .court-net::before{left:2%}.court-net::after{right:2%}
 .court-net>span{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:8px;letter-spacing:3px;font-weight:900;color:var(--muted)}
-.your-zone{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);font-size:9px;letter-spacing:3px;font-weight:900;color:rgba(70,45,12,.42);text-transform:uppercase}
+.your-zone{position:absolute;left:50%;bottom:1.5%;transform:translateX(-50%);font-size:8px;letter-spacing:3px;font-weight:900;color:rgba(255,255,255,.32);text-transform:uppercase}
 /* slots — compact jersey chips */
 .court-slot{position:absolute;width:18%;aspect-ratio:.92;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
   background:rgba(8,16,32,.62);backdrop-filter:blur(3px);border:1.5px solid rgba(255,255,255,.22);border-radius:13px;
@@ -1095,12 +1095,14 @@ const AI_TEAMS_WOMEN = [
   {nation:"Germany",flag:"🇩🇪",base:82},{nation:"Canada",flag:"🇨🇦",base:82},
 ];
 
-// Your half only — front row near the net, back row behind the attack line.
+// Your half only — 6 starters on the wood, libero in the blue free zone behind the court.
 const COURT_POS = [
   // front row (near net): OPP · MB · OH
-  [1, 22, 31],[4, 50, 31],[2, 78, 31],
-  // back row: OH · MB · S · LIBERO
-  [3, 18, 68],[5, 39, 68],[0, 60, 68],[6, 81, 68],
+  [1, 22, 27],[4, 50, 27],[2, 78, 27],
+  // back row: OH · MB · S
+  [3, 22, 56],[5, 50, 56],[0, 78, 56],
+  // libero — in the free zone (blue) behind the court
+  [6, 50, 87],
 ];
 const SLOTS = [
   {pos:"S",label:"SETTER"},{pos:"OPP",label:"OPPOSITE"},
