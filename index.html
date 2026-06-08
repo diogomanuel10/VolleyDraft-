@@ -241,6 +241,12 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .court-slot.selected{border-color:var(--blue);background:rgba(59,130,246,.2);box-shadow:0 0 16px rgba(59,130,246,.45);animation:pulse-blue 1.5s ease-in-out infinite}
 .court-slot.open{border-style:dashed;border-color:rgba(251,191,36,.6);background:rgba(245,158,11,.1)}
 .court-slot.filled{border-color:var(--green);background:linear-gradient(180deg,rgba(16,185,129,.28),rgba(8,16,32,.72))}
+/* libero — distinct jersey colour (free-zone specialist) */
+.court-slot.libero{border-color:rgba(168,85,247,.55);box-shadow:0 3px 12px rgba(168,85,247,.28)}
+.court-slot.libero.open{border-style:dashed;border-color:rgba(168,85,247,.7);background:rgba(168,85,247,.12)}
+.court-slot.libero.filled{border-color:#a855f7;background:linear-gradient(180deg,rgba(168,85,247,.34),rgba(8,16,32,.74))}
+.court-slot.libero .slot-pos-label{color:rgba(216,180,254,.95)}
+.court-slot.libero .slot-player-ovr{background:#a855f7;color:#fff}
 @keyframes pulse-blue{0%,100%{box-shadow:0 0 10px rgba(59,130,246,.3)}50%{box-shadow:0 0 20px rgba(59,130,246,.55)}}
 .slot-pos-label{font-size:7px;font-weight:800;letter-spacing:1px;color:rgba(255,255,255,.55);text-transform:uppercase;margin-bottom:1px}
 .slot-icon{font-size:16px;color:rgba(255,255,255,.4)}
@@ -1419,6 +1425,7 @@ function renderCourt(){
     const isOpen=!posMode&&!s.player;
     const div=document.createElement("div");
     let cls="court-slot";
+    if(s.pos==="L")cls+=" libero";
     if(s.player)cls+=" filled";
     else if(isSelected)cls+=" selected";
     else if(isOpen)cls+=" open";
