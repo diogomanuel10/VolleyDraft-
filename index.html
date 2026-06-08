@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#0a0e1a" />
-<title>VolleyDraft — Spin · Draft · Dominate</title>
-<meta name="description" content="VolleyDraft — spin for a nation and era, draft a lineup of real volleyball legends, and simulate a full VNL season." />
+<title>VolleyDraft (15-0) — Spin · Draft · Dominate</title>
+<meta name="description" content="VolleyDraft — spin for a nation and era, draft a lineup of real volleyball legends, and chase the perfect 15-0 VNL season." />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2046%2046'%3E%3Crect%20x='2'%20y='2'%20width='42'%20height='42'%20rx='11'%20fill='%23141b2e'/%3E%3Cpath%20d='M12%2013%20L23%2034%20L34%2013'%20fill='none'%20stroke='%23fbbf24'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='23'%20cy='16'%20r='3.6'%20fill='%23fde68a'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2046%2046'%3E%3Crect%20x='0'%20y='0'%20width='46'%20height='46'%20rx='10'%20fill='%23141b2e'/%3E%3Cpath%20d='M12%2013%20L23%2034%20L34%2013'%20fill='none'%20stroke='%23fbbf24'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='23'%20cy='16'%20r='3.6'%20fill='%23fde68a'/%3E%3C/svg%3E" />
 <style>
@@ -372,7 +372,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
     </div>
     <div>
       <div class="logo-text">Volley<em>Draft</em></div>
-      <div class="logo-sub">FIVB · VNL · Dream Team</div>
+      <div class="logo-sub">Chase the perfect 15-0</div>
     </div>
   </a>
   <div class="header-right">
@@ -586,7 +586,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
   <div class="footer-brand">🏐 Volley<em>Draft</em></div>
   <div class="footer-slogan">
     Spin the wheel of volleyball history, draft a lineup of real legends from FIVB's greatest
-    campaigns, and find out if your dream team can conquer a full VNL season.
+    campaigns, and find out if your dream team can go a perfect 15-0 through a full VNL season.
   </div>
   <div class="footer-actions">
     <a class="btn-feedback" href="mailto:diomanuel10@gmail.com?subject=VolleyDraft%20Feedback&body=Hi!%20Here's%20my%20feedback%20on%20VolleyDraft:%0A%0A">💬 Leave us feedback</a>
@@ -1456,22 +1456,27 @@ function teamStrength(r,variance=0){
 /* ── SEASON SIM ── */
 function simulateSeason(ratingVariance=0){
   const myStr=teamStrength(roster,ratingVariance);
-  const aiPool=currentAI();
-  const pool=[...aiPool].sort(()=>Math.random()-.5).slice(0,7)
-    .map(t=>({nation:t.nation,flag:t.flag,str:t.base+(Math.random()*6-3)}));
+  const pool=currentAI().map(t=>({nation:t.nation,flag:t.flag,str:t.base+(Math.random()*6-3)}));
   const me={nation:team.name,flag:team.flag,str:myStr,me:true};
   let teams=[me,...pool];
   teams.forEach(t=>{t.W=0;t.L=0;t.setW=0;t.setL=0;t.pts=0;});
+  // Preliminary phase: single round-robin among 13 teams → 12 matches each (VNL format)
   const prelim=[];
   for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++){const m=playMatch(teams[i],teams[j]);prelim.push(m);applyResult(teams[i],teams[j],m);}
   teams.sort((a,b)=>b.W-a.W||b.pts-a.pts||(b.setW-b.setL)-(a.setW-a.setL)||b.str-a.str);
   teams.forEach((t,i)=>t.rank=i+1);
-  const top4=teams.slice(0,4);
-  const sf1=playMatch(top4[0],top4[3]),sf2=playMatch(top4[1],top4[2]);
-  const w1=winnerOf(top4[0],top4[3],sf1),l1=loserOf(top4[0],top4[3],sf1);
-  const w2=winnerOf(top4[1],top4[2],sf2),l2=loserOf(top4[1],top4[2],sf2);
-  const bronze=playMatch(l1,l2),gold=playMatch(w1,w2);
-  const finals={sf:[{m:sf1,a:top4[0],b:top4[3]},{m:sf2,a:top4[1],b:top4[2]}],bronze:{m:bronze,winner:winnerOf(l1,l2,bronze)},gold:{m:gold,winner:winnerOf(w1,w2,gold),runner:loserOf(w1,w2,gold)}};
+  // Top 8 → knockout bracket: Quarterfinals (1v8, 2v7, 3v6, 4v5)
+  const t8=teams.slice(0,8);
+  const qf=[[t8[0],t8[7]],[t8[1],t8[6]],[t8[2],t8[5]],[t8[3],t8[4]]]
+    .map(([a,b])=>{const m=playMatch(a,b);return{m,a,b,winner:winnerOf(a,b,m)};});
+  // Semifinals: QF1w v QF4w, QF2w v QF3w
+  const sf=[[qf[0].winner,qf[3].winner],[qf[1].winner,qf[2].winner]]
+    .map(([a,b])=>{const m=playMatch(a,b);return{m,a,b,winner:winnerOf(a,b,m),loser:loserOf(a,b,m)};});
+  const bm=playMatch(sf[0].loser,sf[1].loser);
+  const gm=playMatch(sf[0].winner,sf[1].winner);
+  const finals={qf,sf,
+    bronze:{m:bm,a:sf[0].loser,b:sf[1].loser,winner:winnerOf(sf[0].loser,sf[1].loser,bm)},
+    gold:{m:gm,a:sf[0].winner,b:sf[1].winner,winner:winnerOf(sf[0].winner,sf[1].winner,gm),runner:loserOf(sf[0].winner,sf[1].winner,gm)}};
   finals.champion=finals.gold.winner;finals.silver=finals.gold.runner;finals.bronzeWinner=finals.bronze.winner;
   let medal="none";
   if(finals.champion?.me)medal="gold";
@@ -1502,8 +1507,9 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
     ${isLast?saveBlock:""}
     <div class="section-title">Preliminary Standings</div>
     <table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
-    ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=4?'<span class="finals-badge">FINALS</span>':''}</td><td class="tn">${t.flag} ${t.nation}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
+    ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${t.nation}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
     </table>
+    <div class="section-title">Quarterfinals</div>${finals.qf.map(x=>row(x.m)).join("")}
     <div class="section-title">Semifinals</div>${row(finals.sf[0].m)}${row(finals.sf[1].m)}
     <div class="section-title">Bronze Match</div>${row(finals.bronze.m)}
     <div class="section-title">🏆 Gold Match</div>${row(finals.gold.m)}
@@ -1558,10 +1564,10 @@ function showHowToPlay(){
       <li><strong style="color:var(--text)">🎰 Spin</strong> — hit <em>Spin</em> to draw a random <strong>nation + decade</strong> (e.g. Brazil · 2000s).</li>
       <li><strong style="color:var(--text)">✋ Draft</strong> — pick one <strong>real player</strong> from that squad to fill a court position (setter, outside, opposite, middle, libero).</li>
       <li><strong style="color:var(--text)">🔁 Repeat</strong> — keep spinning and drafting across the rounds until your <strong>starting six</strong> is complete.</li>
-      <li><strong style="color:var(--text)">🏐 Simulate</strong> — run a full <strong>VNL season</strong> with your line-up.</li>
+      <li><strong style="color:var(--text)">🏐 Simulate</strong> — run a full <strong>VNL season</strong>: 12 preliminary games, then quarterfinals, semifinals and the final.</li>
     </ol>
     <p style="margin:16px 0 0;padding:12px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px">
-      <strong style="color:var(--gold)">🏆 Goal:</strong> assemble the strongest balanced dream team you can, win the season, and climb the global leaderboard.
+      <strong style="color:var(--gold)">🏆 Goal:</strong> build the strongest balanced dream team you can and win it all — a perfect <strong>15-0</strong> season — then climb the global leaderboard.
     </p>
   </div>
   <div style="margin-top:18px"><button class="btn-primary" style="width:100%;padding:11px;font-size:13px" id="closeHowBtn">Got it — let's play</button></div>`;
