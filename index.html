@@ -363,6 +363,18 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
   table.lb th,table.lb td{padding:7px 6px}
   .lb-players{display:none}
   footer{padding:28px 16px}
+  /* mobile polish: prevent iOS focus-zoom (inputs must be ≥16px) */
+  input.cf-name,input.cf-sub-input{font-size:16px}
+  /* bigger touch targets for the dice / edit buttons */
+  .cf-roll{width:36px;height:36px;font-size:14px}
+  .cf-roll.big{width:48px;height:64px;font-size:20px}
+  .btn-edit-user,.btn-signout{padding:4px}
+  .club-setup{gap:10px}
+}
+/* snappier taps on touch devices (no 300ms delay, no grey flash) */
+@media(hover:none){
+  button,.toggle-btn,.pcard,.career-tab,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  .modal{-webkit-overflow-scrolling:touch}
 }
 </style>
 <!-- Vercel Web Analytics -->
