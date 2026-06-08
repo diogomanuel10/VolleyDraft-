@@ -376,6 +376,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
   <div class="header-right">
     <button class="btn-outline" id="lbBtn">🏆<span class="btn-lbl">&nbsp;Leaderboard</span></button>
     <div id="authArea"></div>
+    <button class="btn-icon" id="howBtn" title="How to Play">?</button>
     <button class="btn-icon" id="themeBtn" title="Toggle theme">🌙</button>
     <button class="btn-icon" id="resetBtn" title="New Game" style="display:none">↺</button>
   </div>
@@ -1545,6 +1546,26 @@ function startSimulation(){
   renderSeasonResult(result,1,settings.seasonMode==="career"?3:1);
 }
 
+/* ── HOW TO PLAY ── */
+function showHowToPlay(){
+  $("modal").innerHTML=`<div class="modal-header"><h2>🏐 How to Play</h2><button class="modal-close" id="closeModal">✕</button></div>
+  <div style="line-height:1.6;color:var(--text2);font-size:14px">
+    <p style="margin:0 0 16px"><strong style="color:var(--text)">VolleyDraft</strong> is a draft game: spin for a nation &amp; era, recruit real volleyball legends, build your dream six, then simulate a full VNL-style season.</p>
+    <ol style="margin:0;padding-left:20px;display:grid;gap:12px">
+      <li><strong style="color:var(--text)">🎰 Spin</strong> — hit <em>Spin</em> to draw a random <strong>nation + decade</strong> (e.g. Brazil · 2000s).</li>
+      <li><strong style="color:var(--text)">✋ Draft</strong> — pick one <strong>real player</strong> from that squad to fill a court position (setter, outside, opposite, middle, libero).</li>
+      <li><strong style="color:var(--text)">🔁 Repeat</strong> — keep spinning and drafting across the rounds until your <strong>starting six</strong> is complete.</li>
+      <li><strong style="color:var(--text)">🏐 Simulate</strong> — run a full <strong>VNL season</strong> with your line-up.</li>
+    </ol>
+    <p style="margin:16px 0 0;padding:12px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px">
+      <strong style="color:var(--gold)">🏆 Goal:</strong> assemble the strongest balanced dream team you can, win the season, and climb the global leaderboard.
+    </p>
+  </div>
+  <div style="margin-top:18px"><button class="btn-primary" style="width:100%;padding:11px;font-size:13px" id="closeHowBtn">Got it — let's play</button></div>`;
+  $("overlay").classList.add("show");
+  $("closeModal").onclick=$("closeHowBtn").onclick=()=>$("overlay").classList.remove("show");
+}
+
 /* ── LEADERBOARD ── */
 async function showLeaderboard(){
   $("modal").innerHTML=`<div class="modal-header"><h2>🏆 Global Leaderboard</h2><button class="modal-close" id="closeModal">✕</button></div><div style="text-align:center;padding:32px;color:var(--muted)">${sb?"Loading…":"Leaderboard unavailable (offline)."}</div>`;
@@ -1584,6 +1605,7 @@ $("rerollBtn").addEventListener("click",doReroll);
 $("seasonBtn").addEventListener("click",startSimulation);
 $("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
+$("howBtn").addEventListener("click",showHowToPlay);
 $("teamDice").addEventListener("click",rollAll);
 $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
