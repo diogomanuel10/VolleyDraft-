@@ -302,6 +302,33 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .so-name{font-size:11px;font-weight:700;margin:4px 0 2px;line-height:1.2}
 .so-ovr{font-size:18px;font-weight:900;color:var(--gold)}
 .so-from{font-size:9px;color:var(--muted);margin-top:2px}
+
+/* ── STREAK WIDGET ── */
+.streak-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.streak-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.streak-title{font-size:14px;font-weight:800;color:var(--text)}
+.streak-count{color:var(--gold)}
+.streak-days{display:flex;justify-content:space-between}
+.streak-day{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.streak-dot{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:2px solid var(--border2);transition:.2s}
+.streak-day.played .streak-dot{background:var(--gold);border-color:var(--gold2);box-shadow:0 0 8px rgba(245,158,11,.4)}
+.streak-day.today:not(.played) .streak-dot{border-color:var(--text2);background:var(--border)}
+.streak-lbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.3px}
+.streak-day.today .streak-lbl{color:var(--text)}
+.streak-hint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.4}
+
+/* ── MODE CARDS ── */
+.mode-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:560px){.mode-cards{grid-template-columns:1fr}}
+.mode-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);transition:border-color .18s,transform .15s}
+.mode-card:hover{transform:translateY(-2px);border-color:var(--border2)}
+.mode-card-icon{font-size:22px;line-height:1}
+.mode-card-name{font-size:17px;font-weight:900;letter-spacing:-.2px}
+.mode-card-desc{font-size:12px;color:var(--text2);line-height:1.5;flex:1;margin-top:2px}
+.mode-play-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:800;margin-top:6px;width:100%;font-family:inherit;cursor:pointer;border:none;box-shadow:0 3px 10px rgba(245,158,11,.3);transition:filter .15s}
+.mode-play-btn:hover{filter:brightness(1.07)}
+.mode-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:4px 0 18px;text-transform:uppercase;letter-spacing:1.5px}
+.mode-divider::before,.mode-divider::after{content:"";flex:1;height:1px;background:var(--border2)}
 .save-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:11px 13px;margin-bottom:14px}
 .save-info{flex:1;font-size:12px;color:var(--text2)}
 .btn-save{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;padding:8px 14px;border-radius:9px;font-size:12px;white-space:nowrap;flex:0 0 auto}
@@ -484,6 +511,45 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
       <div class="lobby-title">Volley<em>Draft</em></div>
       <div class="lobby-desc"><b>Spin · Draft · Dominate.</b><br>Spin for a nation &amp; era, draft a lineup of real volleyball legends, and simulate a full VNL season.</div>
     </div>
+
+    <div class="streak-card" id="streakWidget">
+      <div class="streak-header">
+        <div class="streak-title">🔥 Daily streak</div>
+      </div>
+      <div class="streak-days" id="streakDays">
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">M</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">T</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">W</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">T</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">F</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">S</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">S</div></div>
+      </div>
+      <div class="streak-hint" id="streakHint">Play daily to build a streak.</div>
+    </div>
+
+    <div class="mode-cards">
+      <div class="mode-card">
+        <div class="mode-card-icon">🎰</div>
+        <div class="mode-card-name">Classic</div>
+        <div class="mode-card-desc">Draft with full stats visible — make informed picks.</div>
+        <button class="mode-play-btn" data-mode="classic">Play →</button>
+      </div>
+      <div class="mode-card">
+        <div class="mode-card-icon">👑</div>
+        <div class="mode-card-name">Dynasty</div>
+        <div class="mode-card-desc">5 seasons with a transfer window — build a lasting legacy.</div>
+        <button class="mode-play-btn" data-mode="dynasty">Play →</button>
+      </div>
+      <div class="mode-card">
+        <div class="mode-card-icon">👁️</div>
+        <div class="mode-card-name">Elite</div>
+        <div class="mode-card-desc">Stats hidden — draft by memory and test your volleyball knowledge.</div>
+        <button class="mode-play-btn" data-mode="elite">Play →</button>
+      </div>
+    </div>
+
+    <div class="mode-divider">or customize</div>
 
     <div class="settings-card">
       <div class="settings-row">
@@ -1261,7 +1327,7 @@ async function initAuth(){
   const {data:{session}}=await sb.auth.getSession();
   currentUser=session?.user??null;renderAuth();applyCoach();
   sb.auth.onAuthStateChange((_e,session)=>{
-    currentUser=session?.user??null;renderAuth();applyCoach();
+    currentUser=session?.user??null;renderAuth();applyCoach();renderStreak();
     // Strip any leftover OAuth token from the URL so the next login starts clean.
     if(window.location.hash.includes('access_token')){
       try{history.replaceState(null,'',authRedirect());}catch(_){}
@@ -1466,6 +1532,56 @@ async function adminSave(){
   msg.classList.add("ok");msg.textContent="Saved & published — changes are live for everyone. 🎉";
 }
 
+/* ── DAILY STREAK ── */
+const DAY_LABELS=['M','T','W','T','F','S','S'];
+function todayStr(){return new Date().toISOString().split('T')[0];}
+function dayIdx(){const d=new Date().getDay();return d===0?6:d-1;} // Mon=0…Sun=6
+function mondayOf(str){const d=new Date(str);const day=d.getDay();const m=new Date(d);m.setDate(d.getDate()-(day===0?6:day-1));return m.toISOString().split('T')[0];}
+function getStreak(){try{return JSON.parse(localStorage.getItem('vd-streak')||'null')||{streak:0,lastPlayed:null,week:[false,false,false,false,false,false,false]};}catch{return{streak:0,lastPlayed:null,week:[false,false,false,false,false,false,false]};}}
+function updateStreak(){
+  const today=todayStr();
+  const data=getStreak();
+  if(data.lastPlayed===today){renderStreak();return;}
+  const yest=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  const streak=data.lastPlayed===yest?(data.streak||0)+1:1;
+  let week=[...(data.week||[false,false,false,false,false,false,false])];
+  if(data.lastPlayed&&mondayOf(today)!==mondayOf(data.lastPlayed))week=[false,false,false,false,false,false,false];
+  week[dayIdx()]=true;
+  localStorage.setItem('vd-streak',JSON.stringify({streak,lastPlayed:today,week}));
+  renderStreak();
+}
+function renderStreak(){
+  const daysEl=$("streakDays");const hintEl=$("streakHint");const hdrEl=document.querySelector(".streak-header");
+  if(!daysEl)return;
+  const data=getStreak();const di=dayIdx();const week=data.week||[false,false,false,false,false,false,false];
+  daysEl.innerHTML=DAY_LABELS.map((lbl,i)=>`<div class="streak-day${week[i]?' played':''}${i===di?' today':''}"><div class="streak-dot"></div><div class="streak-lbl">${lbl}</div></div>`).join('');
+  if(hintEl)hintEl.textContent=sb&&!currentUser?'Play daily to build a streak — sign up so it never resets.':'Play daily to build a streak.';
+  if(hdrEl){
+    const n=data.streak||0;
+    const saveBtn=sb&&!currentUser?`<button class="btn-outline" id="streakSaveBtn" style="font-size:11px;padding:5px 11px">Sign up to save</button>`:'';
+    hdrEl.innerHTML=`<div class="streak-title">🔥 Daily streak${n>0?` <span class="streak-count">· ${n} day${n!==1?'s':''}</span>`:''}</div>${saveBtn}`;
+    const ssb=$("streakSaveBtn");if(ssb)ssb.onclick=()=>openAuthModal('signin');
+  }
+}
+
+/* ── QUICK PLAY ── */
+function quickPlay(mode){
+  const presets={
+    classic:{draftMode:'squad',seasonMode:'prime',difficulty:'medium'},
+    dynasty:{draftMode:'squad',seasonMode:'dynasty',difficulty:'medium'},
+    elite:  {draftMode:'squad',seasonMode:'prime', difficulty:'elite'},
+  };
+  const p=presets[mode];if(!p)return;
+  Object.assign(settings,p);
+  // sync toggle UI
+  [['draftModeGroup','active-purple','draftMode'],['seasonModeGroup','active-blue','seasonMode'],['diffGroup','active-green','difficulty']].forEach(([gid,cls,key])=>{
+    const grp=$(gid);if(!grp)return;
+    grp.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active','active-purple','active-blue','active-green'));
+    const btn=grp.querySelector(`[data-val="${settings[key]}"]`);if(btn)btn.classList.add(cls);
+  });
+  startGame();
+}
+
 /* ── LOBBY ── */
 function setupLobby(){
   setupToggleGroup("genderGroup","active",v=>{settings.gender=v;});
@@ -1476,6 +1592,10 @@ function setupLobby(){
   $("lobbyVenue").addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);const tv=$("teamVenue");if(tv)tv.textContent=team.venue;});
   $("startBtn").onclick=startGame;
   $("logoHome").onclick=e=>{e.preventDefault();if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}};
+  document.querySelectorAll('.mode-play-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>quickPlay(btn.dataset.mode));
+  });
+  renderStreak();
 }
 function setupToggleGroup(groupId,activeClass,onChange){
   const grp=$(groupId);
@@ -1502,6 +1622,7 @@ function startGame(){
   $("lobbyArea").style.display="none";
   $("gameArea").style.display="";
   $("resetBtn").style.display="";
+  updateStreak();
   rerollsLeft=DIFF_CONFIG[settings.difficulty].rerolls;
   careerSeasons=[];careerSeason=0;dynastySeasons=[];dynastySeason=0;dynastyScore=0;
   renderTeam();
