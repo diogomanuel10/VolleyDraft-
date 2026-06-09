@@ -1331,8 +1331,8 @@ function openAuthModal(mode){
 }
 
 /* ── SQUAD DATA (remote, admin-editable) ── */
-const ADMIN_EMAIL="diomanuel10@gmail.com";
-function isAdmin(){return !!currentUser && (currentUser.email===ADMIN_EMAIL || currentUser.user_metadata?.email===ADMIN_EMAIL);}
+const ADMIN_EMAILS=["diomanuel10@gmail.com","silviaa.gracaa@gmail.com"];
+function isAdmin(){const e=currentUser?.email||currentUser?.user_metadata?.email;return !!e && ADMIN_EMAILS.includes(e);}
 async function loadSquads(){
   if(!sb)return;
   try{
