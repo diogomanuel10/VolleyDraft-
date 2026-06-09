@@ -1369,6 +1369,7 @@ function adminTeamBlock(t,i){
   return `<div class="admin-team">${head}<div class="admin-team-body">${meta}${rows}<button class="admin-addp" data-act="addp" data-ti="${i}">+ Add player</button><button class="admin-del" data-act="delteam" data-ti="${i}" style="align-self:flex-start;font-size:12px;color:var(--red)">🗑 Delete team</button></div></div>`;
 }
 function renderAdmin(){
+  const prevScroll=(document.getElementById("adminTeams")||{}).scrollTop||0;
   const list=adminData[adminGender];
   $("modal").innerHTML=`<div class="modal-header"><h2>⚙️ Squad Editor</h2><button class="modal-close" id="closeModal">✕</button></div>
     <div class="admin-tabs">
@@ -1410,6 +1411,8 @@ function renderAdmin(){
     else if(act==="delp"){adminData[adminGender][ti].players.splice(+b.dataset.pi,1);renderAdmin();}
     else if(act==="delteam"){if(confirm("Delete this team?")){adminData[adminGender].splice(ti,1);adminOpen=-1;renderAdmin();}}
   });
+  // keep the scroll position so clicking a team doesn't jump back to the top
+  teams.scrollTop=prevScroll;
 }
 // Merge pasted JSON into the editor: matches teams by gender+nation+era (replace), else adds.
 function adminImport(raw){
