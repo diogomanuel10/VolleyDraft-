@@ -286,6 +286,49 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .career-tabs{display:flex;gap:6px;margin-bottom:12px}
 .career-tab{flex:1;padding:8px;border-radius:9px;font-size:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
 .career-tab.active{background:rgba(245,158,11,.12);border-color:var(--gold);color:var(--gold)}
+.dynasty-banner{background:linear-gradient(135deg,rgba(167,139,250,.14),rgba(251,191,36,.08));border:1px solid var(--purple);border-radius:12px;padding:12px 15px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.dynasty-score-num{font-size:28px;font-weight:900;color:var(--purple);line-height:1}
+.dynasty-score-lbl{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.transfer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px}
+@media(max-width:480px){.transfer-grid{grid-template-columns:1fr}}
+.transfer-card{background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:9px 11px;display:flex;align-items:center;gap:8px}
+.transfer-card.swapping{border-color:var(--gold);background:rgba(245,158,11,.08)}
+.swap-btn{background:rgba(245,158,11,.12);border:1px solid var(--gold);color:var(--gold);padding:4px 8px;border-radius:7px;font-size:11px;font-weight:700;flex:0 0 auto;cursor:pointer;font-family:inherit}
+.swap-btn:disabled{opacity:.35;cursor:not-allowed}
+.swap-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:8px 0 10px}
+@media(max-width:480px){.swap-opts{grid-template-columns:1fr}}
+.swap-opt{background:var(--surface2);border:1.5px solid var(--border2);border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;transition:.15s}
+.swap-opt:hover{border-color:var(--gold);background:rgba(245,158,11,.08);transform:translateY(-1px)}
+.so-name{font-size:11px;font-weight:700;margin:4px 0 2px;line-height:1.2}
+.so-ovr{font-size:18px;font-weight:900;color:var(--gold)}
+.so-from{font-size:9px;color:var(--muted);margin-top:2px}
+
+/* ── STREAK WIDGET ── */
+.streak-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.streak-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.streak-title{font-size:14px;font-weight:800;color:var(--text)}
+.streak-count{color:var(--gold)}
+.streak-days{display:flex;justify-content:space-between}
+.streak-day{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.streak-dot{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:2px solid var(--border2);transition:.2s}
+.streak-day.played .streak-dot{background:var(--gold);border-color:var(--gold2);box-shadow:0 0 8px rgba(245,158,11,.4)}
+.streak-day.today:not(.played) .streak-dot{border-color:var(--text2);background:var(--border)}
+.streak-lbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.3px}
+.streak-day.today .streak-lbl{color:var(--text)}
+.streak-hint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.4}
+
+/* ── MODE CARDS ── */
+.mode-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:560px){.mode-cards{grid-template-columns:1fr}}
+.mode-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);transition:border-color .18s,transform .15s}
+.mode-card:hover{transform:translateY(-2px);border-color:var(--border2)}
+.mode-card-icon{font-size:22px;line-height:1}
+.mode-card-name{font-size:17px;font-weight:900;letter-spacing:-.2px}
+.mode-card-desc{font-size:12px;color:var(--text2);line-height:1.5;flex:1;margin-top:2px}
+.mode-play-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:800;margin-top:6px;width:100%;font-family:inherit;cursor:pointer;border:none;box-shadow:0 3px 10px rgba(245,158,11,.3);transition:filter .15s}
+.mode-play-btn:hover{filter:brightness(1.07)}
+.mode-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:4px 0 18px;text-transform:uppercase;letter-spacing:1.5px}
+.mode-divider::before,.mode-divider::after{content:"";flex:1;height:1px;background:var(--border2)}
 .save-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:11px 13px;margin-bottom:14px}
 .save-info{flex:1;font-size:12px;color:var(--text2)}
 .btn-save{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;padding:8px 14px;border-radius:9px;font-size:12px;white-space:nowrap;flex:0 0 auto}
@@ -469,6 +512,45 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
       <div class="lobby-desc"><b>Spin · Draft · Dominate.</b><br>Spin for a nation &amp; era, draft a lineup of real volleyball legends, and simulate a full VNL season.</div>
     </div>
 
+    <div class="streak-card" id="streakWidget">
+      <div class="streak-header">
+        <div class="streak-title">🔥 Daily streak</div>
+      </div>
+      <div class="streak-days" id="streakDays">
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">M</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">T</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">W</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">T</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">F</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">S</div></div>
+        <div class="streak-day"><div class="streak-dot"></div><div class="streak-lbl">S</div></div>
+      </div>
+      <div class="streak-hint" id="streakHint">Play daily to build a streak.</div>
+    </div>
+
+    <div class="mode-cards">
+      <div class="mode-card">
+        <div class="mode-card-icon">🎰</div>
+        <div class="mode-card-name">Classic</div>
+        <div class="mode-card-desc">Draft with full stats visible — make informed picks.</div>
+        <button class="mode-play-btn" data-mode="classic">Play →</button>
+      </div>
+      <div class="mode-card">
+        <div class="mode-card-icon">👑</div>
+        <div class="mode-card-name">Dynasty</div>
+        <div class="mode-card-desc">5 seasons with a transfer window — build a lasting legacy.</div>
+        <button class="mode-play-btn" data-mode="dynasty">Play →</button>
+      </div>
+      <div class="mode-card">
+        <div class="mode-card-icon">👁️</div>
+        <div class="mode-card-name">Elite</div>
+        <div class="mode-card-desc">Stats hidden — draft by memory and test your volleyball knowledge.</div>
+        <button class="mode-play-btn" data-mode="elite">Play →</button>
+      </div>
+    </div>
+
+    <div class="mode-divider">or customize</div>
+
     <div class="settings-card">
       <div class="settings-row">
         <div class="settings-label">Gender</div>
@@ -512,6 +594,11 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
             <span class="tb-icon">📅</span>
             <span class="tb-label">Career</span>
             <span class="tb-sub">3 seasons, form varies</span>
+          </button>
+          <button class="toggle-btn" data-val="dynasty">
+            <span class="tb-icon">👑</span>
+            <span class="tb-label">Dynasty</span>
+            <span class="tb-sub">5 seasons · transfers</span>
           </button>
         </div>
       </div>
@@ -1180,6 +1267,9 @@ let roster, spinning, pickedKeys, currentUser, rerollsLeft, selectedSlotIndex;
 let activeSquad = null;
 let careerSeasons = [];
 let careerSeason = 0;
+let dynastySeasons = [];
+let dynastySeason = 0;
+let dynastyScore = 0;
 let team = {name:"",short:"VD",flag:"🏐",color:"#f59e0b",venue:"",coach:"You"};
 
 /* ── HELPERS ── */
@@ -1237,7 +1327,7 @@ async function initAuth(){
   const {data:{session}}=await sb.auth.getSession();
   currentUser=session?.user??null;renderAuth();applyCoach();
   sb.auth.onAuthStateChange((_e,session)=>{
-    currentUser=session?.user??null;renderAuth();applyCoach();
+    currentUser=session?.user??null;renderAuth();applyCoach();renderStreak();
     // Strip any leftover OAuth token from the URL so the next login starts clean.
     if(window.location.hash.includes('access_token')){
       try{history.replaceState(null,'',authRedirect());}catch(_){}
@@ -1442,6 +1532,56 @@ async function adminSave(){
   msg.classList.add("ok");msg.textContent="Saved & published — changes are live for everyone. 🎉";
 }
 
+/* ── DAILY STREAK ── */
+const DAY_LABELS=['M','T','W','T','F','S','S'];
+function todayStr(){return new Date().toISOString().split('T')[0];}
+function dayIdx(){const d=new Date().getDay();return d===0?6:d-1;} // Mon=0…Sun=6
+function mondayOf(str){const d=new Date(str);const day=d.getDay();const m=new Date(d);m.setDate(d.getDate()-(day===0?6:day-1));return m.toISOString().split('T')[0];}
+function getStreak(){try{return JSON.parse(localStorage.getItem('vd-streak')||'null')||{streak:0,lastPlayed:null,week:[false,false,false,false,false,false,false]};}catch{return{streak:0,lastPlayed:null,week:[false,false,false,false,false,false,false]};}}
+function updateStreak(){
+  const today=todayStr();
+  const data=getStreak();
+  if(data.lastPlayed===today){renderStreak();return;}
+  const yest=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  const streak=data.lastPlayed===yest?(data.streak||0)+1:1;
+  let week=[...(data.week||[false,false,false,false,false,false,false])];
+  if(data.lastPlayed&&mondayOf(today)!==mondayOf(data.lastPlayed))week=[false,false,false,false,false,false,false];
+  week[dayIdx()]=true;
+  localStorage.setItem('vd-streak',JSON.stringify({streak,lastPlayed:today,week}));
+  renderStreak();
+}
+function renderStreak(){
+  const daysEl=$("streakDays");const hintEl=$("streakHint");const hdrEl=document.querySelector(".streak-header");
+  if(!daysEl)return;
+  const data=getStreak();const di=dayIdx();const week=data.week||[false,false,false,false,false,false,false];
+  daysEl.innerHTML=DAY_LABELS.map((lbl,i)=>`<div class="streak-day${week[i]?' played':''}${i===di?' today':''}"><div class="streak-dot"></div><div class="streak-lbl">${lbl}</div></div>`).join('');
+  if(hintEl)hintEl.textContent=sb&&!currentUser?'Play daily to build a streak — sign up so it never resets.':'Play daily to build a streak.';
+  if(hdrEl){
+    const n=data.streak||0;
+    const saveBtn=sb&&!currentUser?`<button class="btn-outline" id="streakSaveBtn" style="font-size:11px;padding:5px 11px">Sign up to save</button>`:'';
+    hdrEl.innerHTML=`<div class="streak-title">🔥 Daily streak${n>0?` <span class="streak-count">· ${n} day${n!==1?'s':''}</span>`:''}</div>${saveBtn}`;
+    const ssb=$("streakSaveBtn");if(ssb)ssb.onclick=()=>openAuthModal('signin');
+  }
+}
+
+/* ── QUICK PLAY ── */
+function quickPlay(mode){
+  const presets={
+    classic:{draftMode:'squad',seasonMode:'prime',difficulty:'medium'},
+    dynasty:{draftMode:'squad',seasonMode:'dynasty',difficulty:'medium'},
+    elite:  {draftMode:'squad',seasonMode:'prime', difficulty:'elite'},
+  };
+  const p=presets[mode];if(!p)return;
+  Object.assign(settings,p);
+  // sync toggle UI
+  [['draftModeGroup','active-purple','draftMode'],['seasonModeGroup','active-blue','seasonMode'],['diffGroup','active-green','difficulty']].forEach(([gid,cls,key])=>{
+    const grp=$(gid);if(!grp)return;
+    grp.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active','active-purple','active-blue','active-green'));
+    const btn=grp.querySelector(`[data-val="${settings[key]}"]`);if(btn)btn.classList.add(cls);
+  });
+  startGame();
+}
+
 /* ── LOBBY ── */
 function setupLobby(){
   setupToggleGroup("genderGroup","active",v=>{settings.gender=v;});
@@ -1452,6 +1592,10 @@ function setupLobby(){
   $("lobbyVenue").addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);const tv=$("teamVenue");if(tv)tv.textContent=team.venue;});
   $("startBtn").onclick=startGame;
   $("logoHome").onclick=e=>{e.preventDefault();if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}};
+  document.querySelectorAll('.mode-play-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>quickPlay(btn.dataset.mode));
+  });
+  renderStreak();
 }
 function setupToggleGroup(groupId,activeClass,onChange){
   const grp=$(groupId);
@@ -1478,8 +1622,9 @@ function startGame(){
   $("lobbyArea").style.display="none";
   $("gameArea").style.display="";
   $("resetBtn").style.display="";
+  updateStreak();
   rerollsLeft=DIFF_CONFIG[settings.difficulty].rerolls;
-  careerSeasons=[];careerSeason=0;
+  careerSeasons=[];careerSeason=0;dynastySeasons=[];dynastySeason=0;dynastyScore=0;
   renderTeam();
   resetGame();
 }
@@ -1491,7 +1636,7 @@ function renderRoundUI(){
   const dots=$("roundDots");dots.innerHTML="";
   for(let i=0;i<7;i++){const d=document.createElement("div");d.className="round-dot"+(i<filled?" done":i===filled?" active":"");dots.appendChild(d);}
   const gLabel=settings.gender==="women"?"♀ Women":"♂ Men";
-  $("genderBadge").textContent=gLabel+(settings.draftMode==="position"?" · Pos First":"")+(settings.seasonMode==="career"?" · Career":"");
+  $("genderBadge").textContent=gLabel+(settings.draftMode==="position"?" · Pos First":"")+(settings.seasonMode==="career"?" · Career":settings.seasonMode==="dynasty"?" · Dynasty":"");
   if(rerollsLeft>0){$("rerollBadge").style.display="flex";$("rerollCount").textContent=rerollsLeft;}
   else{$("rerollBadge").style.display="none";}
   if(settings.draftMode==="position"){
@@ -1669,6 +1814,12 @@ function teamStrength(r,variance=0){
   return w/tot;
 }
 
+/* ── DYNASTY HELPERS ── */
+function dynastyMedalPts(medal){return{gold:100,silver:60,bronze:30,none:0}[medal]??0;}
+function dynastyPrelimBonus(rank){return Math.max(0,(9-rank)*4);}
+function dynastyVariance(seasonIdx){return[0,2,4,5,6][seasonIdx]??6;}
+function dynastyTransferBudget(medal){return medal==="gold"?2:1;}
+
 /* ── SEASON SIM ── */
 function simulateSeason(ratingVariance=0){
   const myStr=teamStrength(roster,ratingVariance);
@@ -1712,13 +1863,16 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   const side=(t,r)=>`<div class="match-team ${r?"right":""} ${t.me?"you":""}">${r?"":` <span>${t.flag}</span>`}<span>${esc(t.nation)}</span>${r?`<span>${t.flag}</span>`:""}</div>`;
   const row=m=>`<div class="match">${side(m.a,false)}<div class="match-score"><span class="${m.aWon?"w":"l"}">${m.sa}</span>&nbsp;–&nbsp;<span class="${m.aWon?"l":"w"}">${m.sb}</span></div>${side(m.b,true)}</div>`;
   const isCareer=settings.seasonMode==="career";
-  const isLast=!isCareer||seasonNum>=totalSeasons;
+  const isDynasty=settings.seasonMode==="dynasty";
+  const isLast=(!isCareer&&!isDynasty)||seasonNum>=totalSeasons;
   const saveBlock=currentUser
     ?`<div class="save-row"><div class="save-info">Saving as <b>${esc(userName())}</b> — save to leaderboard?</div><button class="btn-save" id="saveScoreBtn">💾 Save</button></div>`
     :`<div class="save-row"><div class="save-info">Sign in to save your score.</div><button class="btn-google" id="saveSignInBtn"><svg viewBox="0 0 48 48" style="width:14px;height:14px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in</button></div>`;
-  const careerHeader=isCareer?`<div style="display:flex;gap:8px;margin-bottom:12px">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" onclick="window._careerTab(${i})">${i+1===seasonNum?`Season ${i+1} ▶`:`Season ${i+1}${careerSeasons[i]?` ${MEDAL_EMOJI[careerSeasons[i].medal]}`:""}`}</button>`).join("")}</div>`:"";
-  let html=`<div class="modal-header"><h2>🏐 VNL ${isCareer?`Season ${seasonNum}/${totalSeasons}`:"Season Result"}</h2><button class="modal-close" id="closeModal">✕</button></div>
+  const careerHeader=(isCareer||isDynasty)?`<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" onclick="window._careerTab(${i})">${i+1===seasonNum?`S${i+1} ▶`:`S${i+1}${careerSeasons[i]?` ${MEDAL_EMOJI[careerSeasons[i].medal]}`:""}`}</button>`).join("")}</div>`:"";
+  const dynastyBanner=isDynasty?`<div class="dynasty-banner"><div><div class="dynasty-score-lbl">Dynasty Score</div><div class="dynasty-score-num">${dynastyScore}</div></div><div style="flex:1;text-align:right;color:var(--text2);font-size:11px;line-height:1.6">Season ${seasonNum}/${totalSeasons}<br>${dynastySeasons.map(s=>MEDAL_EMOJI[s.medal]).join(" ")}</div></div>`:"";
+  let html=`<div class="modal-header"><h2>${isDynasty?"👑":"🏐"} VNL ${(isCareer||isDynasty)?`Season ${seasonNum}/${totalSeasons}`:"Season Result"}${isDynasty?" — Dynasty":""}</h2><button class="modal-close" id="closeModal">✕</button></div>
     ${careerHeader}
+    ${dynastyBanner}
     <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.flag} ${esc(team.name)}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${esc(team.coach)} · 🏟 ${esc(team.venue)}</div></div>
     ${isLast?saveBlock:""}
     <div class="section-title">Preliminary Standings</div>
@@ -1732,7 +1886,7 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
     <div style="text-align:center;font-size:12px;color:var(--text2);margin:8px 0 12px">🥇 ${finals.champion.flag} ${esc(finals.champion.nation)} &nbsp;·&nbsp; 🥈 ${finals.silver.flag} ${esc(finals.silver.nation)} &nbsp;·&nbsp; 🥉 ${finals.bronzeWinner.flag} ${esc(finals.bronzeWinner.nation)}</div>
     <div class="section-title">All Prelim Matches</div>${prelim.map(row).join("")}
     <div style="margin-top:14px;display:flex;gap:8px">
-      ${!isLast?`<button class="btn-primary" style="flex:1;padding:12px;font-size:14px" id="nextSeasonBtn">▶ Season ${seasonNum+1}</button>`:""}
+      ${!isLast?`<button class="btn-primary" style="flex:1;padding:12px;font-size:14px" id="nextSeasonBtn">${isDynasty?"↕ Transfer Window · S"+(seasonNum+1):"▶ Season "+(seasonNum+1)}</button>`:""}
       <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="playAgain">↺ New Draft</button>
     </div>`;
   $("modal").innerHTML=html;
@@ -1741,11 +1895,8 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   $("playAgain").onclick=()=>{$("overlay").classList.remove("show");showLobby();};
   if(!isLast){
     $("nextSeasonBtn").onclick=()=>{
-      const variance=careerSeason===1?3:5;
-      const next=simulateSeason(variance);
-      careerSeasons.push(next);
-      careerSeason++;
-      renderSeasonResult(next,careerSeason,totalSeasons);
+      if(isDynasty){showDynastyTransfer(seasonNum,medal,totalSeasons);}
+      else{const variance=careerSeason===1?3:5;const next=simulateSeason(variance);careerSeasons.push(next);careerSeason++;renderSeasonResult(next,careerSeason,totalSeasons);}
     };
   }
   if(currentUser&&isLast){
@@ -1761,14 +1912,131 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   }else if($("saveSignInBtn")){
     $("saveSignInBtn").onclick=()=>openAuthModal('signin');
   }
-  window._careerTab=i=>{if(careerSeasons[i])renderSeasonResult(careerSeasons[i],i+1,3);};
+  window._careerTab=i=>{if(careerSeasons[i])renderSeasonResult(careerSeasons[i],i+1,totalSeasons);};
+}
+
+/* ── DYNASTY TRANSFER WINDOW ── */
+function showDynastyTransfer(seasonNum, medal, totalSeasons) {
+  const budget = dynastyTransferBudget(medal);
+  let swapsDone = 0;
+  let swapSlotIdx = -1;
+  let cachedOptions = [];
+
+  function getSwapOptions(pos) {
+    const squads = currentSquads();
+    const shuffled = [...squads].sort(() => Math.random() - .5);
+    const opts = [];
+    const taken = new Set([...pickedKeys]);
+    for (const sq of shuffled) {
+      if (opts.length >= 3) break;
+      const pool = sq.players.filter(p => p.pos === pos && !taken.has(playerKey(p)));
+      if (!pool.length) continue;
+      const p = pool[Math.floor(Math.random() * pool.length)];
+      opts.push({...p, _from: `${sq.nation} ${sq.era}`, _flag: sq.flag, _display: `${sq.flag} ${sq.nation} ${sq.era}`});
+      taken.add(playerKey(p));
+    }
+    return opts;
+  }
+
+  function render() {
+    const remaining = budget - swapsDone;
+    const nextSeason = seasonNum + 1;
+    const hideOvr = DIFF_CONFIG[settings.difficulty].hideRatings;
+
+    const rosterHtml = roster.map((slot, i) => {
+      const p = slot.player;
+      if (!p) return '';
+      const canSwap = remaining > 0 && swapSlotIdx === -1;
+      const isSwapping = i === swapSlotIdx;
+      return `<div class="transfer-card${isSwapping ? ' swapping' : ''}">
+        <div class="pos-pill pos-${slot.pos}">${slot.pos}</div>
+        <div style="flex:1;min-width:0">
+          <div class="pname">${esc(p.name)}</div>
+          <div style="font-size:9.5px;color:var(--muted);margin-top:1px">${esc(p.flag||'')} ${esc(p.from||'')}</div>
+        </div>
+        <span style="font-size:15px;font-weight:900;color:var(--gold);margin-right:2px">${hideOvr?'?':p.ovr}</span>
+        ${isSwapping ? '<span style="font-size:10px;color:var(--gold)">picking…</span>' : canSwap ? `<button class="swap-btn" onclick="window._dynSwap(${i})">↕</button>` : ''}
+      </div>`;
+    }).join('');
+
+    let swapHtml = '';
+    if (swapSlotIdx !== -1) {
+      const slot = roster[swapSlotIdx];
+      swapHtml = `<div class="section-title">Choose a ${POS_NAME[slot.pos]} to sign</div>
+        <div class="swap-opts">
+          ${cachedOptions.map((p, i) => `<div class="swap-opt" onclick="window._dynPick(${i})">
+            <div class="pos-pill pos-${slot.pos}" style="margin:0 auto 5px;width:30px;height:30px;font-size:9px">${slot.pos}</div>
+            <div class="so-name">${esc(p.name)}</div>
+            <div class="so-ovr">${hideOvr ? '?' : p.ovr}</div>
+            <div class="so-from">${esc(p._display)}</div>
+          </div>`).join('')}
+        </div>
+        <button class="btn-outline" style="width:100%;margin-bottom:8px;font-size:12px" onclick="window._dynCancel()">✕ Cancel</button>`;
+    }
+
+    $("modal").innerHTML = `
+      <div class="modal-header"><h2>👑 Transfer Window — Season ${nextSeason}</h2><button class="modal-close" id="closeModal">✕</button></div>
+      <div class="dynasty-banner">
+        <div><div class="dynasty-score-lbl">Dynasty Score</div><div class="dynasty-score-num">${dynastyScore}</div></div>
+        <div style="flex:1;text-align:right;color:var(--text2);font-size:11px;line-height:1.6">${remaining} swap${remaining !== 1 ? 's' : ''} left<br>${MEDAL_EMOJI[medal]} S${seasonNum} · ${dynastySeasons.map(s=>MEDAL_EMOJI[s.medal]).join(' ')}</div>
+      </div>
+      <div class="section-title">Your Squad · Entering Season ${nextSeason}</div>
+      <div class="transfer-grid">${rosterHtml}</div>
+      ${swapHtml}
+      ${swapSlotIdx === -1 ? `<button class="btn-primary" style="width:100%;padding:13px;font-size:14px;margin-top:4px" id="dynastyNextBtn">▶ Simulate Season ${nextSeason}</button>` : ''}
+    `;
+    $("overlay").classList.add("show");
+    $("closeModal").onclick = () => $("overlay").classList.remove("show");
+
+    window._dynSwap = i => {
+      swapSlotIdx = i;
+      cachedOptions = getSwapOptions(roster[i].pos);
+      render();
+    };
+    window._dynPick = i => {
+      const p = cachedOptions[i];
+      const slot = roster[swapSlotIdx];
+      pickedKeys.delete(playerKey(slot.player));
+      slot.player = {...p, from: p._from, flag: p._flag};
+      pickedKeys.add(playerKey(slot.player));
+      swapsDone++;
+      swapSlotIdx = -1;
+      cachedOptions = [];
+      render();
+      renderCourt();
+    };
+    window._dynCancel = () => {
+      swapSlotIdx = -1;
+      cachedOptions = [];
+      render();
+    };
+
+    const nextBtn = $("dynastyNextBtn");
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        const variance = dynastyVariance(seasonNum);
+        const next = simulateSeason(variance);
+        dynastySeasons.push(next);
+        dynastySeason++;
+        careerSeasons.push(next);
+        careerSeason++;
+        dynastyScore += dynastyMedalPts(next.medal) + dynastyPrelimBonus(next.me.rank);
+        renderSeasonResult(next, dynastySeason, totalSeasons);
+      };
+    }
+  }
+
+  render();
 }
 
 function startSimulation(){
   if(!rosterFull())return;
+  const isDynasty=settings.seasonMode==="dynasty";
+  const totalSeasons=settings.seasonMode==="career"?3:isDynasty?5:1;
   const result=simulateSeason();
   careerSeasons=[result];careerSeason=1;
-  renderSeasonResult(result,1,settings.seasonMode==="career"?3:1);
+  if(isDynasty){dynastySeasons=[result];dynastySeason=1;dynastyScore=dynastyMedalPts(result.medal)+dynastyPrelimBonus(result.me.rank);}
+  renderSeasonResult(result,1,totalSeasons);
 }
 
 /* ── HOW TO PLAY ── */
