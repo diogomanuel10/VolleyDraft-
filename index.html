@@ -496,6 +496,16 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
 /* ── DYNASTY SCREENS ── */
 .dynasty-screen-wrap{max-width:600px;margin:0 auto;padding:28px 20px 80px}
 .standings-scroll{max-height:250px;overflow-y:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:8px}
+
+/* ── NAV DROPDOWN MENU ── */
+.nav-menu{position:absolute;top:calc(100% + 6px);right:12px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.5);padding:6px;z-index:51;min-width:200px;display:none;flex-direction:column;animation:modalIn .15s ease}
+.nav-menu.open{display:flex}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;background:none;border:none;color:var(--text);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left;width:100%;transition:.1s}
+.nav-item:hover{background:var(--surface2)}
+.nav-item-em{font-size:17px;line-height:1;flex:0 0 auto}
+.nav-item-danger{color:var(--red)}
+.nav-item-danger:hover{background:rgba(248,113,113,.08)}
+.nav-divider{height:1px;background:var(--border);margin:4px 0}
 </style>
 <!-- Vercel Web Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
@@ -523,12 +533,16 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
     </div>
   </a>
   <div class="header-right">
-    <button class="btn-outline" id="lbBtn">🏆<span class="btn-lbl">&nbsp;Leaderboard</span></button>
     <div id="authArea"></div>
-    <button class="btn-icon" id="adminBtn" title="Squad Editor (admin)" style="display:none">⚙️</button>
-    <button class="btn-icon" id="howBtn" title="How to Play">?</button>
-    <button class="btn-icon" id="themeBtn" title="Toggle theme">🌙</button>
-    <button class="btn-icon" id="resetBtn" title="New Game" style="display:none">↺</button>
+    <button class="btn-icon" id="menuBtn" title="Menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="nav-menu" id="navMenu">
+    <button class="nav-item" id="lbBtn"><span class="nav-item-em">🏆</span>Leaderboard</button>
+    <button class="nav-item" id="howBtn"><span class="nav-item-em">❓</span>How to Play</button>
+    <button class="nav-item" id="themeBtn"><span class="nav-item-em">🌙</span>Toggle theme</button>
+    <div class="nav-divider"></div>
+    <button class="nav-item" id="adminBtn" style="display:none"><span class="nav-item-em">⚙️</span>Squad Editor</button>
+    <button class="nav-item nav-item-danger" id="resetBtn" style="display:none"><span class="nav-item-em">↺</span>New Draft</button>
   </div>
 </header>
 
@@ -1290,16 +1304,17 @@ function renderTeam(){
 }
 
 /* ── THEME ── */
+function setThemeIcon(t){const em=$("themeBtn")?.querySelector(".nav-item-em");if(em)em.textContent=t==="dark"?"🌙":"☀️";}
 function initTheme(){
   const saved=localStorage.getItem("vd-theme")||"dark";
   document.documentElement.dataset.theme=saved;
-  $("themeBtn").textContent=saved==="dark"?"🌙":"☀️";
+  setThemeIcon(saved);
 }
 function toggleTheme(){
   const next=document.documentElement.dataset.theme==="dark"?"light":"dark";
   document.documentElement.dataset.theme=next;
   localStorage.setItem("vd-theme",next);
-  $("themeBtn").textContent=next==="dark"?"🌙":"☀️";
+  setThemeIcon(next);
 }
 
 /* ── AUTH ── */
@@ -2317,14 +2332,21 @@ function resetGame(){
 
 /* ── INIT ── */
 initTheme();
+// Nav dropdown
+const _navMenu=$("navMenu"),_menuBtn=$("menuBtn");
+_menuBtn.addEventListener("click",e=>{e.stopPropagation();_navMenu.classList.toggle("open");_menuBtn.setAttribute("aria-expanded",_navMenu.classList.contains("open"));});
+document.addEventListener("click",()=>{_navMenu.classList.remove("open");_menuBtn.setAttribute("aria-expanded","false");});
+_navMenu.addEventListener("click",()=>{_navMenu.classList.remove("open");_menuBtn.setAttribute("aria-expanded","false");});
+// Nav actions
 $("themeBtn").addEventListener("click",toggleTheme);
-$("spinBtn").addEventListener("click",spin);
-$("rerollBtn").addEventListener("click",doReroll);
-$("seasonBtn").addEventListener("click",startSimulation);
-$("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
 $("howBtn").addEventListener("click",showHowToPlay);
 $("adminBtn").addEventListener("click",openAdmin);
+$("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
+// Game actions
+$("spinBtn").addEventListener("click",spin);
+$("rerollBtn").addEventListener("click",doReroll);
+$("seasonBtn").addEventListener("click",startSimulation);
 $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
