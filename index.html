@@ -105,10 +105,11 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .toggle-btn.active-purple{background:rgba(139,92,246,.12);border-color:var(--purple);color:var(--purple)}
 .toggle-btn.active-blue{background:rgba(59,130,246,.12);border-color:var(--blue);color:var(--blue)}
 .toggle-btn.active-green{background:rgba(16,185,129,.12);border-color:var(--green);color:var(--green)}
+.toggle-btn.active-orange{background:rgba(249,115,22,.12);border-color:#f97316;color:#f97316}
 .toggle-btn .tb-icon{font-size:18px;display:block;margin-bottom:3px}
 .toggle-btn .tb-label{display:block;font-size:11px;font-weight:800}
 .toggle-btn .tb-sub{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:1px}
-.toggle-btn.active .tb-sub,.toggle-btn.active-purple .tb-sub,.toggle-btn.active-blue .tb-sub,.toggle-btn.active-green .tb-sub{color:inherit;opacity:.75}
+.toggle-btn.active .tb-sub,.toggle-btn.active-purple .tb-sub,.toggle-btn.active-blue .tb-sub,.toggle-btn.active-green .tb-sub,.toggle-btn.active-orange .tb-sub{color:inherit;opacity:.75}
 .start-btn{width:100%;padding:16px;border-radius:14px;font-size:17px;letter-spacing:.5px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;box-shadow:0 6px 24px rgba(245,158,11,.4);margin-top:8px}
 .start-btn:hover{filter:brightness(1.08)}
 
@@ -1262,7 +1263,7 @@ const DIFF_CONFIG = {
    monogram in the club's real brand colours. Names, venues, coaches and
    colours are real (recent seasons). */
 /* ── SETTINGS STATE ── */
-let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium"};
+let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium",eras:["1990s","2000s","2010s","2020s"]};
 
 /* ── GAME STATE ── */
 let roster, spinning, pickedKeys, currentUser, rerollsLeft, selectedSlotIndex;
@@ -1288,7 +1289,7 @@ function nextOpenIndex(){return roster.findIndex(s=>!s.player)}
 function rosterFull(){return roster.every(s=>s.player)}
 function playerKey(p){return p.name+"|"+p.pos}
 function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
-function currentSquads(){return settings.gender==="women"?liveSquads.women:liveSquads.men}
+function currentSquads(){const all=settings.gender==="women"?liveSquads.women:liveSquads.men;return settings.eras&&settings.eras.length?all.filter(sq=>settings.eras.includes(sq.era)):all;}
 function currentAI(){return settings.gender==="women"?AI_TEAMS_WOMEN:AI_TEAMS_MEN}
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -1806,6 +1807,12 @@ function openModeSettings(mode){
           <button class="toggle-btn${g('elite',settings.difficulty,'active-green')}" data-val="elite"><span class="tb-icon">👁️</span><span class="tb-label">Elite</span><span class="tb-sub">No rerolls · hidden ratings</span></button>
         </div>
       </div>
+      <div class="settings-row">
+        <div class="settings-label">Era Pool</div>
+        <div class="toggle-group era-toggle-group" id="msEras">
+          ${["1990s","2000s","2010s","2020s"].map(era=>`<button class="toggle-btn${settings.eras.includes(era)?' active-orange':''}" data-era="${era}"><span class="tb-icon">📅</span><span class="tb-label">${era}</span></button>`).join('')}
+        </div>
+      </div>
       <div class="settings-row" style="margin-bottom:0">
         <div class="settings-label">Your Team</div>
         <div class="club-setup">
@@ -1823,6 +1830,19 @@ function openModeSettings(mode){
     setupToggleGroup("msGender","active",v=>{settings.gender=v;render();});
     setupToggleGroup("msDraft","active-purple",v=>{settings.draftMode=v;render();});
     setupToggleGroup("msDiff","active-green",v=>{settings.difficulty=v;render();});
+    document.querySelectorAll("#msEras .toggle-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const era=btn.dataset.era;
+        if(settings.eras.includes(era)){
+          if(settings.eras.length===1)return; // keep at least one
+          settings.eras=settings.eras.filter(e=>e!==era);
+          btn.classList.remove("active-orange");
+        }else{
+          settings.eras=[...settings.eras,era];
+          btn.classList.add("active-orange");
+        }
+      });
+    });
     const mstn=$("msTeamName");
     if(mstn) mstn.addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const mc=$("msCrest");if(mc)mc.textContent=initials(team.name||'My Team');});
     const msvn=$("msVenue");
