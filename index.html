@@ -338,6 +338,25 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
 .auth-msg{font-size:12px;text-align:center;min-height:15px;line-height:1.4}
 .auth-msg.err{color:var(--red)}.auth-msg.ok{color:var(--green)}
 
+/* ── ADMIN EDITOR ── */
+.admin-tabs{display:flex;gap:8px;margin-bottom:10px}
+.admin-tab{flex:1;padding:8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-weight:700;font-size:13px}
+.admin-tab.on{border-color:var(--gold);color:var(--gold)}
+.admin-teams{max-height:55vh;overflow:auto;display:flex;flex-direction:column;gap:6px;margin:-2px -2px 0;padding:2px}
+.admin-team{border:1px solid var(--border2);border-radius:9px;background:var(--surface)}
+.admin-team-h{display:flex;align-items:center;gap:8px;padding:9px 11px;cursor:pointer;font-size:13px}
+.admin-team-h .era{color:var(--muted);font-weight:600;font-size:11px}
+.admin-team-body{padding:0 11px 11px;display:flex;flex-direction:column;gap:6px}
+.admin-meta{display:flex;gap:6px;margin-bottom:2px}
+.admin-row{display:grid;grid-template-columns:1fr 62px 46px 50px 24px;gap:5px;align-items:center}
+.admin-in{width:100%;padding:6px 7px;border-radius:7px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-size:13px;outline:none}
+.admin-in:focus{border-color:var(--gold)}
+.admin-del{background:none;color:var(--muted);font-size:14px;padding:0}
+.admin-del:hover{color:var(--red)}
+.admin-add,.admin-addp{width:100%;padding:8px;border-radius:8px;background:var(--surface2);border:1px dashed var(--border2);color:var(--text2);font-size:12px;margin-top:6px}
+.admin-add:hover,.admin-addp:hover{border-color:var(--gold);color:var(--gold)}
+.admin-actions{margin-top:12px}
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .game-grid{grid-template-columns:1fr}
@@ -422,6 +441,7 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
   <div class="header-right">
     <button class="btn-outline" id="lbBtn">🏆<span class="btn-lbl">&nbsp;Leaderboard</span></button>
     <div id="authArea"></div>
+    <button class="btn-icon" id="adminBtn" title="Squad Editor (admin)" style="display:none">⚙️</button>
     <button class="btn-icon" id="howBtn" title="How to Play">?</button>
     <button class="btn-icon" id="themeBtn" title="Toggle theme">🌙</button>
     <button class="btn-icon" id="resetBtn" title="New Game" style="display:none">↺</button>
@@ -1103,6 +1123,8 @@ const PLAYER_INFO = {
 
 /* merge real data onto squad players */
 [...SQUADS_MEN,...SQUADS_WOMEN].forEach(sq=>sq.players.forEach(p=>{const i=PLAYER_INFO[p.name];if(i){p.ht=i.ht;}}));
+// Built-in squads are the fallback; liveSquads may be replaced by data loaded from Supabase (admin-editable).
+let liveSquads = {men:SQUADS_MEN, women:SQUADS_WOMEN};
 
 // AI base strengths tuned down by 3 vs real form so medals are more attainable.
 const AI_TEAMS_MEN = [
@@ -1174,7 +1196,7 @@ function nextOpenIndex(){return roster.findIndex(s=>!s.player)}
 function rosterFull(){return roster.every(s=>s.player)}
 function playerKey(p){return p.name+"|"+p.pos}
 function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
-function currentSquads(){return settings.gender==="women"?SQUADS_WOMEN:SQUADS_MEN}
+function currentSquads(){return settings.gender==="women"?liveSquads.women:liveSquads.men}
 function currentAI(){return settings.gender==="women"?AI_TEAMS_WOMEN:AI_TEAMS_MEN}
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -1244,6 +1266,7 @@ async function editUsername(firstTime){
 }
 function renderAuth(){
   const area=$("authArea");
+  const ab=$("adminBtn");if(ab)ab.style.display=isAdmin()?"":"none";
   if(!sb){area.innerHTML='';return;}
   if(currentUser){
     const name=userName();
@@ -1305,6 +1328,83 @@ function openAuthModal(mode){
     $("authPass").addEventListener('keydown',e=>{if(e.key==='Enter')submit();});
   }
   render();
+}
+
+/* ── SQUAD DATA (remote, admin-editable) ── */
+const ADMIN_EMAIL="diomanuel10@gmail.com";
+function isAdmin(){return !!currentUser && (currentUser.email===ADMIN_EMAIL || currentUser.user_metadata?.email===ADMIN_EMAIL);}
+async function loadSquads(){
+  if(!sb)return;
+  try{
+    const {data,error}=await sb.from("game_data").select("value").eq("key","squads").maybeSingle();
+    if(!error && data?.value && Array.isArray(data.value.men) && Array.isArray(data.value.women)){
+      liveSquads={men:data.value.men,women:data.value.women};
+      // backfill height for any player missing it
+      [...liveSquads.men,...liveSquads.women].forEach(sq=>(sq.players||[]).forEach(p=>{if(p.ht==null){const inf=PLAYER_INFO[p.name];if(inf)p.ht=inf.ht;}}));
+    }
+  }catch(e){/* keep built-in fallback */}
+}
+
+/* ── ADMIN SQUAD EDITOR ── */
+let adminData=null, adminGender="men", adminOpen=-1;
+const POS_OPTS=["OH","OPP","MB","S","L"];
+function openAdmin(){
+  if(!isAdmin()){toast("Admins only.");return;}
+  adminData=JSON.parse(JSON.stringify({men:liveSquads.men,women:liveSquads.women}));
+  adminGender="men";adminOpen=-1;
+  renderAdmin();
+}
+function adminTeamBlock(t,i){
+  const open=i===adminOpen;
+  const head=`<div class="admin-team-h" data-act="toggle" data-ti="${i}"><span>${open?"▾":"▸"}</span><b>${esc(t.nation||"—")}</b><span class="era">${esc(t.era||"")}</span><span style="flex:1"></span><span class="era">${(t.players||[]).length}p</span></div>`;
+  if(!open)return `<div class="admin-team">${head}</div>`;
+  const meta=`<div class="admin-meta"><input class="admin-in" data-ti="${i}" data-field="nation" value="${esc(t.nation||"")}" placeholder="Nation"><input class="admin-in" data-ti="${i}" data-field="era" value="${esc(t.era||"")}" placeholder="Era"></div>`;
+  const rows=(t.players||[]).map((p,pi)=>`<div class="admin-row">
+    <input class="admin-in" data-ti="${i}" data-pi="${pi}" data-field="name" value="${esc(p.name||"")}" placeholder="Name">
+    <select class="admin-in" data-ti="${i}" data-pi="${pi}" data-field="pos">${POS_OPTS.map(o=>`<option ${p.pos===o?"selected":""}>${o}</option>`).join("")}</select>
+    <input class="admin-in" type="number" min="40" max="99" data-ti="${i}" data-pi="${pi}" data-field="ovr" value="${p.ovr??""}" title="OVR">
+    <input class="admin-in" type="number" min="150" max="230" data-ti="${i}" data-pi="${pi}" data-field="ht" value="${p.ht??""}" title="Height cm">
+    <button class="admin-del" data-act="delp" data-ti="${i}" data-pi="${pi}" title="Remove">✕</button>
+  </div>`).join("");
+  return `<div class="admin-team">${head}<div class="admin-team-body">${meta}${rows}<button class="admin-addp" data-act="addp" data-ti="${i}">+ Add player</button><button class="admin-del" data-act="delteam" data-ti="${i}" style="align-self:flex-start;font-size:12px;color:var(--red)">🗑 Delete team</button></div></div>`;
+}
+function renderAdmin(){
+  const list=adminData[adminGender];
+  $("modal").innerHTML=`<div class="modal-header"><h2>⚙️ Squad Editor</h2><button class="modal-close" id="closeModal">✕</button></div>
+    <div class="admin-tabs">
+      <button class="admin-tab ${adminGender==="men"?"on":""}" data-g="men">Men (${adminData.men.length})</button>
+      <button class="admin-tab ${adminGender==="women"?"on":""}" data-g="women">Women (${adminData.women.length})</button>
+    </div>
+    <div class="admin-teams" id="adminTeams">${list.map((t,i)=>adminTeamBlock(t,i)).join("")}</div>
+    <button class="admin-add" id="adminAddTeam">+ Add team</button>
+    <div class="admin-actions"><button class="auth-submit" id="adminSave">💾 Save &amp; publish</button><div class="auth-msg" id="adminMsg"></div></div>`;
+  $("overlay").classList.add("show");
+  $("closeModal").onclick=()=>$("overlay").classList.remove("show");
+  $("modal").querySelectorAll(".admin-tab").forEach(b=>b.onclick=()=>{adminGender=b.dataset.g;adminOpen=-1;renderAdmin();});
+  $("adminAddTeam").onclick=()=>{adminData[adminGender].push({nation:"New Team",flag:"🏐",era:"2020s",comp:"",blurb:"",gender:adminGender,players:[]});adminOpen=adminData[adminGender].length-1;renderAdmin();};
+  $("adminSave").onclick=adminSave;
+  const teams=$("adminTeams");
+  teams.addEventListener("input",e=>{
+    const el=e.target,ti=+el.dataset.ti;if(isNaN(ti))return;const f=el.dataset.field;
+    if(el.dataset.pi!==undefined){const pi=+el.dataset.pi;let v=el.value;if(f==="ovr"||f==="ht")v=v===""?null:+v;adminData[adminGender][ti].players[pi][f]=v;}
+    else if(f){adminData[adminGender][ti][f]=el.value;}
+  });
+  teams.addEventListener("click",e=>{
+    const b=e.target.closest("[data-act]");if(!b)return;const ti=+b.dataset.ti,act=b.dataset.act;
+    if(act==="toggle"){adminOpen=adminOpen===ti?-1:ti;renderAdmin();}
+    else if(act==="addp"){adminData[adminGender][ti].players.push({name:"",pos:"OH",ovr:80,ht:190});renderAdmin();}
+    else if(act==="delp"){adminData[adminGender][ti].players.splice(+b.dataset.pi,1);renderAdmin();}
+    else if(act==="delteam"){if(confirm("Delete this team?")){adminData[adminGender].splice(ti,1);adminOpen=-1;renderAdmin();}}
+  });
+}
+async function adminSave(){
+  const msg=$("adminMsg");msg.className="auth-msg";msg.textContent="Saving…";
+  // clean: drop empty players, coerce numbers
+  ["men","women"].forEach(g=>adminData[g].forEach(t=>{t.gender=g;t.players=(t.players||[]).filter(p=>p.name&&p.name.trim()).map(p=>({...p,ovr:+p.ovr||80,ht:p.ht?+p.ht:undefined}));}));
+  const {error}=await sb.from("game_data").upsert({key:"squads",value:adminData,updated_at:new Date().toISOString()});
+  if(error){msg.classList.add("err");msg.textContent="Error: "+error.message;return;}
+  liveSquads={men:adminData.men,women:adminData.women};
+  msg.classList.add("ok");msg.textContent="Saved & published — changes are live for everyone. 🎉";
 }
 
 /* ── LOBBY ── */
@@ -1698,12 +1798,14 @@ $("seasonBtn").addEventListener("click",startSimulation);
 $("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
 $("howBtn").addEventListener("click",showHowToPlay);
+$("adminBtn").addEventListener("click",openAdmin);
 $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
 
 setupLobby();
 renderTeam();
+await loadSquads();
 await initAuth();
 </script>
 </body>
