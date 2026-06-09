@@ -318,15 +318,15 @@ input.cf-sub-input::placeholder{color:var(--text2);opacity:.7}
 .streak-hint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.4}
 
 /* ── MODE CARDS ── */
-.mode-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-@media(max-width:560px){.mode-cards{grid-template-columns:1fr}}
-.mode-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);transition:border-color .18s,transform .15s}
+.mode-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.mode-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:18px;padding:22px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);transition:border-color .18s,transform .15s}
 .mode-card:hover{transform:translateY(-2px);border-color:var(--border2)}
-.mode-card-icon{font-size:22px;line-height:1}
-.mode-card-name{font-size:17px;font-weight:900;letter-spacing:-.2px}
-.mode-card-desc{font-size:12px;color:var(--text2);line-height:1.5;flex:1;margin-top:2px}
-.mode-play-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:800;margin-top:6px;width:100%;font-family:inherit;cursor:pointer;border:none;box-shadow:0 3px 10px rgba(245,158,11,.3);transition:filter .15s}
-.mode-play-btn:hover{filter:brightness(1.07)}
+.mode-card-icon{font-size:36px;line-height:1;flex:0 0 auto}
+.mode-card-body{flex:1;min-width:0}
+.mode-card-name{font-size:18px;font-weight:900;letter-spacing:-.2px}
+.mode-card-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-top:3px}
+.mode-play-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;padding:14px 22px;border-radius:12px;font-size:15px;font-weight:800;white-space:nowrap;flex:0 0 auto;font-family:inherit;cursor:pointer;border:none;box-shadow:0 4px 12px rgba(245,158,11,.35);transition:filter .15s}
+.mode-play-btn:hover{filter:brightness(1.08)}
 .mode-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:4px 0 18px;text-transform:uppercase;letter-spacing:1.5px}
 .mode-divider::before,.mode-divider::after{content:"";flex:1;height:1px;background:var(--border2)}
 .save-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:11px 13px;margin-bottom:14px}
@@ -572,119 +572,30 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
     <div class="mode-cards">
       <div class="mode-card">
         <div class="mode-card-icon">🎰</div>
-        <div class="mode-card-name">Classic</div>
-        <div class="mode-card-desc">Draft with full stats visible — make informed picks.</div>
+        <div class="mode-card-body">
+          <div class="mode-card-name">Classic</div>
+          <div class="mode-card-desc">Draft with full stats visible — make informed picks.</div>
+        </div>
         <button class="mode-play-btn" data-mode="classic">Play →</button>
       </div>
       <div class="mode-card">
         <div class="mode-card-icon">👑</div>
-        <div class="mode-card-name">Dynasty</div>
-        <div class="mode-card-desc">5 seasons with a transfer window — build a lasting legacy.</div>
+        <div class="mode-card-body">
+          <div class="mode-card-name">Dynasty</div>
+          <div class="mode-card-desc">5 seasons with a transfer window — build a lasting legacy.</div>
+        </div>
         <button class="mode-play-btn" data-mode="dynasty">Play →</button>
       </div>
       <div class="mode-card">
         <div class="mode-card-icon">👁️</div>
-        <div class="mode-card-name">Elite</div>
-        <div class="mode-card-desc">Stats hidden — draft by memory and test your volleyball knowledge.</div>
+        <div class="mode-card-body">
+          <div class="mode-card-name">Elite</div>
+          <div class="mode-card-desc">Stats hidden — draft by memory and test your volleyball knowledge.</div>
+        </div>
         <button class="mode-play-btn" data-mode="elite">Play →</button>
       </div>
     </div>
 
-    <div class="mode-divider">or customize</div>
-
-    <div class="settings-card">
-      <div class="settings-row">
-        <div class="settings-label">Gender</div>
-        <div class="toggle-group" id="genderGroup">
-          <button class="toggle-btn active" data-val="men">
-            <span class="tb-icon">♂</span>
-            <span class="tb-label">Men</span>
-            <span class="tb-sub">VNL / World League</span>
-          </button>
-          <button class="toggle-btn" data-val="women">
-            <span class="tb-icon">♀</span>
-            <span class="tb-label">Women</span>
-            <span class="tb-sub">VNL / World GP</span>
-          </button>
-        </div>
-      </div>
-      <div class="settings-row">
-        <div class="settings-label">Draft Mode</div>
-        <div class="toggle-group" id="draftModeGroup">
-          <button class="toggle-btn active" data-val="squad">
-            <span class="tb-icon">🎰</span>
-            <span class="tb-label">Squad First</span>
-            <span class="tb-sub">Spin nation · pick player</span>
-          </button>
-          <button class="toggle-btn" data-val="position">
-            <span class="tb-icon">📍</span>
-            <span class="tb-label">Position First</span>
-            <span class="tb-sub">Pick slot · spin for it</span>
-          </button>
-        </div>
-      </div>
-      <div class="settings-row">
-        <div class="settings-label">Season Mode</div>
-        <div class="toggle-group" id="seasonModeGroup">
-          <button class="toggle-btn active" data-val="prime">
-            <span class="tb-icon">⚡</span>
-            <span class="tb-label">Prime</span>
-            <span class="tb-sub">Single season, peak form</span>
-          </button>
-          <button class="toggle-btn" data-val="career">
-            <span class="tb-icon">📅</span>
-            <span class="tb-label">Career</span>
-            <span class="tb-sub">3 seasons, form varies</span>
-          </button>
-          <button class="toggle-btn" data-val="dynasty">
-            <span class="tb-icon">👑</span>
-            <span class="tb-label">Dynasty</span>
-            <span class="tb-sub">5 seasons · transfers</span>
-          </button>
-        </div>
-      </div>
-      <div class="settings-row">
-        <div class="settings-label">Difficulty</div>
-        <div class="toggle-group" id="diffGroup">
-          <button class="toggle-btn" data-val="easy">
-            <span class="tb-icon">🌱</span>
-            <span class="tb-label">Easy</span>
-            <span class="tb-sub">3 rerolls · ratings shown</span>
-          </button>
-          <button class="toggle-btn active-green" data-val="medium">
-            <span class="tb-icon">🏐</span>
-            <span class="tb-label">Medium</span>
-            <span class="tb-sub">1 reroll · ratings shown</span>
-          </button>
-          <button class="toggle-btn" data-val="hard">
-            <span class="tb-icon">🔥</span>
-            <span class="tb-label">Hard</span>
-            <span class="tb-sub">No rerolls · ratings shown</span>
-          </button>
-          <button class="toggle-btn" data-val="elite">
-            <span class="tb-icon">👁️</span>
-            <span class="tb-label">Elite</span>
-            <span class="tb-sub">No rerolls · hidden ratings</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-card">
-      <div class="settings-label">Your Team</div>
-      <div class="club-setup" id="clubSetup">
-        <div class="crest" id="lobbyCrest">VD</div>
-        <div class="club-fields">
-          <div class="cf">
-            <input class="cf-name" id="lobbyName" maxlength="32" placeholder="Your team name" spellcheck="false" autocomplete="off">
-          </div>
-          <div class="cf cf-sub"><span class="cf-ico">👔</span><span id="lobbyCoach">—</span></div>
-          <div class="cf cf-sub"><span class="cf-ico">🏟</span><input class="cf-sub-input" id="lobbyVenue" maxlength="42" placeholder="Your venue" spellcheck="false" autocomplete="off"></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="start-btn" id="startBtn">⚡ &nbsp;Start Draft</button>
   </div>
 </div>
 
@@ -1801,45 +1712,90 @@ function showDynastyResult(result, seasonNum, totalSeasons){
   }
 }
 
-/* ── QUICK PLAY ── */
-function quickPlay(mode){
-  const presets={
-    classic:{draftMode:'squad',seasonMode:'prime',difficulty:'medium'},
-    dynasty:{draftMode:'squad',seasonMode:'dynasty',difficulty:'medium'},
-    elite:  {draftMode:'squad',seasonMode:'prime', difficulty:'elite'},
-  };
-  const p=presets[mode];if(!p)return;
-  Object.assign(settings,p);
-  // sync toggle UI
-  [['draftModeGroup','active-purple','draftMode'],['seasonModeGroup','active-blue','seasonMode'],['diffGroup','active-green','difficulty']].forEach(([gid,cls,key])=>{
-    const grp=$(gid);if(!grp)return;
-    grp.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active','active-purple','active-blue','active-green'));
-    const btn=grp.querySelector(`[data-val="${settings[key]}"]`);if(btn)btn.classList.add(cls);
-  });
-  startGame();
+/* ── MODE SETTINGS MODAL ── */
+const MODE_CFG={
+  classic:{icon:'🎰',name:'Classic',seasonMode:'prime',difficulty:'medium',desc:'Single season — full stats visible'},
+  dynasty:{icon:'👑',name:'Dynasty',seasonMode:'dynasty',difficulty:'medium',desc:'5 seasons with a transfer window'},
+  elite:  {icon:'👁️',name:'Elite',  seasonMode:'prime', difficulty:'elite', desc:'Single season — ratings hidden'},
+};
+function openModeSettings(mode){
+  const cfg=MODE_CFG[mode]||MODE_CFG.classic;
+  settings.seasonMode=cfg.seasonMode;
+  settings.difficulty=cfg.difficulty;
+  function g(val,cur,cls){return val===cur?` ${cls}`:'';} // active class helper
+  function render(){
+    $("modal").innerHTML=`
+      <div class="modal-header"><h2>${cfg.icon} ${cfg.name}</h2><button class="modal-close" id="closeModal">✕</button></div>
+      <p style="font-size:13px;color:var(--text2);margin:-4px 0 16px">${cfg.desc}</p>
+      <div class="settings-row">
+        <div class="settings-label">Gender</div>
+        <div class="toggle-group" id="msGender">
+          <button class="toggle-btn${g('men',settings.gender,'active')}" data-val="men"><span class="tb-icon">♂</span><span class="tb-label">Men</span><span class="tb-sub">VNL / World League</span></button>
+          <button class="toggle-btn${g('women',settings.gender,'active')}" data-val="women"><span class="tb-icon">♀</span><span class="tb-label">Women</span><span class="tb-sub">VNL / World GP</span></button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Draft Mode</div>
+        <div class="toggle-group" id="msDraft">
+          <button class="toggle-btn${g('squad',settings.draftMode,'active-purple')}" data-val="squad"><span class="tb-icon">🎰</span><span class="tb-label">Squad First</span><span class="tb-sub">Spin nation · pick player</span></button>
+          <button class="toggle-btn${g('position',settings.draftMode,'active-purple')}" data-val="position"><span class="tb-icon">📍</span><span class="tb-label">Position First</span><span class="tb-sub">Pick slot · spin for it</span></button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Difficulty</div>
+        <div class="toggle-group" id="msDiff">
+          <button class="toggle-btn${g('easy',settings.difficulty,'active-green')}" data-val="easy"><span class="tb-icon">🌱</span><span class="tb-label">Easy</span><span class="tb-sub">3 rerolls · ratings shown</span></button>
+          <button class="toggle-btn${g('medium',settings.difficulty,'active-green')}" data-val="medium"><span class="tb-icon">🏐</span><span class="tb-label">Medium</span><span class="tb-sub">1 reroll · ratings shown</span></button>
+          <button class="toggle-btn${g('hard',settings.difficulty,'active-green')}" data-val="hard"><span class="tb-icon">🔥</span><span class="tb-label">Hard</span><span class="tb-sub">No rerolls · ratings shown</span></button>
+          <button class="toggle-btn${g('elite',settings.difficulty,'active-green')}" data-val="elite"><span class="tb-icon">👁️</span><span class="tb-label">Elite</span><span class="tb-sub">No rerolls · hidden ratings</span></button>
+        </div>
+      </div>
+      <div class="settings-row" style="margin-bottom:0">
+        <div class="settings-label">Your Team</div>
+        <div class="club-setup">
+          <div class="crest" id="msCrest">${initials(team.name||'My Team')}</div>
+          <div class="club-fields">
+            <div class="cf"><input class="cf-name" id="msTeamName" maxlength="32" placeholder="Your team name" value="${esc(team.name||'')}" spellcheck="false" autocomplete="off"></div>
+            <div class="cf cf-sub"><span class="cf-ico">🏟</span><input class="cf-sub-input" id="msVenue" maxlength="42" placeholder="Your venue" value="${esc(team.venue||'')}" spellcheck="false" autocomplete="off"></div>
+          </div>
+        </div>
+      </div>
+      <button class="start-btn" id="msStartBtn" style="margin-top:16px">⚡ &nbsp;Start Draft</button>
+    `;
+    $("overlay").classList.add("show");
+    $("closeModal").onclick=()=>$("overlay").classList.remove("show");
+    setupToggleGroup("msGender","active",v=>{settings.gender=v;render();});
+    setupToggleGroup("msDraft","active-purple",v=>{settings.draftMode=v;render();});
+    setupToggleGroup("msDiff","active-green",v=>{settings.difficulty=v;render();});
+    const mstn=$("msTeamName");
+    if(mstn) mstn.addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const mc=$("msCrest");if(mc)mc.textContent=initials(team.name||'My Team');});
+    const msvn=$("msVenue");
+    if(msvn) msvn.addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);});
+    $("msStartBtn").onclick=()=>{
+      team.name=($("msTeamName")?.value.trim()||"").slice(0,32)||"My Team";
+      team.venue=($("msVenue")?.value.trim()||"").slice(0,42)||"Home Arena";
+      $("overlay").classList.remove("show");
+      startGame();
+    };
+  }
+  render();
 }
 
 /* ── LOBBY ── */
 function setupLobby(){
-  setupToggleGroup("genderGroup","active",v=>{settings.gender=v;});
-  setupToggleGroup("draftModeGroup","active-purple",v=>settings.draftMode=v);
-  setupToggleGroup("seasonModeGroup","active-blue",v=>settings.seasonMode=v);
-  setupToggleGroup("diffGroup","active-green",v=>settings.difficulty=v);
-  $("lobbyName").addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const lc=$("lobbyCrest");if(lc)lc.textContent=initials(team.name);const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;});
-  $("lobbyVenue").addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);const tv=$("teamVenue");if(tv)tv.textContent=team.venue;});
-  $("startBtn").onclick=startGame;
   $("logoHome").onclick=e=>{
     e.preventDefault();
     if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}
     else if(['profileArea','dynastyResultArea','dynastyTransferArea'].some(id=>{const el=$(id);return el&&el.style.display!=='none';})){showLobby();}
   };
   document.querySelectorAll('.mode-play-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>quickPlay(btn.dataset.mode));
+    btn.addEventListener('click',()=>openModeSettings(btn.dataset.mode));
   });
   renderStreak();
 }
 function setupToggleGroup(groupId,activeClass,onChange){
   const grp=$(groupId);
+  if(!grp) return;
   grp.querySelectorAll(".toggle-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
       grp.querySelectorAll(".toggle-btn").forEach(b=>{
@@ -1859,9 +1815,12 @@ function showLobby(){
   renderStreak();
 }
 function startGame(){
-  // Each new game can use a freshly typed team name / venue (blank → sensible default).
-  const ln=$("lobbyName");team.name=((ln&&ln.value.trim())||"").slice(0,32)||"My Team";
-  const lv=$("lobbyVenue");team.venue=((lv&&lv.value.trim())||"").slice(0,42)||"Home Arena";
+  const ln=$("lobbyName");
+  if(ln) team.name=(ln.value.trim()||"").slice(0,32)||"My Team";
+  else if(!team.name) team.name="My Team";
+  const lv=$("lobbyVenue");
+  if(lv) team.venue=(lv.value.trim()||"").slice(0,42)||"Home Arena";
+  else if(!team.venue) team.venue="Home Arena";
   renderTeam();
   $("lobbyArea").style.display="none";
   $("gameArea").style.display="";
