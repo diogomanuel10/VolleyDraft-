@@ -6,6 +6,13 @@
 <meta name="theme-color" content="#0a0e1a" />
 <title>VolleyDraft (15-0) — Spin · Draft · Dominate</title>
 <meta name="description" content="VolleyDraft — spin for a nation and era, draft a lineup of real volleyball legends, and chase the perfect 15-0 VNL season." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://volley-draft-15-0.vercel.app/" />
+<meta property="og:title" content="VolleyDraft — Spin · Draft · Dominate" />
+<meta property="og:description" content="Spin for a volleyball nation & era, draft real legends, and simulate a full VNL season. Can you go 15-0?" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="VolleyDraft — Spin · Draft · Dominate" />
+<meta name="twitter:description" content="Spin for a volleyball nation & era, draft real legends, simulate a VNL season. Can you go 15-0?" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2046%2046'%3E%3Crect%20x='2'%20y='2'%20width='42'%20height='42'%20rx='11'%20fill='%23141b2e'/%3E%3Cpath%20d='M12%2013%20L23%2034%20L34%2013'%20fill='none'%20stroke='%23fbbf24'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='23'%20cy='16'%20r='3.6'%20fill='%23fde68a'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2046%2046'%3E%3Crect%20x='0'%20y='0'%20width='46'%20height='46'%20rx='10'%20fill='%23141b2e'/%3E%3Cpath%20d='M12%2013%20L23%2034%20L34%2013'%20fill='none'%20stroke='%23fbbf24'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='23'%20cy='16'%20r='3.6'%20fill='%23fde68a'/%3E%3C/svg%3E" />
 <style>
@@ -1563,6 +1570,28 @@ function renderStreak(){
   }
 }
 
+/* ── SHARE ── */
+const APP_URL='https://volley-draft-15-0.vercel.app/';
+function shareResult(medal,isDynasty){
+  const rating=teamStrength(roster).toFixed(1);
+  const medalLine={gold:'🥇 VNL Champions!',silver:'🥈 VNL Silver Medal!',bronze:'🥉 VNL Bronze Medal!',none:'Sem medalha desta vez.'}[medal]||'';
+  let text;
+  if(isDynasty){
+    const medals=dynastySeasons.map(s=>MEDAL_EMOJI[s.medal]).join(' ');
+    text=`👑 VolleyDraft Dynasty\n${medals} — ${dynastyScore} pts\n${medalLine}\n${team.flag} ${team.name} · Rating ${rating}\n\n🏐 ${APP_URL}`;
+  }else{
+    const players=roster.filter(s=>s.player).map(s=>s.player.name).join(' · ');
+    text=`${MEDAL_EMOJI[medal]||'🏐'} VolleyDraft\n${medalLine}\n${team.flag} ${team.name} · Rating ${rating}\n${players}\n\n🏐 ${APP_URL}`;
+  }
+  if(navigator.share){
+    navigator.share({title:'VolleyDraft',text}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(text).then(()=>toast('Resultado copiado! 📋')).catch(()=>{
+      try{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Resultado copiado! 📋');}catch{}
+    });
+  }
+}
+
 /* ── SCREENS ── */
 function hideScreens(){
   ['seasonResultArea','profileArea','dynastyResultArea','dynastyTransferArea'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
@@ -1702,7 +1731,10 @@ function showDynastyResult(result, seasonNum, totalSeasons){
     <div class="standings-scroll"><table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
     ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${esc(t.nation)}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
     </table></div>
-    <div style="margin-top:12px"><button class="btn-outline" style="width:100%;padding:12px;font-size:14px" id="dynPlayAgain">↺ New Draft</button></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="dynPlayAgain">↺ New Draft</button>
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="dynShareBtn">📤 Partilhar</button>
+    </div>
   `;
   if(medal==='gold'){checkAchievement('dynasty_king');if(settings.difficulty==='elite')checkAchievement('elite_win');}
   $('dynastyResultArea').style.display='';
@@ -1719,6 +1751,8 @@ function showDynastyResult(result, seasonNum, totalSeasons){
   if(dtb) dtb.onclick=()=>showDynastyTransfer(seasonNum,medal,totalSeasons);
   const pa=$('dynPlayAgain');
   if(pa) pa.onclick=()=>{hideScreens();showLobby();};
+  const sb=$('dynShareBtn');
+  if(sb) sb.onclick=()=>shareResult(medal,true);
   if(isLast&&currentUser){
     const btn=$('dynastySaveBtn');
     if(btn) btn.onclick=async()=>{
@@ -2113,7 +2147,10 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
     <div class="standings-scroll"><table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
     ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${esc(t.nation)}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
     </table></div>
-    <div style="margin-top:12px"><button class="btn-outline" style="width:100%;padding:12px;font-size:14px" id="srPlayAgain">↺ New Draft</button></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="srPlayAgain">↺ New Draft</button>
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="srShareBtn">📤 Partilhar</button>
+    </div>
   `;
   $('seasonResultArea').style.display='';
   $('lobbyArea').style.display='none';
@@ -2130,6 +2167,8 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   }
   const pa=$('srPlayAgain');
   if(pa) pa.onclick=()=>{hideScreens();showLobby();};
+  const sb=$('srShareBtn');
+  if(sb) sb.onclick=()=>shareResult(medal,false);
   if(!isLast){
     const nb=$('nextSeasonBtn');
     if(nb) nb.onclick=()=>{const variance=careerSeason===1?3:5;const next=simulateSeason(variance);careerSeasons.push(next);careerSeason++;renderSeasonResult(next,careerSeason,totalSeasons);};
