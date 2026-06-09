@@ -455,6 +455,47 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
   button,.toggle-btn,.pcard,.career-tab,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .modal{-webkit-overflow-scrolling:touch}
 }
+
+/* ── PROFILE SCREEN ── */
+.screen-wrap{max-width:560px;margin:0 auto;padding:32px 20px 80px}
+.screen-back{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:700;margin-bottom:20px;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.screen-back:hover{border-color:var(--gold);color:var(--gold)}
+.profile-avatar-row{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.profile-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);background:var(--surface2);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:28px}
+.profile-name{font-size:22px;font-weight:900;line-height:1.2}
+.profile-sub{font-size:13px;color:var(--text2);margin-top:3px}
+.profile-top-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.profile-streak-card{background:linear-gradient(135deg,#f97316,#ea580c);border-radius:16px;padding:18px;color:#fff;box-shadow:0 6px 20px rgba(234,88,12,.35)}
+.profile-streak-num{font-size:42px;font-weight:900;line-height:1}
+.profile-streak-lbl{font-size:10px;font-weight:800;letter-spacing:1px;opacity:.85;margin-top:4px;text-transform:uppercase}
+.profile-streak-week{display:flex;gap:5px;margin-top:12px}
+.profile-streak-dot{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.35);transition:.2s;flex:0 0 auto}
+.profile-streak-dot.played{background:#fff;border-color:#fff}
+.profile-rating-card{background:var(--card-grad),var(--surface);border:1px solid var(--border2);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.profile-rating-num{font-size:42px;font-weight:900;color:var(--gold);line-height:1}
+.profile-rating-lbl{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--muted);margin-top:4px;text-transform:uppercase}
+.profile-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.profile-mini-stat{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:14px;text-align:center}
+.profile-mini-num{font-size:22px;font-weight:900;color:var(--text)}
+.profile-mini-lbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.5px;margin-top:3px}
+.achievements-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:480px){.achievements-grid{grid-template-columns:repeat(2,1fr)}}
+.achievement{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:14px;text-align:center}
+.achievement.earned{border-color:var(--gold);background:rgba(245,158,11,.06)}
+.achievement.locked{opacity:.4;filter:grayscale(.5)}
+.achievement-icon{font-size:24px;margin-bottom:5px}
+.achievement-name{font-size:11px;font-weight:700;line-height:1.2}
+.achievement-desc{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.3}
+.recent-game{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;margin-bottom:6px}
+.recent-medal{font-size:22px;flex:0 0 auto}
+.recent-info{flex:1;min-width:0}
+.recent-team{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-meta{font-size:11px;color:var(--text2);margin-top:2px}
+.recent-rating{font-size:17px;font-weight:900;color:var(--gold);flex:0 0 auto}
+.user-chip{cursor:pointer}
+/* ── DYNASTY SCREENS ── */
+.dynasty-screen-wrap{max-width:600px;margin:0 auto;padding:28px 20px 80px}
+.standings-scroll{max-height:250px;overflow-y:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:8px}
 </style>
 <!-- Vercel Web Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
@@ -720,6 +761,28 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
         <div class="hint-text" id="rosterHint">Spin to draft your first player.</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- PROFILE SCREEN -->
+<div id="profileArea" style="display:none">
+  <div class="screen-wrap">
+    <button class="screen-back" id="profileBack">← Back</button>
+    <div id="profileContent"></div>
+  </div>
+</div>
+
+<!-- DYNASTY RESULT SCREEN -->
+<div id="dynastyResultArea" style="display:none">
+  <div class="dynasty-screen-wrap">
+    <div id="dynastyResultContent"></div>
+  </div>
+</div>
+
+<!-- DYNASTY TRANSFER SCREEN -->
+<div id="dynastyTransferArea" style="display:none">
+  <div class="dynasty-screen-wrap">
+    <div id="dynastyTransferContent"></div>
   </div>
 </div>
 
@@ -1361,12 +1424,14 @@ function renderAuth(){
   if(currentUser){
     const name=userName();
     const avatar=safeImg(currentUser.user_metadata?.avatar_url);
-    area.innerHTML=`<div class="user-chip">${avatar?`<img src="${esc(avatar)}" alt="">`:''}<span class="uname">${esc(name)}</span><button class="btn-edit-user" id="editUserBtn" title="Change username">✎</button><button class="btn-signout" id="signOutBtn">sign out</button></div>`;
-    $("signOutBtn").onclick=()=>sb.auth.signOut();
-    $("editUserBtn").onclick=()=>editUsername(false);
+    area.innerHTML=`<div class="user-chip" id="userChip" title="View profile">${avatar?`<img src="${esc(avatar)}" alt="">`:''}<span class="uname">${esc(name)}</span><button class="btn-edit-user" id="editUserBtn" title="Change username">✎</button><button class="btn-signout" id="signOutBtn">sign out</button></div>`;
+    $("signOutBtn").onclick=e=>{e.stopPropagation();sb.auth.signOut();};
+    $("editUserBtn").onclick=e=>{e.stopPropagation();editUsername(false);};
+    $("userChip").onclick=e=>{if(!e.target.closest('button'))window.showProfile();};
   }else{
-    area.innerHTML=`<button class="btn-outline" id="signInBtn">Sign in</button>`;
+    area.innerHTML=`<button class="btn-icon" id="profileGuestBtn" title="Profile">👤</button><button class="btn-outline" id="signInBtn">Sign in</button>`;
     $("signInBtn").onclick=()=>openAuthModal('signin');
+    $("profileGuestBtn").onclick=()=>window.showProfile();
   }
 }
 const GOOGLE_SVG=`<svg viewBox="0 0 48 48" style="width:16px;height:16px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
@@ -1548,6 +1613,7 @@ function updateStreak(){
   if(data.lastPlayed&&mondayOf(today)!==mondayOf(data.lastPlayed))week=[false,false,false,false,false,false,false];
   week[dayIdx()]=true;
   localStorage.setItem('vd-streak',JSON.stringify({streak,lastPlayed:today,week}));
+  if(streak>=7) checkAchievement('streak_7');
   renderStreak();
 }
 function renderStreak(){
@@ -1561,6 +1627,177 @@ function renderStreak(){
     const saveBtn=sb&&!currentUser?`<button class="btn-outline" id="streakSaveBtn" style="font-size:11px;padding:5px 11px">Sign up to save</button>`:'';
     hdrEl.innerHTML=`<div class="streak-title">🔥 Daily streak${n>0?` <span class="streak-count">· ${n} day${n!==1?'s':''}</span>`:''}</div>${saveBtn}`;
     const ssb=$("streakSaveBtn");if(ssb)ssb.onclick=()=>openAuthModal('signin');
+  }
+}
+
+/* ── SCREENS ── */
+function hideScreens(){
+  ['profileArea','dynastyResultArea','dynastyTransferArea'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
+  $('overlay').classList.remove('show');
+}
+
+const ACHIEVEMENTS=[
+  {id:'first_gold',icon:'🥇',name:'First Gold',desc:'Win your first VNL title'},
+  {id:'dynasty_king',icon:'👑',name:'Dynasty King',desc:'Win a season in Dynasty mode'},
+  {id:'hat_trick',icon:'🎩',name:'Hat Trick',desc:'Win 3 gold medals'},
+  {id:'undefeated',icon:'💎',name:'Undefeated',desc:'Finish 1st in the preliminaries'},
+  {id:'elite_win',icon:'👁️',name:'Blind Faith',desc:'Win gold on Elite difficulty'},
+  {id:'streak_7',icon:'🔥',name:'On Fire',desc:'Build a 7-day login streak'},
+];
+function checkAchievement(id){try{const list=JSON.parse(localStorage.getItem('vd-ach')||'[]');if(!list.includes(id)){list.push(id);localStorage.setItem('vd-ach',JSON.stringify(list));}}catch{}}
+function getEarned(){try{return JSON.parse(localStorage.getItem('vd-ach')||'[]');}catch{return[];}}
+
+function showProfile(){
+  hideScreens();
+  $('lobbyArea').style.display='none';
+  $('gameArea').style.display='none';
+  $('profileArea').style.display='';
+  renderProfileShell();
+  if(sb&&currentUser) renderProfileData();
+}
+
+function renderProfileShell(){
+  const streak=getStreak();
+  const name=currentUser?userName():'Guest';
+  const avatar=currentUser?safeImg(currentUser.user_metadata?.avatar_url):null;
+  const isGuest=!currentUser;
+  const earned=getEarned();
+  const week=streak.week||[false,false,false,false,false,false,false];
+  const weekDots=DAY_LABELS.map((_,i)=>`<div class="profile-streak-dot${week[i]?' played':''}"></div>`).join('');
+  const achHtml=ACHIEVEMENTS.map(a=>{
+    const e=earned.includes(a.id);
+    return `<div class="achievement${e?' earned':' locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div>`;
+  }).join('');
+  $('profileContent').innerHTML=`
+    <div class="profile-avatar-row">
+      ${avatar?`<img class="profile-avatar" src="${esc(avatar)}" alt="">`:`<div class="profile-avatar">👤</div>`}
+      <div>
+        <div class="profile-name">${esc(name)}</div>
+        <div class="profile-sub">${isGuest?'Playing as guest':'VolleyDraft Player'}</div>
+        ${isGuest?`<button class="btn-primary" style="margin-top:8px;padding:7px 14px;font-size:12px" id="profileSignUp">Sign Up to Save</button>`:''}
+      </div>
+    </div>
+    <div class="profile-top-cards">
+      <div class="profile-streak-card">
+        <div style="font-size:12px;font-weight:800;opacity:.85;margin-bottom:4px">🔥 Login Streak</div>
+        <div class="profile-streak-num">${streak.streak||0}</div>
+        <div class="profile-streak-lbl">DAY${(streak.streak||0)!==1?'S':''} CONSECUTIVE</div>
+        <div class="profile-streak-week">${weekDots}</div>
+      </div>
+      <div class="profile-rating-card">
+        <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:4px">⭐ Best Rating</div>
+        <div class="profile-rating-num" id="profileBestRating">—</div>
+        <div class="profile-rating-lbl">TEAM RATING</div>
+      </div>
+    </div>
+    <div class="profile-mini-stats">
+      <div class="profile-mini-stat"><div class="profile-mini-num" id="profileGamesPlayed">—</div><div class="profile-mini-lbl">GAMES</div></div>
+      <div class="profile-mini-stat"><div class="profile-mini-num" id="profileBestMedal">—</div><div class="profile-mini-lbl">BEST MEDAL</div></div>
+      <div class="profile-mini-stat"><div class="profile-mini-num" id="profileAvgRating">—</div><div class="profile-mini-lbl">AVG RATING</div></div>
+    </div>
+    <div class="section-title">Achievements</div>
+    <div class="achievements-grid" id="achievementsGrid">${achHtml}</div>
+    <div class="section-title">Recent Games</div>
+    <div id="profileRecentGames"><div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">${isGuest?'Sign in to see your game history.':'Loading…'}</div></div>
+  `;
+  const psu=$('profileSignUp');
+  if(psu) psu.onclick=()=>openAuthModal('signin');
+}
+
+async function renderProfileData(){
+  if(!sb||!currentUser) return;
+  try{
+    const {data,error}=await sb.from('leaderboard').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+    if(error||!data) return;
+    const ratings=data.map(r=>r.team_rating||0);
+    const bestRating=ratings.length?Math.max(...ratings).toFixed(1):'—';
+    const avgRating=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1):'—';
+    const medalOrder={gold:0,silver:1,bronze:2,none:3};
+    const sorted=[...data].sort((a,b)=>medalOrder[a.medal]-medalOrder[b.medal]);
+    const bestMedal=sorted.length?sorted[0].medal:'none';
+    const el=$('profileBestRating');if(el)el.textContent=bestRating;
+    const gp=$('profileGamesPlayed');if(gp)gp.textContent=data.length;
+    const bm=$('profileBestMedal');if(bm)bm.textContent=MEDAL_EMOJI[bestMedal]||'—';
+    const ar=$('profileAvgRating');if(ar)ar.textContent=avgRating;
+    // check achievements
+    if(data.some(r=>r.medal==='gold'))checkAchievement('first_gold');
+    if(data.filter(r=>r.medal==='gold').length>=3)checkAchievement('hat_trick');
+    if(data.some(r=>r.prelim_rank===1))checkAchievement('undefeated');
+    // re-render achievements with updated state
+    const earned=getEarned();
+    const ag=$('achievementsGrid');
+    if(ag) ag.innerHTML=ACHIEVEMENTS.map(a=>{const e=earned.includes(a.id);return `<div class="achievement${e?' earned':' locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div>`;}).join('');
+    // recent games (last 5)
+    const rg=$('profileRecentGames');
+    if(!rg) return;
+    const recent=data.slice(0,5);
+    if(!recent.length){rg.innerHTML=`<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No games saved yet. Play and save your score!</div>`;return;}
+    rg.innerHTML=recent.map(row=>{
+      const d=row.created_at?new Date(row.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-';
+      return `<div class="recent-game"><div class="recent-medal">${MEDAL_EMOJI[row.medal]||'🏐'}</div><div class="recent-info"><div class="recent-team">${esc(row.team_name||'My Team')}</div><div class="recent-meta">${d} · #${row.prelim_rank||'?'} prelim</div></div><div class="recent-rating">${(row.team_rating||0).toFixed(1)}</div></div>`;
+    }).join('');
+  }catch(e){}
+}
+
+/* ── DYNASTY RESULT SCREEN ── */
+function showDynastyResult(result, seasonNum, totalSeasons){
+  const {teams,prelim,finals,me,medal}=result;
+  const medalTxt={gold:"VNL CHAMPIONS!",silver:"VNL Silver Medal!",bronze:"VNL Bronze Medal!",none:"No medal this time"};
+  const side=(t,r)=>`<div class="match-team ${r?"right":""} ${t.me?"you":""}">${r?"":`<span>${t.flag}</span>`}<span>${esc(t.nation)}</span>${r?`<span>${t.flag}</span>`:""}</div>`;
+  const row=m=>`<div class="match">${side(m.a,false)}<div class="match-score"><span class="${m.aWon?"w":"l"}">${m.sa}</span>&nbsp;–&nbsp;<span class="${m.aWon?"l":"w"}">${m.sb}</span></div>${side(m.b,true)}</div>`;
+  const isLast=seasonNum>=totalSeasons;
+  const saveBlock=isLast?(currentUser
+    ?`<div class="save-row"><div class="save-info">Saving as <b>${esc(userName())}</b> — save to leaderboard?</div><button class="btn-save" id="dynastySaveBtn">💾 Save</button></div>`
+    :`<div class="save-row"><div class="save-info">Sign in to save your score.</div><button class="btn-google" id="dynastySaveSignInBtn" style="width:100%;justify-content:center;padding:9px">${GOOGLE_SVG}Sign in</button></div>`)
+    :'';
+  const nextCta=!isLast?`<button class="btn-primary" style="width:100%;padding:13px;font-size:15px;margin-bottom:12px" id="dynastyTransferBtn">↕ Transfer Window · Season ${seasonNum+1}</button>`:'';
+  const dynastyBanner=`<div class="dynasty-banner"><div><div class="dynasty-score-lbl">Dynasty Score</div><div class="dynasty-score-num">${dynastyScore}</div></div><div style="flex:1;text-align:right;color:var(--text2);font-size:11px;line-height:1.6">Season ${seasonNum}/${totalSeasons}<br>${dynastySeasons.map(s=>MEDAL_EMOJI[s.medal]).join(" ")}</div></div>`;
+  const seasonTabs=`<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">${Array.from({length:totalSeasons},(_,i)=>`<button class="career-tab${i+1===seasonNum?" active":""}" id="dynTab_${i}">${i+1===seasonNum?`S${i+1} ▶`:`S${i+1}${dynastySeasons[i]?` ${MEDAL_EMOJI[dynastySeasons[i].medal]}`:""}`}</button>`).join("")}</div>`;
+  $('dynastyResultContent').innerHTML=`
+    ${seasonTabs}
+    ${dynastyBanner}
+    <div class="medal-banner medal-${medal}"><span class="medal-emoji">${MEDAL_EMOJI[medal]}</span><div class="medal-title">${team.flag} ${esc(team.name)}</div><div class="medal-sub">${medalTxt[medal]} · Rating ${teamStrength(roster).toFixed(1)} · ${ordinal(me.rank)} in prelims<br>Coached by ${esc(team.coach)} · 🏟 ${esc(team.venue)}</div></div>
+    ${nextCta}
+    ${saveBlock}
+    <div class="section-title">Finals</div>
+    <div style="margin-bottom:4px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted)">QUARTERFINALS</div>${finals.qf.map(x=>row(x.m)).join("")}
+    <div style="margin:10px 0 4px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted)">SEMIFINALS</div>${row(finals.sf[0].m)}${row(finals.sf[1].m)}
+    <div style="margin:10px 0 4px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted)">BRONZE</div>${row(finals.bronze.m)}
+    <div style="margin:10px 0 4px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted)">🏆 GOLD</div>${row(finals.gold.m)}
+    <div style="text-align:center;font-size:12px;color:var(--text2);margin:8px 0 12px">🥇 ${finals.champion.flag} ${esc(finals.champion.nation)} &nbsp;·&nbsp; 🥈 ${finals.silver.flag} ${esc(finals.silver.nation)} &nbsp;·&nbsp; 🥉 ${finals.bronzeWinner.flag} ${esc(finals.bronzeWinner.nation)}</div>
+    <div class="section-title">Preliminary Standings</div>
+    <div class="standings-scroll"><table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
+    ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${esc(t.nation)}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
+    </table></div>
+    <div style="margin-top:12px"><button class="btn-outline" style="width:100%;padding:12px;font-size:14px" id="dynPlayAgain">↺ New Draft</button></div>
+  `;
+  if(medal==='gold'){checkAchievement('dynasty_king');if(settings.difficulty==='elite')checkAchievement('elite_win');}
+  $('dynastyResultArea').style.display='';
+  $('dynastyTransferArea').style.display='none';
+  $('lobbyArea').style.display='none';
+  $('gameArea').style.display='none';
+  $('overlay').classList.remove('show');
+  // season tabs
+  Array.from({length:totalSeasons},(_,i)=>{
+    const btn=$(`dynTab_${i}`);
+    if(btn) btn.onclick=()=>{if(dynastySeasons[i])showDynastyResult(dynastySeasons[i],i+1,totalSeasons);};
+  });
+  const dtb=$('dynastyTransferBtn');
+  if(dtb) dtb.onclick=()=>showDynastyTransfer(seasonNum,medal,totalSeasons);
+  const pa=$('dynPlayAgain');
+  if(pa) pa.onclick=()=>{hideScreens();showLobby();};
+  if(isLast&&currentUser){
+    const btn=$('dynastySaveBtn');
+    if(btn) btn.onclick=async()=>{
+      btn.disabled=true;btn.textContent='Saving…';
+      const bestMedal=['gold','silver','bronze','none'].find(m=>dynastySeasons.some(s=>s.medal===m))||medal;
+      const players=roster.filter(s=>s.player).map(s=>({name:s.player.name,pos:s.pos,ovr:s.player.ovr,from:s.player.from}));
+      const {error}=await sb.from('leaderboard').insert({user_id:currentUser.id,display_name:userName(),team_name:team.name||'My Team',avatar_url:safeImg(currentUser.user_metadata?.avatar_url)||null,medal:bestMedal,team_rating:parseFloat(teamStrength(roster).toFixed(2)),prelim_rank:me.rank,players});
+      if(error){btn.disabled=false;btn.textContent='💾 Save';toast('Error: '+error.message);}
+      else{btn.textContent='✅ Saved!';toast('Score saved! Opening leaderboard…');setTimeout(showLeaderboard,700);}
+    };
+  }else if($('dynastySaveSignInBtn')){
+    $('dynastySaveSignInBtn').onclick=()=>openAuthModal('signin');
   }
 }
 
@@ -1591,7 +1828,11 @@ function setupLobby(){
   $("lobbyName").addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const lc=$("lobbyCrest");if(lc)lc.textContent=initials(team.name);const ct=$("courtTitle");if(ct)ct.textContent=`${team.flag} ${team.name}`;});
   $("lobbyVenue").addEventListener("input",e=>{team.venue=e.target.value.slice(0,42);const tv=$("teamVenue");if(tv)tv.textContent=team.venue;});
   $("startBtn").onclick=startGame;
-  $("logoHome").onclick=e=>{e.preventDefault();if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}};
+  $("logoHome").onclick=e=>{
+    e.preventDefault();
+    if($("gameArea").style.display!=="none"){if(confirm("Return to lobby? Current game will be lost."))showLobby();}
+    else if(['profileArea','dynastyResultArea','dynastyTransferArea'].some(id=>{const el=$(id);return el&&el.style.display!=='none';})){showLobby();}
+  };
   document.querySelectorAll('.mode-play-btn').forEach(btn=>{
     btn.addEventListener('click',()=>quickPlay(btn.dataset.mode));
   });
@@ -1613,6 +1854,9 @@ function showLobby(){
   $("lobbyArea").style.display="";
   $("gameArea").style.display="none";
   $("resetBtn").style.display="none";
+  ['profileArea','dynastyResultArea','dynastyTransferArea'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
+  $('overlay').classList.remove('show');
+  renderStreak();
 }
 function startGame(){
   // Each new game can use a freshly typed team name / venue (blank → sensible default).
@@ -1622,6 +1866,8 @@ function startGame(){
   $("lobbyArea").style.display="none";
   $("gameArea").style.display="";
   $("resetBtn").style.display="";
+  ['profileArea','dynastyResultArea','dynastyTransferArea'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
+  $('overlay').classList.remove('show');
   updateStreak();
   rerollsLeft=DIFF_CONFIG[settings.difficulty].rerolls;
   careerSeasons=[];careerSeason=0;dynastySeasons=[];dynastySeason=0;dynastyScore=0;
@@ -1858,6 +2104,7 @@ function winnerOf(a,b,m){return m.aWon?a:b}function loserOf(a,b,m){return m.aWon
 
 /* ── RENDER SEASON ── */
 function renderSeasonResult(result,seasonNum,totalSeasons){
+  if(settings.seasonMode==="dynasty"){showDynastyResult(result,seasonNum,totalSeasons);return;}
   const {teams,prelim,finals,me,medal}=result;
   const medalTxt={gold:"VNL CHAMPIONS!",silver:"VNL Silver Medal!",bronze:"VNL Bronze Medal!",none:"No medal this time"};
   const side=(t,r)=>`<div class="match-team ${r?"right":""} ${t.me?"you":""}">${r?"":` <span>${t.flag}</span>`}<span>${esc(t.nation)}</span>${r?`<span>${t.flag}</span>`:""}</div>`;
@@ -1891,6 +2138,8 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
     </div>`;
   $("modal").innerHTML=html;
   $("overlay").classList.add("show");
+  if(medal==='gold'){checkAchievement('first_gold');if(settings.difficulty==='elite')checkAchievement('elite_win');}
+  if(me.rank===1) checkAchievement('undefeated');
   $("closeModal").onclick=()=>$("overlay").classList.remove("show");
   $("playAgain").onclick=()=>{$("overlay").classList.remove("show");showLobby();};
   if(!isLast){
@@ -1974,8 +2223,9 @@ function showDynastyTransfer(seasonNum, medal, totalSeasons) {
         <button class="btn-outline" style="width:100%;margin-bottom:8px;font-size:12px" onclick="window._dynCancel()">✕ Cancel</button>`;
     }
 
-    $("modal").innerHTML = `
-      <div class="modal-header"><h2>👑 Transfer Window — Season ${nextSeason}</h2><button class="modal-close" id="closeModal">✕</button></div>
+    $("dynastyTransferContent").innerHTML = `
+      <button class="screen-back" id="dynTransferBack">← S${seasonNum} Result</button>
+      <div class="modal-header" style="margin-bottom:14px"><h2>👑 Transfer Window — Season ${nextSeason}</h2></div>
       <div class="dynasty-banner">
         <div><div class="dynasty-score-lbl">Dynasty Score</div><div class="dynasty-score-num">${dynastyScore}</div></div>
         <div style="flex:1;text-align:right;color:var(--text2);font-size:11px;line-height:1.6">${remaining} swap${remaining !== 1 ? 's' : ''} left<br>${MEDAL_EMOJI[medal]} S${seasonNum} · ${dynastySeasons.map(s=>MEDAL_EMOJI[s.medal]).join(' ')}</div>
@@ -1985,8 +2235,10 @@ function showDynastyTransfer(seasonNum, medal, totalSeasons) {
       ${swapHtml}
       ${swapSlotIdx === -1 ? `<button class="btn-primary" style="width:100%;padding:13px;font-size:14px;margin-top:4px" id="dynastyNextBtn">▶ Simulate Season ${nextSeason}</button>` : ''}
     `;
-    $("overlay").classList.add("show");
-    $("closeModal").onclick = () => $("overlay").classList.remove("show");
+    $("dynastyResultArea").style.display = "none";
+    $("dynastyTransferArea").style.display = "";
+    const dynBack = $("dynTransferBack");
+    if(dynBack) dynBack.onclick = () => { $("dynastyTransferArea").style.display="none"; $("dynastyResultArea").style.display=""; };
 
     window._dynSwap = i => {
       swapSlotIdx = i;
@@ -2021,7 +2273,7 @@ function showDynastyTransfer(seasonNum, medal, totalSeasons) {
         careerSeasons.push(next);
         careerSeason++;
         dynastyScore += dynastyMedalPts(next.medal) + dynastyPrelimBonus(next.me.rank);
-        renderSeasonResult(next, dynastySeason, totalSeasons);
+        showDynastyResult(next, dynastySeason, totalSeasons);
       };
     }
   }
@@ -2106,8 +2358,10 @@ $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
 
+window.showProfile = showProfile;
 setupLobby();
 renderTeam();
+$("profileBack").addEventListener("click", showLobby);
 await loadSquads();
 await initAuth();
 </script>
