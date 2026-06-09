@@ -6,6 +6,13 @@
 <meta name="theme-color" content="#0a0e1a" />
 <title>VolleyDraft (15-0) — Spin · Draft · Dominate</title>
 <meta name="description" content="VolleyDraft — spin for a nation and era, draft a lineup of real volleyball legends, and chase the perfect 15-0 VNL season." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://volley-draft-15-0.vercel.app/" />
+<meta property="og:title" content="VolleyDraft — Spin · Draft · Dominate" />
+<meta property="og:description" content="Spin for a volleyball nation & era, draft real legends, and simulate a full VNL season. Can you go 15-0?" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="VolleyDraft — Spin · Draft · Dominate" />
+<meta name="twitter:description" content="Spin for a volleyball nation & era, draft real legends, simulate a VNL season. Can you go 15-0?" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2046%2046'%3E%3Crect%20x='2'%20y='2'%20width='42'%20height='42'%20rx='11'%20fill='%23141b2e'/%3E%3Cpath%20d='M12%2013%20L23%2034%20L34%2013'%20fill='none'%20stroke='%23fbbf24'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='23'%20cy='16'%20r='3.6'%20fill='%23fde68a'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2046%2046'%3E%3Crect%20x='0'%20y='0'%20width='46'%20height='46'%20rx='10'%20fill='%23141b2e'/%3E%3Cpath%20d='M12%2013%20L23%2034%20L34%2013'%20fill='none'%20stroke='%23fbbf24'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='23'%20cy='16'%20r='3.6'%20fill='%23fde68a'/%3E%3C/svg%3E" />
 <style>
@@ -98,10 +105,11 @@ button{font-family:inherit;cursor:pointer;border:none;font-weight:700;transition
 .toggle-btn.active-purple{background:rgba(139,92,246,.12);border-color:var(--purple);color:var(--purple)}
 .toggle-btn.active-blue{background:rgba(59,130,246,.12);border-color:var(--blue);color:var(--blue)}
 .toggle-btn.active-green{background:rgba(16,185,129,.12);border-color:var(--green);color:var(--green)}
+.toggle-btn.active-orange{background:rgba(249,115,22,.12);border-color:#f97316;color:#f97316}
 .toggle-btn .tb-icon{font-size:18px;display:block;margin-bottom:3px}
 .toggle-btn .tb-label{display:block;font-size:11px;font-weight:800}
 .toggle-btn .tb-sub{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:1px}
-.toggle-btn.active .tb-sub,.toggle-btn.active-purple .tb-sub,.toggle-btn.active-blue .tb-sub,.toggle-btn.active-green .tb-sub{color:inherit;opacity:.75}
+.toggle-btn.active .tb-sub,.toggle-btn.active-purple .tb-sub,.toggle-btn.active-blue .tb-sub,.toggle-btn.active-green .tb-sub,.toggle-btn.active-orange .tb-sub{color:inherit;opacity:.75}
 .start-btn{width:100%;padding:16px;border-radius:14px;font-size:17px;letter-spacing:.5px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;box-shadow:0 6px 24px rgba(245,158,11,.4);margin-top:8px}
 .start-btn:hover{filter:brightness(1.08)}
 
@@ -496,6 +504,16 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
 /* ── DYNASTY SCREENS ── */
 .dynasty-screen-wrap{max-width:600px;margin:0 auto;padding:28px 20px 80px}
 .standings-scroll{max-height:250px;overflow-y:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:8px}
+
+/* ── NAV DROPDOWN MENU ── */
+.nav-menu{position:absolute;top:calc(100% + 6px);right:12px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.5);padding:6px;z-index:51;min-width:200px;display:none;flex-direction:column;animation:modalIn .15s ease}
+.nav-menu.open{display:flex}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;background:none;border:none;color:var(--text);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left;width:100%;transition:.1s}
+.nav-item:hover{background:var(--surface2)}
+.nav-item-em{font-size:17px;line-height:1;flex:0 0 auto}
+.nav-item-danger{color:var(--red)}
+.nav-item-danger:hover{background:rgba(248,113,113,.08)}
+.nav-divider{height:1px;background:var(--border);margin:4px 0}
 </style>
 <!-- Vercel Web Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
@@ -523,12 +541,16 @@ footer{padding:36px 20px;border-top:1px solid var(--border);margin-top:44px;text
     </div>
   </a>
   <div class="header-right">
-    <button class="btn-outline" id="lbBtn">🏆<span class="btn-lbl">&nbsp;Leaderboard</span></button>
     <div id="authArea"></div>
-    <button class="btn-icon" id="adminBtn" title="Squad Editor (admin)" style="display:none">⚙️</button>
-    <button class="btn-icon" id="howBtn" title="How to Play">?</button>
-    <button class="btn-icon" id="themeBtn" title="Toggle theme">🌙</button>
-    <button class="btn-icon" id="resetBtn" title="New Game" style="display:none">↺</button>
+    <button class="btn-icon" id="menuBtn" title="Menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="nav-menu" id="navMenu">
+    <button class="nav-item" id="lbBtn"><span class="nav-item-em">🏆</span>Leaderboard</button>
+    <button class="nav-item" id="howBtn"><span class="nav-item-em">❓</span>How to Play</button>
+    <button class="nav-item" id="themeBtn"><span class="nav-item-em">🌙</span>Toggle theme</button>
+    <div class="nav-divider"></div>
+    <button class="nav-item" id="adminBtn" style="display:none"><span class="nav-item-em">⚙️</span>Squad Editor</button>
+    <button class="nav-item nav-item-danger" id="resetBtn" style="display:none"><span class="nav-item-em">↺</span>New Draft</button>
   </div>
 </header>
 
@@ -1241,7 +1263,7 @@ const DIFF_CONFIG = {
    monogram in the club's real brand colours. Names, venues, coaches and
    colours are real (recent seasons). */
 /* ── SETTINGS STATE ── */
-let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium"};
+let settings = {gender:"men",draftMode:"squad",seasonMode:"prime",difficulty:"medium",eras:["1990s","2000s","2010s","2020s"]};
 
 /* ── GAME STATE ── */
 let roster, spinning, pickedKeys, currentUser, rerollsLeft, selectedSlotIndex;
@@ -1267,7 +1289,7 @@ function nextOpenIndex(){return roster.findIndex(s=>!s.player)}
 function rosterFull(){return roster.every(s=>s.player)}
 function playerKey(p){return p.name+"|"+p.pos}
 function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
-function currentSquads(){return settings.gender==="women"?liveSquads.women:liveSquads.men}
+function currentSquads(){const all=settings.gender==="women"?liveSquads.women:liveSquads.men;return settings.eras&&settings.eras.length?all.filter(sq=>settings.eras.includes(sq.era)):all;}
 function currentAI(){return settings.gender==="women"?AI_TEAMS_WOMEN:AI_TEAMS_MEN}
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -1290,16 +1312,17 @@ function renderTeam(){
 }
 
 /* ── THEME ── */
+function setThemeIcon(t){const em=$("themeBtn")?.querySelector(".nav-item-em");if(em)em.textContent=t==="dark"?"🌙":"☀️";}
 function initTheme(){
   const saved=localStorage.getItem("vd-theme")||"dark";
   document.documentElement.dataset.theme=saved;
-  $("themeBtn").textContent=saved==="dark"?"🌙":"☀️";
+  setThemeIcon(saved);
 }
 function toggleTheme(){
   const next=document.documentElement.dataset.theme==="dark"?"light":"dark";
   document.documentElement.dataset.theme=next;
   localStorage.setItem("vd-theme",next);
-  $("themeBtn").textContent=next==="dark"?"🌙":"☀️";
+  setThemeIcon(next);
 }
 
 /* ── AUTH ── */
@@ -1548,6 +1571,28 @@ function renderStreak(){
   }
 }
 
+/* ── SHARE ── */
+const APP_URL='https://volley-draft-15-0.vercel.app/';
+function shareResult(medal,isDynasty){
+  const rating=teamStrength(roster).toFixed(1);
+  const medalLine={gold:'🥇 VNL Champions!',silver:'🥈 VNL Silver Medal!',bronze:'🥉 VNL Bronze Medal!',none:'Sem medalha desta vez.'}[medal]||'';
+  let text;
+  if(isDynasty){
+    const medals=dynastySeasons.map(s=>MEDAL_EMOJI[s.medal]).join(' ');
+    text=`👑 VolleyDraft Dynasty\n${medals} — ${dynastyScore} pts\n${medalLine}\n${team.flag} ${team.name} · Rating ${rating}\n\n🏐 ${APP_URL}`;
+  }else{
+    const players=roster.filter(s=>s.player).map(s=>s.player.name).join(' · ');
+    text=`${MEDAL_EMOJI[medal]||'🏐'} VolleyDraft\n${medalLine}\n${team.flag} ${team.name} · Rating ${rating}\n${players}\n\n🏐 ${APP_URL}`;
+  }
+  if(navigator.share){
+    navigator.share({title:'VolleyDraft',text}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(text).then(()=>toast('Resultado copiado! 📋')).catch(()=>{
+      try{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Resultado copiado! 📋');}catch{}
+    });
+  }
+}
+
 /* ── SCREENS ── */
 function hideScreens(){
   ['seasonResultArea','profileArea','dynastyResultArea','dynastyTransferArea'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
@@ -1687,7 +1732,10 @@ function showDynastyResult(result, seasonNum, totalSeasons){
     <div class="standings-scroll"><table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
     ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${esc(t.nation)}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
     </table></div>
-    <div style="margin-top:12px"><button class="btn-outline" style="width:100%;padding:12px;font-size:14px" id="dynPlayAgain">↺ New Draft</button></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="dynPlayAgain">↺ New Draft</button>
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="dynShareBtn">📤 Partilhar</button>
+    </div>
   `;
   if(medal==='gold'){checkAchievement('dynasty_king');if(settings.difficulty==='elite')checkAchievement('elite_win');}
   $('dynastyResultArea').style.display='';
@@ -1704,6 +1752,8 @@ function showDynastyResult(result, seasonNum, totalSeasons){
   if(dtb) dtb.onclick=()=>showDynastyTransfer(seasonNum,medal,totalSeasons);
   const pa=$('dynPlayAgain');
   if(pa) pa.onclick=()=>{hideScreens();showLobby();};
+  const sb=$('dynShareBtn');
+  if(sb) sb.onclick=()=>shareResult(medal,true);
   if(isLast&&currentUser){
     const btn=$('dynastySaveBtn');
     if(btn) btn.onclick=async()=>{
@@ -1757,6 +1807,12 @@ function openModeSettings(mode){
           <button class="toggle-btn${g('elite',settings.difficulty,'active-green')}" data-val="elite"><span class="tb-icon">👁️</span><span class="tb-label">Elite</span><span class="tb-sub">No rerolls · hidden ratings</span></button>
         </div>
       </div>
+      <div class="settings-row">
+        <div class="settings-label">Era Pool</div>
+        <div class="toggle-group era-toggle-group" id="msEras">
+          ${["1990s","2000s","2010s","2020s"].map(era=>`<button class="toggle-btn${settings.eras.includes(era)?' active-orange':''}" data-era="${era}"><span class="tb-icon">📅</span><span class="tb-label">${era}</span></button>`).join('')}
+        </div>
+      </div>
       <div class="settings-row" style="margin-bottom:0">
         <div class="settings-label">Your Team</div>
         <div class="club-setup">
@@ -1774,6 +1830,19 @@ function openModeSettings(mode){
     setupToggleGroup("msGender","active",v=>{settings.gender=v;render();});
     setupToggleGroup("msDraft","active-purple",v=>{settings.draftMode=v;render();});
     setupToggleGroup("msDiff","active-green",v=>{settings.difficulty=v;render();});
+    document.querySelectorAll("#msEras .toggle-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const era=btn.dataset.era;
+        if(settings.eras.includes(era)){
+          if(settings.eras.length===1)return; // keep at least one
+          settings.eras=settings.eras.filter(e=>e!==era);
+          btn.classList.remove("active-orange");
+        }else{
+          settings.eras=[...settings.eras,era];
+          btn.classList.add("active-orange");
+        }
+      });
+    });
     const mstn=$("msTeamName");
     if(mstn) mstn.addEventListener("input",e=>{team.name=e.target.value.slice(0,32);const mc=$("msCrest");if(mc)mc.textContent=initials(team.name||'My Team');});
     const msvn=$("msVenue");
@@ -2098,7 +2167,10 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
     <div class="standings-scroll"><table class="standings"><tr><th>#</th><th class="tn" style="text-align:left">Team</th><th>W</th><th>L</th><th>Pts</th><th>Sets</th></tr>
     ${teams.map(t=>`<tr class="${t.me?"me":""}"><td>${t.rank}${t.rank<=8?'<span class="finals-badge">QF</span>':''}</td><td class="tn">${t.flag} ${esc(t.nation)}</td><td>${t.W}</td><td>${t.L}</td><td>${t.pts}</td><td>${t.setW}-${t.setL}</td></tr>`).join("")}
     </table></div>
-    <div style="margin-top:12px"><button class="btn-outline" style="width:100%;padding:12px;font-size:14px" id="srPlayAgain">↺ New Draft</button></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="srPlayAgain">↺ New Draft</button>
+      <button class="btn-outline" style="flex:1;padding:12px;font-size:14px" id="srShareBtn">📤 Partilhar</button>
+    </div>
   `;
   $('seasonResultArea').style.display='';
   $('lobbyArea').style.display='none';
@@ -2115,6 +2187,8 @@ function renderSeasonResult(result,seasonNum,totalSeasons){
   }
   const pa=$('srPlayAgain');
   if(pa) pa.onclick=()=>{hideScreens();showLobby();};
+  const sb=$('srShareBtn');
+  if(sb) sb.onclick=()=>shareResult(medal,false);
   if(!isLast){
     const nb=$('nextSeasonBtn');
     if(nb) nb.onclick=()=>{const variance=careerSeason===1?3:5;const next=simulateSeason(variance);careerSeasons.push(next);careerSeason++;renderSeasonResult(next,careerSeason,totalSeasons);};
@@ -2317,14 +2391,21 @@ function resetGame(){
 
 /* ── INIT ── */
 initTheme();
+// Nav dropdown
+const _navMenu=$("navMenu"),_menuBtn=$("menuBtn");
+_menuBtn.addEventListener("click",e=>{e.stopPropagation();_navMenu.classList.toggle("open");_menuBtn.setAttribute("aria-expanded",_navMenu.classList.contains("open"));});
+document.addEventListener("click",()=>{_navMenu.classList.remove("open");_menuBtn.setAttribute("aria-expanded","false");});
+_navMenu.addEventListener("click",()=>{_navMenu.classList.remove("open");_menuBtn.setAttribute("aria-expanded","false");});
+// Nav actions
 $("themeBtn").addEventListener("click",toggleTheme);
-$("spinBtn").addEventListener("click",spin);
-$("rerollBtn").addEventListener("click",doReroll);
-$("seasonBtn").addEventListener("click",startSimulation);
-$("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
 $("lbBtn").addEventListener("click",showLeaderboard);
 $("howBtn").addEventListener("click",showHowToPlay);
 $("adminBtn").addEventListener("click",openAdmin);
+$("resetBtn").addEventListener("click",()=>{if(confirm("Start a new draft?"))showLobby();});
+// Game actions
+$("spinBtn").addEventListener("click",spin);
+$("rerollBtn").addEventListener("click",doReroll);
+$("seasonBtn").addEventListener("click",startSimulation);
 $("teamEdit").addEventListener("click",renameTeam);
 $("teamName").addEventListener("click",renameTeam);
 $("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))$("overlay").classList.remove("show");});
