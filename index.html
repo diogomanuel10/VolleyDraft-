@@ -1391,7 +1391,9 @@ function renderAdmin(){
   $("adminImportApply").onclick=()=>{
     const r=adminImport($("adminImportBox").value);
     if(r.err){toast("Import failed: "+r.err);return;}
-    toast(`Imported: ${r.updated} updated, ${r.added} added. Review, then Save.`);
+    // Jump to the imported team (correct gender tab) and open it so it's visible.
+    if(r.lastIdx>=0){adminGender=r.lastG;adminOpen=r.lastIdx;}
+    toast(`Imported: ${r.updated} updated, ${r.added} added. Don't forget to Save & publish.`);
     renderAdmin();
   };
   $("adminSave").onclick=adminSave;
@@ -1417,15 +1419,15 @@ function adminImport(raw){
   else if(parsed&&parsed.players)teams=[parsed];
   else if(parsed&&(parsed.men||parsed.women)){(parsed.men||[]).forEach(t=>teams.push({...t,gender:"men"}));(parsed.women||[]).forEach(t=>teams.push({...t,gender:"women"}));}
   else return{err:"unrecognized shape"};
-  let updated=0,added=0;
+  let updated=0,added=0,lastG=adminGender,lastIdx=-1;
   teams.forEach(t=>{
     const g=t.gender||adminGender, arr=adminData[g]; if(!arr)return;
     const idx=arr.findIndex(x=>x.nation===t.nation&&x.era===t.era);
     const players=(t.players||[]).map(p=>({name:p.name,pos:p.pos,ovr:+p.ovr||80,...(p.ht?{ht:+p.ht}:{})}));
     const merged={nation:t.nation,flag:t.flag||(idx>=0?arr[idx].flag:"🏐"),era:t.era,comp:t.comp??(idx>=0?arr[idx].comp:""),blurb:t.blurb??(idx>=0?arr[idx].blurb:""),gender:g,players};
-    if(idx>=0){arr[idx]=merged;updated++;}else{arr.push(merged);added++;}
+    if(idx>=0){arr[idx]=merged;updated++;lastG=g;lastIdx=idx;}else{arr.push(merged);added++;lastG=g;lastIdx=arr.length-1;}
   });
-  return{updated,added};
+  return{updated,added,lastG,lastIdx};
 }
 async function adminSave(){
   const msg=$("adminMsg");msg.className="auth-msg";msg.textContent="Saving…";
